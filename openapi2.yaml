@@ -1,0 +1,413 @@
+swagger: "2.0"
+info:
+  title: Vinyl Catalog API
+  version: 1.0.0
+
+paths:
+
+  /api/register:
+    post:
+      summary: Регистрация пользователя
+      parameters:
+        - name: login
+          type: string
+          required: true
+        - name: password
+          type: string
+          required: true
+        - name: email
+          type: string
+          required: true
+      responses:
+        200:
+          description: Результат регистрации
+          schema:
+            type: object
+            properties:
+              result:
+                type: boolean
+              error:
+                type: string
+                description: сообщение об ошибке в случае ошибки
+
+  /api/login:
+    post:
+      summary: Вход пользователя
+      parameters:
+        - name: login
+          type: string
+          required: true
+        - name: password
+          type: string
+          required: true
+      responses:
+        200:
+          description: Результат входа
+          schema:
+            type: object
+            properties:
+              result:
+                type: boolean
+              error:
+                description: сообщение об ошибке в случае ошибки
+                type: string
+
+  /api/records/list:
+    get:
+      summary: Получение списка пластинок с фильтрацией
+      parameters:
+        - name: name
+          description: название пластинки (для поиска по вхождению)
+          in: query
+          type: string
+        - name: year_begin
+          in: query
+          type: integer
+          description: интервал лет выхода пластинки
+        - name: year_end
+          in: query
+          type: integer
+        - name: performer
+          description: автор, исполнитель, группа (название, поиск по вхождению)
+          in: query
+          type: string
+        - name: genre
+          in: query
+          type: integer
+          description: ид жанра (из справочника)
+      responses:
+        200:
+          description: Список пластинок
+          schema:
+            type: array
+            items:
+              $ref: #components/schemas/recordinfo
+
+  /api/records/new:
+    post:
+      summary: Добавление пластинки вручную в общий каталог
+      parameters:
+        - name: name
+          type: string
+          required: true
+        - name: year
+          type: integer
+          required: true
+        - name: publisher
+          type: string
+          required: true
+        - name: barcode
+          type: string
+          required: true
+        - name: genre_id
+          type: integer
+          required: true
+        - name: performers
+          in: formData
+          type: array
+          items:
+            type: integer
+          required: true
+        - name: tracks
+          in: formData
+          type: array
+          items:
+            type: integer
+          required: true
+        - name: covers
+          in: formData
+          type: array
+          items:
+            type: string
+            format: binary
+          required: true
+      responses:
+        200:
+          description: Успешное добавление
+          schema:
+            type: object
+            properties:
+              result:
+                type: boolean
+              error:
+                type: string
+  
+  /api/records/get/{id}:
+    get:
+      summary: Получение полной информации о пластинке
+      parameters:
+        - name: id
+          in: path
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Информация о пластинке
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              year:
+                type: integer
+              publisher:
+                type: string
+              barcode:
+                type: string
+              genre:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+              performers:
+                type: array
+                items:
+                  $ref: "#components/schemas/performer"
+              tracks:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+              covers:
+                type: array
+                items:
+                  type: string
+                  format: iri-reference
+  
+  /api/records/edit/{id}:    
+    post:
+      summary: Редактирование информации о пластинке
+      description: метод редактирования один как точка входа, а внутри он сам распределяет какие данные править в общем каталоге а какие в личном
+      parameters:
+        - name: id
+          in: path
+          type: integer
+          required: true
+        - name: name
+          type: string
+        - name: year
+          type: integer
+        - name: publisher
+          type: string
+        - name: barcode
+          type: string
+        - name: genre_id
+          type: integer
+        - name: performers
+          description: список ид исполнителей
+          type: array
+          items:
+            type: integer
+        - name: tracks
+          type: array
+          items:
+            type: string
+        - name: covers
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              image:
+                type: string
+                format: binary
+      responses:
+        200:
+          description: Успешное редактирование
+          schema:
+            type: object
+            properties:
+              result:
+                type: boolean
+              error:
+                type: string
+  
+  /api/records/delete/{id}:    
+    post:
+      summary: Удаление пластинки из личного каталога. Если в общем каталоге остается пластинка без ссылок на нее (нет ни у кого такой) то ее из общего удаляем
+      parameters:
+        - name: id
+          in: path
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Успешное удаление
+          schema:
+            type: object
+            properties:
+              result:
+                type: boolean
+              error:
+                type: string
+  
+  /api/records/add/{id}:
+    post:
+      summary: Добавление пластинки в свою коллекцию
+      parameters:
+        - name: id
+          in: path
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Успешное добавление
+          schema:
+            type: object
+            properties:
+              result:
+                type: boolean
+              error:
+                type: string
+  
+  /api/records/search/barcode:
+    post:
+      summary: Поиск по коду
+      parameters:
+        - name: barcode
+          type: string
+          required: true
+      responses:
+        200:
+          description: Результаты поиска
+          schema:
+            type: array
+            items:
+              $ref: "#components/schemas/recordinfo"
+  
+  /api/records/search/image:
+    post:
+      summary: Поиск по картинке
+      parameters:
+        - name: image
+          type: file
+          required: true
+      responses:
+        200:
+          description: Результаты поиска
+          schema:
+            type: array
+            items:
+              $ref: "#components/schemas/recordinfo"
+  
+  /api/play/{id}:
+    get:
+      summary: Получение MP3 файла для проигрывания
+      description: ищет (на стороне сервера) по всем источникам музыки трек по имени трека, и возвращает первую найденную ссылку на файл с музыкой на сервисе источнике
+      parameters:
+        - name: id
+          in: path
+          type: integer
+          required: true
+          description: id трека
+      responses:
+        200:
+          description: ссылка на MP3 файл на внешнем сервисе с музыкой
+          schema:
+            type: string
+            format: uri-reference
+            example: https://music.yandex.ru/tracks/12533
+
+  /api/genres:
+    get:
+      summary: Получение списка жанров для фильтров
+      responses:
+        200:
+          description: ...
+          schema:
+            type: array
+            items:
+              $ref: "#components/schemas/genre"
+
+  /api/performers:
+    get:
+      summary: Получение списка исполнителей которых у нас есть пластинки
+      responses:
+        200:
+          description: ...
+          schema:
+            type: array
+            items:
+              $ref: "#components/schemas/performer"
+
+  /api/performer/{id}:
+    get:
+      summary: Получение исполнителя
+      parameters:
+        - name: id
+          in: path
+          type: integer
+          required: true
+          description: id исполнителя
+      responses:
+        200:
+          description: ...
+          schema:
+            type: array
+            items:
+              $ref: "#components/schemas/performer"
+
+
+components:
+  schemas:
+    performer:
+      description: исполнитель
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        photo:
+          type: string
+          format: uri-reference
+        records:
+          required: false
+          type: array
+          items:
+            $ref: "#components/schemas/recordinfo"
+
+    recordinfo:
+      description: информация о пластинке для вывода в списке
+      type: object
+      properties:
+        id:
+          type: integer
+          required: false
+          description: ид в полном каталоге, заполнено если пластинка есть в нашем каталоге
+        name:
+          type: string
+        cover:
+          type: string
+          format: uri-reference
+        year:
+          type: integer
+        performers:
+          type: array
+          items:
+            type: integer
+        source_uri:
+          type: string
+          format: uri-reference
+          required: false
+          description: ссылка на внешний источник, чтоб потом оттуда получить полную инфу для добавления
+
+    genre:
+      description: информация о жанре
+      type: object
+      properties:
+        id:
+          type: integer
+          required: false
+        name:
+          type: string
+
