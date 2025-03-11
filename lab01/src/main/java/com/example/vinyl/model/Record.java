@@ -19,6 +19,5 @@ public class Record {
     @JoinColumn(name = "genre", nullable = false)
     private Genre genre;
 
-    // Getters and Setters
 }
 

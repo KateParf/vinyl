@@ -3,8 +3,8 @@ package com.example.vinyl.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "performer")
-public class Performer {
+@Table(name = "group")
+public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -12,9 +12,5 @@ public class Performer {
     private String name;
 
     private byte[] picture;
-
-    @ManyToOne
-    @JoinColumn(name = "group_id")
-    private Group group;
 
 }

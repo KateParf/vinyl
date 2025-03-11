@@ -11,6 +11,5 @@ public class Genre {
 
     private String name;
 
-    // Getters and Setters
 }
 

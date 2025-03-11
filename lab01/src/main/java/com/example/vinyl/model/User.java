@@ -13,6 +13,9 @@ public class User {
     private String password;
     private String email;
 
+    public User() {
+    }
+
     public User(String login, String email, String password) {
         this.login = login;
         this.email = email;
@@ -51,6 +54,5 @@ public class User {
         this.email = email;
     }
 
-    // Getters and Setters
 }
 

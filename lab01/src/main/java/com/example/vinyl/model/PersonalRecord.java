@@ -22,6 +22,5 @@ public class PersonalRecord {
 
     private String comment;
 
-    // Getters and Setters
 }
 

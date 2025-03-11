@@ -14,8 +14,11 @@ public class PerformerRecord {
     private Record record;
 
     @ManyToOne
-    @JoinColumn(name = "performer_id", nullable = false)
+    @JoinColumn(name = "performer_id")
     private Performer performer;
 
-    // Getters and Setters
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Performer group;
+
 }
