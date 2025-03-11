@@ -19,5 +19,17 @@ public class Record {
     @JoinColumn(name = "genre", nullable = false)
     private Genre genre;
 
+    public Integer getId(){
+        return this.id;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
 }
 
