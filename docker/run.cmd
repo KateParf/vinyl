@@ -1,1 +1,0 @@
-docker run --name postgres17.4 -d -p 5432:5432 postgres 
