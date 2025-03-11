@@ -5,7 +5,7 @@ CREATE TYPE "condition_enum" AS ENUM (
 );
 
 CREATE TABLE "record" (
-  "id" integer PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "name" varchar,
   "year" integer,
   "publisher" varchar,
@@ -14,7 +14,7 @@ CREATE TABLE "record" (
 );
 
 CREATE TABLE "personal_record" (
-  "id" integer PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "record_id" integer NOT NULL,
   "user_id" integer NOT NULL,
   "condition" condition_enum,
@@ -29,13 +29,13 @@ CREATE TABLE "users" (
 );
 
 CREATE TABLE "cover" (
-  "id" integer PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "record_id" integer NOT NULL,
   "picture" bytea
 );
 
 CREATE TABLE "genre" (
-  "id" integer PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "name" varchar
 );
 
@@ -46,20 +46,20 @@ CREATE TABLE "performer_record" (
 );
 
 CREATE TABLE "tracks" (
-  "id" integer PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "record_id" integer NOT NULL,
   "name" varchar
 );
 
 CREATE TABLE "performer" (
-  "id" integer PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "group_id" integer,
   "name" varchar,
   "picture" bytea
 );
 
 CREATE TABLE "group" (
-  "id" integer PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "name" varchar,
   "picture" bytea
 );
