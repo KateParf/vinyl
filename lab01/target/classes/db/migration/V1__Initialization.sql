@@ -10,7 +10,7 @@ CREATE TABLE "record" (
   "year" integer,
   "publisher" varchar,
   "barcode" varchar,
-  "genre" integer NOT NULL
+  "genre_id" integer NOT NULL
 );
 
 CREATE TABLE "personal_record" (
@@ -31,7 +31,7 @@ CREATE TABLE "users" (
 CREATE TABLE "cover" (
   "id" SERIAL PRIMARY KEY,
   "record_id" integer NOT NULL,
-  "picture" bytea
+  "picture" varchar
 );
 
 CREATE TABLE "genre" (
@@ -55,16 +55,16 @@ CREATE TABLE "performer" (
   "id" SERIAL PRIMARY KEY,
   "group_id" integer,
   "name" varchar,
-  "picture" bytea
+  "picture" varchar
 );
 
-CREATE TABLE "group" (
+CREATE TABLE "groups" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar,
-  "picture" bytea
+  "picture" varchar
 );
 
-ALTER TABLE "record" ADD FOREIGN KEY ("genre") REFERENCES "genre" ("id");
+ALTER TABLE "record" ADD FOREIGN KEY ("genre_id") REFERENCES "genre" ("id");
 
 ALTER TABLE "personal_record" ADD FOREIGN KEY ("record_id") REFERENCES "record" ("id");
 
@@ -76,9 +76,9 @@ ALTER TABLE "performer_record" ADD FOREIGN KEY ("record_id") REFERENCES "record"
 
 ALTER TABLE "performer_record" ADD FOREIGN KEY ("performer_id") REFERENCES "performer" ("id");
 
-ALTER TABLE "performer_record" ADD FOREIGN KEY ("group_id") REFERENCES "group" ("id");
+ALTER TABLE "performer_record" ADD FOREIGN KEY ("group_id") REFERENCES "groups" ("id");
 
 ALTER TABLE "tracks" ADD FOREIGN KEY ("record_id") REFERENCES "record" ("id");
 
-ALTER TABLE "performer" ADD FOREIGN KEY ("group_id") REFERENCES "group" ("id");
+ALTER TABLE "performer" ADD FOREIGN KEY ("group_id") REFERENCES "groups" ("id");
 

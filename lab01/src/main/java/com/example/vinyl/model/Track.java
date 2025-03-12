@@ -9,10 +9,10 @@ public class Track {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String name;
+
     @ManyToOne
     @JoinColumn(name = "record_id", nullable = false)
     private Record record;
-
-    private String name;
 
 }

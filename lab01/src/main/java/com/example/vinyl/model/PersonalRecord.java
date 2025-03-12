@@ -22,5 +22,24 @@ public class PersonalRecord {
 
     private String comment;
 
-}
+    public Integer getId() {
+        return this.id;
+    }
 
+    public String getCondition() {
+        return this.condition.name();
+    }
+
+    public void setCondition(ConditionEnum condition) {
+        this.condition = condition;
+    }
+
+    public String getComment() {
+        return this.comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+}

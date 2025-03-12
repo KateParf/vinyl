@@ -1,5 +1,6 @@
 package com.example.vinyl.service;
 
+import com.example.vinyl.controllers.OpResult;
 import com.example.vinyl.model.User;
 import com.example.vinyl.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,11 @@ public class UserService {
     }
 
     @Transactional
-    public String registerUser(String username, String email, String password) {
+    public OpResult registerUser(String username, String email, String password) {
         String encodedPassword = passwordEncoder.encode(password);
         User newUser = new User(username, email, encodedPassword);
         userRepository.save(newUser);
-        return "User registered successfully!";
+        return new OpResult(true);
     }
-
-    
 
 }

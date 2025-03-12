@@ -11,7 +11,7 @@ public class Performer {
 
     private String name;
 
-    private byte[] picture;
+    private String picture;
 
     @ManyToOne
     @JoinColumn(name = "group_id")

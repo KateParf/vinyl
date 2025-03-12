@@ -1,5 +1,6 @@
 package com.example.vinyl;
 
+import com.example.vinyl.controllers.OpResult;
 import com.example.vinyl.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-class VinylApplicationTests {
+class UserTests {
 
 	@Autowired
 	private UserService userService;
@@ -19,9 +20,9 @@ class VinylApplicationTests {
 		String email = "testuser@example.com";
 		String password = "testpassword";
 
-		String result = userService.registerUser(username, email, password);
+		OpResult result = userService.registerUser(username, email, password);
 
-		assertEquals("User registered successfully!", result);
+		assertEquals(true, result.result);
 	}
 
 }

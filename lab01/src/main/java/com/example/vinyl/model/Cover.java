@@ -9,10 +9,9 @@ public class Cover {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "record_id", nullable = false)
-    private Record record;
+    private String picture;
 
-    private byte[] photo;
-
+    public Cover(String picture) {
+        this.picture = picture;
+    }
 }

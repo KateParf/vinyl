@@ -1,8 +1,8 @@
-package com.example.vinyl.controllers;
+package com.example.vinyl.exceptions;
 
 public class RecordNotFoundException extends RuntimeException {
 
-    RecordNotFoundException(Integer id) {
+    public RecordNotFoundException(Integer id) {
       super("Could not find record " + id);
     }
   }
