@@ -20,15 +20,16 @@ class GroupTests {
 	
 	@Test
 	public void testaddNewGroup() {
-		Group bratany = new Group();
-		bratany.setName("Братаны");
-		groupService.add(bratany);	
 
 		Group beatles = new Group();
 		beatles.setName("The Beatles");
 		beatles.setPicture("http://google.com/images/beatles.jpg");
-		groupService.add(beatles);		
-
+		groupService.add(beatles);
+		
+		Group bratany = new Group();
+		bratany.setName("Бутырка");
+		groupService.add(bratany);	
+	
 	}
 
 	@Test

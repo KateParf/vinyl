@@ -1,5 +1,6 @@
 package com.example.vinyl.repository;
 
+import com.example.vinyl.model.Genre;
 import com.example.vinyl.model.Group;
 
 import org.springframework.data.domain.Example;
@@ -16,5 +17,5 @@ import java.util.function.Function;
 
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Integer> {
-
+    Group findByName(String name);
 }

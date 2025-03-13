@@ -1,6 +1,7 @@
 package com.example.vinyl.service;
 
 import com.example.vinyl.exceptions.PerformerNotFoundException;
+import com.example.vinyl.model.Group;
 import com.example.vinyl.model.Performer;
 import com.example.vinyl.repository.PerformerRepository;
 
@@ -27,5 +28,18 @@ public class PerformerService {
     public Performer getById(Integer id) {
         return performerRepository.findById(id)
                 .orElseThrow(() -> new PerformerNotFoundException(id));
+    }
+
+    // Получить исполнителя по имени
+    public Performer getByName(String name) {
+        return performerRepository.findByName(name);
+    }
+
+    public Performer add(Performer performer) {
+        return performerRepository.save(performer);
+    }
+
+    public void clear() {
+        performerRepository.deleteAll();
     }
 }

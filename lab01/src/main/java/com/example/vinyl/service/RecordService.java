@@ -54,4 +54,8 @@ public class RecordService {
         recordRepository.deleteById(id);
     }
 
+    public void clear() {
+        recordRepository.deleteAll();
+    }
+
 }

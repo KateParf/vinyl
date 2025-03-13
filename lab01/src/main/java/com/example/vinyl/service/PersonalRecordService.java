@@ -4,6 +4,9 @@ import com.example.vinyl.exceptions.RecordNotFoundException;
 import com.example.vinyl.model.ConditionEnum;
 import com.example.vinyl.model.PersonalRecord;
 import com.example.vinyl.repository.PersonalRecordRepository;
+import com.example.vinyl.service.RecordService;
+import com.example.vinyl.model.Record;
+import com.example.vinyl.model.User;
 
 import java.util.List;
 
@@ -12,48 +15,63 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PersonalRecordService {
-    private final PersonalRecordRepository recordRepository;
+    private final PersonalRecordRepository persRecordRepository;
+    private final RecordService recordService;
+    private final UserService userService;
 
     @Autowired
-    public PersonalRecordService(PersonalRecordRepository recordRepository) {
-        this.recordRepository = recordRepository;
+    public PersonalRecordService(PersonalRecordRepository recordRepository, RecordService recordService,
+            UserService userService) {
+        this.persRecordRepository = recordRepository;
+        this.recordService = recordService;
+        this.userService = userService;
     }
 
     // Получить все пластинки
     public List<PersonalRecord> getAllRecords() {
-        return recordRepository.findAll();
+        return persRecordRepository.findAll();
     }
 
     // Получить пластинку по ID
     public PersonalRecord getRecord(Integer id) {
-        return recordRepository.findById(id)
+        return persRecordRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException(id));
     }
 
-    // Add existing single item
-    //??
-    public PersonalRecord addExistRecord(Integer id) {
-        PersonalRecord existingRecord = this.getRecord(id);
-        return recordRepository.save(existingRecord);
+    // Добавляем пластинку из общего каталога ?????
+    // при добавлении коменты и состояние пустые а потом мы их отдельно редактируем
+    public PersonalRecord addExistRecord(Integer id, User user) {
+        Record existingRecord = recordService.getRecord(id);
+        PersonalRecord newRecord = new PersonalRecord();
+        newRecord.setRecord(existingRecord);
+        newRecord.setComment(null);
+        newRecord.setCondition(null);
+        newRecord.setUser(user);
+        return persRecordRepository.save(newRecord);
     }
 
     // Edit single item
-    //??
+    // ??
     public PersonalRecord updateRecord(PersonalRecord editRecord) {
-        return recordRepository.findById(editRecord.getId())
+        return persRecordRepository.findById(editRecord.getId())
                 .map(record -> {
-                    record.setCondition(ConditionEnum.valueOf(editRecord.getCondition()));
+                    record.setCondition(editRecord.getCondition());
                     record.setComment(editRecord.getComment());
-                    return recordRepository.save(record);
+                    return persRecordRepository.save(record);
                 })
                 .orElseGet(() -> {
-                    return recordRepository.save(editRecord);
+                    return persRecordRepository.save(editRecord);
                 });
     }
 
     // Delete single item
     public void deleteRecord(Integer id) {
-        recordRepository.deleteById(id);
+        persRecordRepository.deleteById(id);
+    }
+
+    public void clear(User user) {
+        persRecordRepository.deleteAll();
+        //!!! TODO
     }
 
 }

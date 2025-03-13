@@ -12,7 +12,10 @@ public class Track {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "record_id", nullable = false)
-    private Record record;
+    private Record record_id;
+
+    public Track(String name) {
+        this.name = name;
+    }
 
 }

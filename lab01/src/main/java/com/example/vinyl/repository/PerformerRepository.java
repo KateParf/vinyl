@@ -1,5 +1,6 @@
 package com.example.vinyl.repository;
 
+import com.example.vinyl.model.Genre;
 import com.example.vinyl.model.Performer;
 
 import org.springframework.data.domain.Example;
@@ -16,5 +17,5 @@ import java.util.function.Function;
 
 @Repository
 public interface PerformerRepository extends JpaRepository<Performer, Integer> {
-
+    Performer findByName(String name);
 }

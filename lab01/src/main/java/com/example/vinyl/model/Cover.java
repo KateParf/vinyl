@@ -11,7 +11,11 @@ public class Cover {
 
     private String picture;
 
+    @ManyToOne
+    private Record record_id;
+
     public Cover(String picture) {
         this.picture = picture;
     }
+
 }

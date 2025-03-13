@@ -21,8 +21,6 @@ class GenreTests {
 	
 	@Test
 	public void testaddNewGenre() {
-		genreService.clear();
-		
 		Genre rock = new Genre();
 		rock.setName("Rock");
 		genreService.add(rock);		

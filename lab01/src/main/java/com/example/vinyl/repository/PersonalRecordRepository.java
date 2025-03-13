@@ -17,6 +17,4 @@ import java.util.function.Function;
 
 @Repository
 public interface PersonalRecordRepository extends JpaRepository<PersonalRecord, Integer> {
-    // Найти все пластинки по ID юзера ---????
-    List<Track> findByUserId(Integer userId);
 }

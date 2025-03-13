@@ -17,4 +17,32 @@ public class Performer {
     @JoinColumn(name = "group_id")
     private Group group;
 
+    public Integer getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getPicture() {
+        return this.picture;
+    }
+
+    public Group getGroup() {
+        return this.group;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
 }

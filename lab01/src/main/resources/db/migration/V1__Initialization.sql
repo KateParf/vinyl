@@ -1,7 +1,7 @@
 CREATE TYPE "condition_enum" AS ENUM (
-  'bad',
-  'good',
-  'new'
+  'BAD',
+  'GOOD',
+  'NEW'
 );
 
 CREATE TABLE "record" (

@@ -23,9 +23,9 @@ public class GenreService {
         return genreRepository.findAll();
     }
 
-    //!! TODO !!
+    // Получить жанр по названию
     public Genre getByName(String name) {
-        return genreRepository.findAll().getFirst();
+        return genreRepository.findByName(name);
     }
 
     // add

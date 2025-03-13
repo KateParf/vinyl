@@ -1,5 +1,8 @@
 package com.example.vinyl.model;
 
+import org.hibernate.annotations.Type;
+
+import co.elastic.clients.elasticsearch.watcher.ConditionType;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +20,7 @@ public class PersonalRecord {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(name = "condition", columnDefinition = "condition_enum")
     @Enumerated(EnumType.STRING)
     private ConditionEnum condition;
 
@@ -26,7 +30,11 @@ public class PersonalRecord {
         return this.id;
     }
 
-    public String getCondition() {
+    public ConditionEnum getCondition() {
+        return this.condition;
+    }
+
+    public String getConditionName() {
         return this.condition.name();
     }
 
@@ -40,6 +48,18 @@ public class PersonalRecord {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Record getRecord() {
+        return this.record;
+    }
+
+    public void setRecord(Record newRecord) {
+        this.record = newRecord;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }

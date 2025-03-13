@@ -15,6 +15,7 @@ public class Group {
 
     @Nullable
     private String picture;
+    
 
     public Integer getId() {
         return this.id;

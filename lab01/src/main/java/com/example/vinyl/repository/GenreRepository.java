@@ -16,5 +16,5 @@ import java.util.function.Function;
 
 @Repository
 public interface GenreRepository extends JpaRepository<Genre, Integer> {
-
+    Genre findByName(String name);
 }

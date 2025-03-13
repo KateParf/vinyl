@@ -29,4 +29,9 @@ public class UserService {
         return new OpResult(true);
     }
 
+    public User getSessionUser() {
+        return userRepository.findAll().getFirst();
+        //!! TODO
+    }
+
 }

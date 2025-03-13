@@ -29,13 +29,17 @@ public class GroupService {
                 .orElseThrow(() -> new PerformerNotFoundException(id));
     }
 
-    //!! todo
-    public Group getByName(String string) {
-        return groupRepository.findAll().getFirst();
+    // Получить группу по имени
+    public Group getByName(String name) {
+        return groupRepository.findByName(name);
     }
 
     public Group add(Group group) {
         return groupRepository.save(group);
+    }
+
+    public void clear() {
+        groupRepository.deleteAll();
     }
 
 }
