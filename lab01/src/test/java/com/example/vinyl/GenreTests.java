@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -28,13 +31,14 @@ class GenreTests {
 		Genre hiphop = new Genre();
 		hiphop.setName("Hip Hop");
 		genreService.add(hiphop);	
-	}
 
-	@Test
-	public void testGetAll() {
 		List<Genre> genres = genreService.getAll();
-		System.out.println(genres);
-	}
 
+        assertNotNull(genres);
+        assertFalse(genres.isEmpty());
+
+        assertTrue(genres.stream().anyMatch(g -> "Rock".equals(g.getName())));
+        assertTrue(genres.stream().anyMatch(g -> "Hip Hop".equals(g.getName())));
+	}
 
 }

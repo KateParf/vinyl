@@ -98,10 +98,4 @@ class PersonalRecordTests {
         assertEquals(persrec2.getCondition(), ConditionEnum.NEW);
     }
 
-    @Test
-    public void testGetAll() {
-        List<PersonalRecord> records = personalRecordService.getAllRecords();
-        System.out.println(records);
-    }
-
 }

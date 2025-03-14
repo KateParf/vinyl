@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -99,13 +101,10 @@ class RecordTests {
 		record2.setGenre(rock);
 		recordAbbeyRoad.addGroup( beatles );
 		recordService.addNewRecord(record2);
-	}
 
-	@Test
-	public void testGetAll() {
-		List<Record> records = recordService.getAllRecords();
-		System.out.println(records);		
+		List<Record> records = recordService.getAllRecords();	
+		assertNotNull(records);
+        assertFalse(records.isEmpty());
 	}
-
 
 }
