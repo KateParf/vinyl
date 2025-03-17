@@ -21,13 +21,13 @@ class PerformersController {
         this.service = service;
     }
 
-    // List of items
+    // Получение списка исполнителей для которых у нас есть пластинки
     @GetMapping("/performers")
     List<Performer> all() {
         return service.getAll();
     }
 
-    // Single item
+    // Получаем конкретного исполнителя
     @GetMapping("/performer/{id}")
     Performer one(@PathVariable Integer id) {
         return service.getById(id);

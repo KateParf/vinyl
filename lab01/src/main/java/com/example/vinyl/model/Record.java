@@ -70,12 +70,20 @@ public class Record {
         return this.name;
     }
 
+    public Genre getGenre() {
+        return this.genre;
+    }
+
     public Integer getYear() {
         return this.year;
     }
 
     public String getPublisher() {
         return this.publisher;
+    }
+
+    public String getBarcode() {
+        return this.barcode;
     }
 
     public void setName(String name) {
@@ -93,17 +101,17 @@ public class Record {
     public void setPublisher(String publisher) {
         this.publisher = publisher;
     }
-
-    public String getBarcode() {
-        return this.barcode;
-    }
-
+  
     public void setBarcode(String barcode) {
         this.barcode = barcode;
     }
 
     public Set<Group> getGroups() {
         return this.groups;
+    }
+
+    public Set<Performer> getPerformers() {
+        return this.performers;
     }
 
     public Set<Cover> getCoverss() {

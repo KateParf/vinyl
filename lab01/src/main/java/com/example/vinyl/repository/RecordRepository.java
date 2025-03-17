@@ -1,5 +1,6 @@
 package com.example.vinyl.repository;
 
+import com.example.vinyl.model.Performer;
 import com.example.vinyl.model.Record;
 
 import org.springframework.data.domain.Example;
@@ -16,5 +17,6 @@ import java.util.function.Function;
 
 @Repository
 public interface RecordRepository extends JpaRepository<Record, Integer> {
-
+    Record findByName(String name);
+    Record findByBarcode(String barcode);
 }

@@ -8,22 +8,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.vinyl.service.GenreService;
-import com.example.vinyl.model.Genre;
 
 @RestController
-class GenresController {
+class TracksController {
 
-    private final GenreService service;
-
-    GenresController(GenreService service) {
-        this.service = service;
+    TracksController() {
+        
     }
 
-    // Получение всех жанров
-    @GetMapping("/genres")
-    List<Genre> all() {
-        return service.getAll();
+    // Получать мп3 30 сек и проигрывать
+    @GetMapping("/play/{id}")
+    void play(@RequestBody Integer id) {
+        // TODO !!
     }
 
 }

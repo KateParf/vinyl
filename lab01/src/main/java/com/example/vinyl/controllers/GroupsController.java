@@ -22,13 +22,13 @@ class GroupsController {
         this.service = service;
     }
 
-    // List of items
+    // Получение списка групп для которых у нас есть пластинки
     @GetMapping("/groups")
     List<Group> all() {
         return service.getAll();
     }
 
-    // Single item
+    // Получение конкретной группы
     @GetMapping("/group/{id}")
     Group one(@PathVariable Integer id) {
         return service.getById(id);
