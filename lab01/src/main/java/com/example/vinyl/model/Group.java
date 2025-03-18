@@ -1,12 +1,14 @@
 package com.example.vinyl.model;
 
+import java.io.Serializable;
+
 import org.springframework.lang.Nullable;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "groups")
-public class Group {
+public class Group implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -25,16 +27,15 @@ public class Group {
         return this.name;
     }
 
-    public String getPicture() {
-        return this.picture;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPicture() {
+        return this.picture;
     }
 
     public void setPicture(String picture) {
         this.picture = picture;
     }
-
 }

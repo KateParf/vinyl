@@ -107,4 +107,23 @@ class RecordTests {
         assertFalse(records.isEmpty());
 	}
 
+	@Test
+	public void testFilterRecords() {
+		List<Record> records = recordService.getFilterRecords(null, null, null, null);	
+		assertNotNull(records);
+        assertFalse(records.isEmpty());
+
+		Genre rock = genreService.getByName("Rock");
+		List<Record> records2 = recordService.getFilterRecords(rock.getId(), null, null, null);	
+		assertNotNull(records2);
+        assertFalse(records2.isEmpty());
+	}	
+
+	@Test
+	public void testAllRecords() {
+		List<Record> records = recordService.getAllRecords();	
+		assertNotNull(records);
+        assertFalse(records.isEmpty());
+	}	
+
 }

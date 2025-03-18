@@ -19,13 +19,13 @@ import com.example.vinyl.model.User;
 
 @RestController
 @RequestMapping("/userrecords")
-class RecordsController {
+class PersonalRecordsController {
 
     private final RecordService service;
     private final UserService userService;
     private final PersonalRecordService personalService;
 
-    RecordsController(RecordService service, PersonalRecordService personalService, UserService userService) {
+    PersonalRecordsController(RecordService service, PersonalRecordService personalService, UserService userService) {
         this.service = service;
         this.personalService = personalService;
         this.userService = userService;

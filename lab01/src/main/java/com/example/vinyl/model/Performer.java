@@ -1,10 +1,12 @@
 package com.example.vinyl.model;
 
+import java.io.Serializable;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "performer")
-public class Performer {
+public class Performer implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

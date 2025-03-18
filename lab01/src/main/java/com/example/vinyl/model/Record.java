@@ -1,5 +1,6 @@
 package com.example.vinyl.model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -7,7 +8,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "record")
-public class Record {
+public class Record implements Serializable {
     public Record() {}
 
     @Id
@@ -50,13 +51,12 @@ public class Record {
         inverseJoinColumns = { @JoinColumn(name = "group_id") })
     private Set<Group> groups = new HashSet<>();
 
-    /*@OneToMany(mappedBy = "record_id")
-    Set<Group> groups = new HashSet<>();*/
-
-    @OneToMany(mappedBy="record_id")
+    @OneToMany( fetch = FetchType.EAGER )
+    @JoinColumn(name = "record_id")
     private Set<Cover> covers = new HashSet<>();
 
-    @OneToMany(mappedBy="record_id")
+    @OneToMany( fetch = FetchType.EAGER )
+    @JoinColumn(name = "record_id")
     private Set<Track> tracks = new HashSet<>();
 
 
@@ -114,7 +114,7 @@ public class Record {
         return this.performers;
     }
 
-    public Set<Cover> getCoverss() {
+    public Set<Cover> getCovers() {
         return this.covers;
     }
 

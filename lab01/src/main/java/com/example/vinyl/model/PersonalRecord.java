@@ -1,5 +1,7 @@
 package com.example.vinyl.model;
 
+import java.io.Serializable;
+
 import org.hibernate.annotations.Type;
 
 import co.elastic.clients.elasticsearch.watcher.ConditionType;
@@ -7,7 +9,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "personal_record")
-public class PersonalRecord {
+public class PersonalRecord implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

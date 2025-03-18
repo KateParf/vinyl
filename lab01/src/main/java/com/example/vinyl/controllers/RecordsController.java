@@ -33,12 +33,12 @@ class RecordsController {
     // Получаем все пластинки - TODO add filters
     @GetMapping("/list")
     List<Record> all(
-            @RequestParam(required = false) String genre,
-            @RequestParam(required = false) String performer,
-            @RequestParam(required = false) String group,
+            @RequestParam(required = false) Integer genre_id,
+            @RequestParam(required = false) Integer performer_id,
+            @RequestParam(required = false) Integer group_id,
             @RequestParam(required = false) Integer decade ) {
         //return service.getAllRecords();
-        return service.getFilterRecords(genre, performer, group, decade);
+        return service.getFilterRecords(genre_id, performer_id, group_id, decade);
     }
 
     // Получаем конкретную пластинку по ид
