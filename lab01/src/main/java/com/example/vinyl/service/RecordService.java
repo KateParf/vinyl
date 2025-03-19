@@ -41,7 +41,9 @@ public class RecordService {
         log.info(info);
         //return recordRepository.findAllFiltered(genre_id, performer_id, group_id, startYear, endYear);
 
-        return recordRepository.findByGroups_IdAndPerformers_IdAndGenre_Id(group_id, performer_id, genre_id);
+        //return recordRepository.findByGroups_IdAndPerformers_IdAndGenre_Id(group_id, performer_id, genre_id);
+
+        return recordRepository.findAllFiltered(genre_id, performer_id, group_id, startYear, endYear);
     }
 
     // Получить пластинку по ID
