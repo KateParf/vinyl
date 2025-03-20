@@ -18,7 +18,8 @@ public class SecurityConfig {
     // для отладки откл авторизацию
     @Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests().anyRequest().permitAll();
+		http.csrf().disable().authorizeHttpRequests().anyRequest().permitAll();
 		return http.build();
 	}
+
 }

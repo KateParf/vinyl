@@ -48,7 +48,7 @@ class RecordsController {
     }
 
     // Редактируем общую инфу о пластинке
-    @PostMapping("/edit/{id}")
+    @PostMapping("/edit")
     OpResult editRecord(@RequestBody Record editRecord) {
         service.updateRecord(editRecord);
         return new OpResult(true);
@@ -62,8 +62,8 @@ class RecordsController {
     }
 
     // Удаление пластинки из общего каталога
-    @PostMapping("/delete/{id}")
-    OpResult deleteRecord(@RequestBody Integer id) {
+    @GetMapping("/delete/{id}")
+    OpResult deleteRecord(@PathVariable Integer id) {
         service.deleteRecord(id);
         return new OpResult(true);
     }

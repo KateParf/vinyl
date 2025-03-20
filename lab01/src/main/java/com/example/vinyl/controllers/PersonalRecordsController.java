@@ -45,22 +45,22 @@ class PersonalRecordsController {
 
     // Добавляем пластинку в коллекцию из общего каталога
     @GetMapping("/add/{id}")
-    OpResult existRecord(@RequestBody Integer id) {
+    OpResult existRecord(@PathVariable Integer id) {
         User user = userService.getSessionUser();
         personalService.addExistRecord(id, user);
         return new OpResult(true);
     }
 
     // Редактируем персональную информацию о пластинке
-    @PostMapping("/edit/{id}")
+    @PostMapping("/edit")
     OpResult editRecord(@RequestBody PersonalRecord editRecord) {
         personalService.updateRecord(editRecord);
         return new OpResult(true);
     }
 
     // Удаляем пластинку из каталога юзера
-    @PostMapping("/delete/{id}")
-    OpResult deleteRecord(@RequestBody Integer id) {
+    @GetMapping("/delete/{id}")
+    OpResult deleteRecord(@PathVariable Integer id) {
         personalService.deleteRecord(id);
         return new OpResult(true);
     }
