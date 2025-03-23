@@ -1,10 +1,14 @@
 package com.example.vinyl.service;
 
 import com.example.vinyl.exceptions.RecordNotFoundException;
+import com.example.vinyl.model.Performer;
+import com.example.vinyl.model.Group;
 import com.example.vinyl.model.Record;
+import com.example.vinyl.model.Track;
 import com.example.vinyl.repository.RecordRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -36,12 +40,15 @@ public class RecordService {
             endYear = startYear + 9; // 1960 -> 1969
         }
         // Логируем параметры для отладки
-        String info = String.format("Filtering records with genre= %d, performer= %d, group= %d, startYear= %d, endYear= %d", 
-            genre_id, performer_id, group_id, startYear, endYear);
+        String info = String.format(
+                "Filtering records with genre= %d, performer= %d, group= %d, startYear= %d, endYear= %d",
+                genre_id, performer_id, group_id, startYear, endYear);
         log.info(info);
-        //return recordRepository.findAllFiltered(genre_id, performer_id, group_id, startYear, endYear);
+        // return recordRepository.findAllFiltered(genre_id, performer_id, group_id,
+        // startYear, endYear);
 
-        //return recordRepository.findByGroups_IdAndPerformers_IdAndGenre_Id(group_id, performer_id, genre_id);
+        // return recordRepository.findByGroups_IdAndPerformers_IdAndGenre_Id(group_id,
+        // performer_id, genre_id);
 
         return recordRepository.findAllFiltered(genre_id, performer_id, group_id, startYear, endYear);
     }
@@ -91,4 +98,34 @@ public class RecordService {
         recordRepository.deleteAll();
     }
 
+    public String getTrackNameById(Integer recordId, Integer trackId) {
+        Record record = this.getRecord(recordId);
+
+        Optional<Track> trackOptional = record.getTracks().stream()
+                .filter(track -> track.getId().equals(trackId))
+                .findFirst();
+
+        if (trackOptional.isPresent()) {
+
+            // Получаем название группы (если есть)
+            String groupName = record.getGroups().stream()
+                    .findFirst()
+                    .map(Group::getName)
+                    .orElse(null);
+
+            // Получаем название исполнителя (если есть)
+            String performerName = record.getPerformers().stream()
+                    .findFirst()
+                    .map(Performer::getName)
+                    .orElse(null);
+
+            if (groupName != null) {
+                return groupName + " " + trackOptional.get().getName();
+            }
+            if (performerName != null) {
+                return performerName + " " + trackOptional.get().getName();
+            }
+        }
+        return null;
+    }
 }

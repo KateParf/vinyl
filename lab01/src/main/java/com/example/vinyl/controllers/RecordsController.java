@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.vinyl.service.PersonalRecordService;
+import com.example.vinyl.service.PlayService;
 import com.example.vinyl.service.RecordService;
 import com.example.vinyl.service.UserService;
 import com.example.vinyl.exceptions.RecordNotFoundException;
@@ -24,13 +25,15 @@ class RecordsController {
 
     private final RecordService service;
     private final UserService userService;
+    private final PlayService playService;
 
-    RecordsController(RecordService service, UserService userService) {
+    RecordsController(RecordService service, UserService userService, PlayService playService) {
         this.service = service;
         this.userService = userService;
+        this.playService = playService;
     }
 
-    // Получаем все пластинки - TODO add filters
+    // Получаем все пластинки
     @GetMapping("/list")
     List<Record> all(
             @RequestParam(required = false) Integer genre_id,
@@ -79,6 +82,14 @@ class RecordsController {
     OpResult getByBarcode(@RequestBody String barcode) {
         service.getByBarcode(barcode);
         return new OpResult(true);
+    }
+
+    // Получать мп3 30 сек и проигрывать
+    @GetMapping("/{recordId}/play/{trackId}")
+    String play(@PathVariable Integer recordId, @PathVariable Integer trackId) {
+        String trackName = service.getTrackNameById(recordId, trackId);
+        String urlMp3 = playService.getTrackMp3URL(trackName);
+        return urlMp3;
     }
 
 }
