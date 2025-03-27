@@ -60,7 +60,7 @@ public class RecordService {
     }
 
     // Поиск пластинки по штрихкоду
-    public Record getByBarcode(String barcode) {
+    public List<Record> getByBarcode(String barcode) {
         return recordRepository.findByBarcode(barcode);
     }
 

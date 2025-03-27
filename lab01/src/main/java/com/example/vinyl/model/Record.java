@@ -132,6 +132,10 @@ public class Record implements Serializable {
         this.groups.add(group);
     }
 
+    public void addPerformer(Performer performer) {
+        this.performers.add(performer);
+    }
+
     public void addCover(String coverUrl) {
         this.covers.add(new Cover(coverUrl));
     }
