@@ -70,6 +70,10 @@ class RecordTests {
 		beatles_add.setPicture("http://google.com/images/beatles.jpg");
 		groupService.add(beatles_add);
 
+		Genre rock_add = new Genre();
+		rock_add.setName("Rock");
+		genreService.add(rock_add);
+
 		Record recordAbbeyRoad = new Record();
 		recordAbbeyRoad.setName("Abbey Road");
 		recordAbbeyRoad.setYear(1969);
@@ -92,7 +96,7 @@ class RecordTests {
 		Record newRecord = recordService.getAllRecords().getLast();
 		assertEquals(newRecord.getName(), "Abbey Road");
 		List<Group> groups = new ArrayList<>(newRecord.getGroups());
-		Group recGroup = groups.get(0);
+		Group recGroup = groups.getFirst();
 		assertEquals(recGroup.getName(), "The Beatles");
 		
 		//--

@@ -4,12 +4,17 @@ CREATE TYPE "condition_enum" AS ENUM (
   'NEW'
 );
 
+CREATE TYPE "role_enum" AS ENUM (
+  'DEFAULT',
+  'ADMIN'
+);
+
 CREATE TABLE "record" (
   "id" SERIAL PRIMARY KEY,
-  "name" varchar,
+  "name" varchar UNIQUE,
   "year" integer,
   "publisher" varchar,
-  "barcode" varchar,
+  "barcode" varchar UNIQUE,
   "genre_id" integer NOT NULL
 );
 
@@ -23,20 +28,21 @@ CREATE TABLE "personal_record" (
 
 CREATE TABLE "users" (
   "id" SERIAL PRIMARY KEY,
-  "login" varchar,
+  "login" varchar UNIQUE,
   "password" varchar,
-  "email" varchar
+  "email" varchar UNIQUE,
+  "user_role" role_enum
 );
 
 CREATE TABLE "cover" (
   "id" SERIAL PRIMARY KEY,
   "record_id" integer NOT NULL,
-  "picture" varchar
+  "picture" varchar UNIQUE
 );
 
 CREATE TABLE "genre" (
   "id" SERIAL PRIMARY KEY,
-  "name" varchar
+  "name" varchar UNIQUE
 );
 
 CREATE TABLE "performer_record" (
@@ -48,37 +54,37 @@ CREATE TABLE "performer_record" (
 CREATE TABLE "tracks" (
   "id" SERIAL PRIMARY KEY,
   "record_id" integer NOT NULL,
-  "name" varchar
+  "name" varchar UNIQUE
 );
 
 CREATE TABLE "performer" (
   "id" SERIAL PRIMARY KEY,
   "group_id" integer,
-  "name" varchar,
+  "name" varchar UNIQUE,
   "picture" varchar
 );
 
 CREATE TABLE "groups" (
   "id" SERIAL PRIMARY KEY,
-  "name" varchar,
+  "name" varchar UNIQUE,
   "picture" varchar
 );
 
-ALTER TABLE "record" ADD FOREIGN KEY ("genre_id") REFERENCES "genre" ("id");
+ALTER TABLE "record" ADD FOREIGN KEY ("genre_id") REFERENCES "genre" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "personal_record" ADD FOREIGN KEY ("record_id") REFERENCES "record" ("id");
+ALTER TABLE "personal_record" ADD FOREIGN KEY ("record_id") REFERENCES "record" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "personal_record" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+ALTER TABLE "personal_record" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "cover" ADD FOREIGN KEY ("record_id") REFERENCES "record" ("id");
+ALTER TABLE "cover" ADD FOREIGN KEY ("record_id") REFERENCES "record" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "performer_record" ADD FOREIGN KEY ("record_id") REFERENCES "record" ("id");
+ALTER TABLE "performer_record" ADD FOREIGN KEY ("record_id") REFERENCES "record" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "performer_record" ADD FOREIGN KEY ("performer_id") REFERENCES "performer" ("id");
+ALTER TABLE "performer_record" ADD FOREIGN KEY ("performer_id") REFERENCES "performer" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "performer_record" ADD FOREIGN KEY ("group_id") REFERENCES "groups" ("id");
+ALTER TABLE "performer_record" ADD FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "tracks" ADD FOREIGN KEY ("record_id") REFERENCES "record" ("id");
+ALTER TABLE "tracks" ADD FOREIGN KEY ("record_id") REFERENCES "record" ("id") ON UPDATE CASCADE;
 
-ALTER TABLE "performer" ADD FOREIGN KEY ("group_id") REFERENCES "groups" ("id");
+ALTER TABLE "performer" ADD FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON UPDATE CASCADE;
 

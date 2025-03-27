@@ -2,6 +2,7 @@ package com.example.vinyl.controllers;
 
 import java.util.List;
 
+import com.example.vinyl.model.RoleEnum;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,8 +33,8 @@ class UsersController {
 
     // Add new user
     @PostMapping("/register")
-    OpResult registerUser(@RequestBody String login, String password, String email) {
-        return service.registerUser(login, email, password);
+    OpResult registerUser(@RequestBody String login, String password, String email, RoleEnum role) {
+        return service.registerUser(login, email, password, role);
     }
 
 }

@@ -37,7 +37,7 @@ class SearchTests {
 		// abba golen hits
 		List<RecordBrief> recs = this.searchService.searchByBarcode("600753511060");
 
-		var rec1 = this.searchService.addFullBriefs(recs.get(0));
+		var rec1 = this.searchService.addFullBriefs(recs.getFirst());
 		
 		assertEquals((rec1.getGroups().toArray(new Group[0])[0]).getName(), "ABBA");
 		assertEquals((rec1.getName()), "ABBA - Gold (Greatest Hits)");

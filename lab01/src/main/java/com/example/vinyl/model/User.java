@@ -13,13 +13,18 @@ public class User {
     private String password;
     private String email;
 
+    @Column(name = "user_role", columnDefinition = "role_enum")
+    @Enumerated(EnumType.STRING)
+    private RoleEnum role;
+
     public User() {
     }
 
-    public User(String login, String email, String password) {
+    public User(String login, String email, String password, RoleEnum role) {
         this.login = login;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     public Integer getId() {

@@ -1,6 +1,7 @@
 package com.example.vinyl;
 
 import com.example.vinyl.controllers.OpResult;
+import com.example.vinyl.model.RoleEnum;
 import com.example.vinyl.service.GenreService;
 import com.example.vinyl.service.GroupService;
 import com.example.vinyl.service.PerformerService;
@@ -45,7 +46,6 @@ class GroupTests {
     
     @Test
     public void test_ClearAll() {
-        userService.registerUser("katya", "kat@mail.ru", "xxxbbbvvv");
         User user = userService.getSessionUser();
         personalRecordService.clear(user);
         recordService.clear();

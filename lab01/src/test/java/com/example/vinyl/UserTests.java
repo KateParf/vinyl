@@ -1,6 +1,7 @@
 package com.example.vinyl;
 
 import com.example.vinyl.controllers.OpResult;
+import com.example.vinyl.model.RoleEnum;
 import com.example.vinyl.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ class UserTests {
 		String email = "testuser@example.com";
 		String password = "testpassword";
 
-		OpResult result = userService.registerUser(username, email, password);
+		OpResult result = userService.registerUser(username, email, password, RoleEnum.DEFAULT);
 
 		assertEquals(true, result.result);
 	}
