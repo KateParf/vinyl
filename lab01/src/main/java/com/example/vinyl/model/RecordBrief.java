@@ -21,6 +21,8 @@ public class RecordBrief {
     // любая информация - ссылка на источник
     private String sourceUID;
 
+    private String barcode;
+
     //----
 
     public String getSourceUID() {
@@ -38,7 +40,10 @@ public class RecordBrief {
     public Integer getYear() {
         return this.year;
     }
-    
+
+    public String getBarcode() {
+        return this.barcode;
+    }
 
     public String getCover() {
         return this.coverUrl;
@@ -56,6 +61,9 @@ public class RecordBrief {
         this.year = year;
     }
 
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
 
     public void setCover(String cover) {
         this.coverUrl = cover;

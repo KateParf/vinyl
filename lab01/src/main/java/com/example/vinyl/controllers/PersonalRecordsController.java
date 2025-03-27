@@ -11,22 +11,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.vinyl.service.PersonalRecordService;
 import com.example.vinyl.service.RecordService;
+import com.example.vinyl.service.SearchService;
 import com.example.vinyl.service.UserService;
 import com.example.vinyl.exceptions.RecordNotFoundException;
 import com.example.vinyl.model.PersonalRecord;
 import com.example.vinyl.model.Record;
+import com.example.vinyl.model.RecordBrief;
 import com.example.vinyl.model.User;
 
 @RestController
 @RequestMapping("/userrecords")
 class PersonalRecordsController {
 
-    private final RecordService service;
     private final UserService userService;
     private final PersonalRecordService personalService;
+    private final SearchService searchService;
 
-    PersonalRecordsController(RecordService service, PersonalRecordService personalService, UserService userService) {
-        this.service = service;
+    PersonalRecordsController(SearchService searchService, PersonalRecordService personalService, UserService userService) {
+        this.searchService = searchService;
         this.personalService = personalService;
         this.userService = userService;
     }
@@ -49,6 +51,14 @@ class PersonalRecordsController {
         User user = userService.getSessionUser();
         personalService.addExistRecord(id, user);
         return new OpResult(true);
+    }
+
+    // из полученных RecordBrief пользователь выбирает одну и мы добавляем ее в бд
+    @PostMapping("/addbrief")
+    OpResult addByRecordBrief(@RequestBody RecordBrief recordBrief) {
+        Record record = searchService.addFullBriefs(recordBrief);
+        Integer id = record.getId();
+        return this.existRecord(id);
     }
 
     // Редактируем персональную информацию о пластинке

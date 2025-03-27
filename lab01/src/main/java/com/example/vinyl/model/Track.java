@@ -2,6 +2,8 @@ package com.example.vinyl.model;
 
 import java.io.Serializable;
 
+import org.hibernate.annotations.Cascade;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -14,8 +16,12 @@ public class Track implements Serializable{
     @Column
     private String name;
 
-    //@ManyToOne
-    //private Record record;
+    @ManyToOne()
+    @Cascade(value={org.hibernate.annotations.CascadeType.ALL})
+    @JoinColumn(name="record_id")
+    protected Record record;
+
+    //---
 
     public Track(String name) {
         this.name = name;
@@ -34,5 +40,9 @@ public class Track implements Serializable{
     
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setRecord(Record record) {
+        this.record = record;
     }
 }

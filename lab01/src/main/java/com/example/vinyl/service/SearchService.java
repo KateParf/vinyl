@@ -9,7 +9,9 @@ import java.security.NoSuchAlgorithmException;
 import java.nio.charset.StandardCharsets;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.example.vinyl.model.Cover;
 import com.example.vinyl.model.Genre;
@@ -17,6 +19,7 @@ import com.example.vinyl.model.Group;
 import com.example.vinyl.model.Performer;
 import com.example.vinyl.model.Record;
 import com.example.vinyl.model.RecordBrief;
+import com.example.vinyl.model.Track;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -83,6 +86,7 @@ public class SearchService {
                     newRecord.setYear(nodeYear.asInt());
                 String genreStr = nodeI.get("genre").get(0).asText();
                 newRecord.setGenre(genreStr);
+                newRecord.setBarcode(nodeI.get("barcode").get(0).asText());
                 newRecord.setCover(nodeI.get("cover_image").asText());
                 newRecord.setSourceUID(nodeI.get("resource_url").asText());
                 records.add(newRecord);
@@ -105,7 +109,8 @@ public class SearchService {
         if (performer == null) {
             performer = new Performer();
             performer.setName(perfName);
-            if (group != null) performer.setGroup(group);
+            if (group != null)
+                performer.setGroup(group);
             // понять откуда брать картинки потому что в response body пустые строки
             performer.setPicture("");
             performerService.add(performer);
@@ -127,10 +132,9 @@ public class SearchService {
 
             // теперь добавляем всех участников
             var mems = jsonNodeArtist.get("members");
-            ObjectMapper objectMapper = new ObjectMapper();
             for (int i = 0; i < mems.size(); i++) {
-                try { 
-                    JsonNode jsonNodePerformer = objectMapper.readTree(mems.get(i).asText());
+                try {
+                    JsonNode jsonNodePerformer = mems.get(i);
                     this.getPerformer(jsonNodePerformer, group);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -140,44 +144,63 @@ public class SearchService {
         return group;
     }
 
-    public void addFullBriefs(RecordBrief recordBrief) {
+    public Record addFullBriefs(RecordBrief recordBrief) {
         try {
-            String url = recordBrief.getSourceUID();
-            String respSearch = HttpRequest.get(url);
+            // сначала смотрим есть ли у нас такая пластинка в бд
+            Record newRecord = recordService.searchRecord(recordBrief.getTitle());
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(respSearch);
+            if (newRecord == null) {
+                String url = recordBrief.getSourceUID();
+                String respSearch = HttpRequest.get(url);
 
-            Record newRecord = new Record();
-            newRecord.setName(recordBrief.getTitle());
-            Integer year = recordBrief.getYear();
-            if (year != null)
-                newRecord.setYear(year);
-            Genre genre = genreService.getByName(recordBrief.getGenre());
-            if (genre != null)
-                newRecord.setGenre(genre);
-            newRecord.setPublisher(jsonNode.get("labels").get(0).get("name").asText());
-            newRecord.addCover(recordBrief.getCover());
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode jsonNode = objectMapper.readTree(respSearch);
 
-            // здесь полное описание артиста
-            // чтобы понимать артист у нас или группа смотрим на поле members
-            // если такого нет, то это соло исполнитель, если есть - группа
-            var artist = jsonNode.get("artists"); // их несколько
-            for (int i = 0; i < artist.size(); i++) {
-                String artistURL = artist.get(0).get("resource_url").asText();
-                String respArtist = HttpRequest.get(artistURL);
-                JsonNode jsonNodeArtist = objectMapper.readTree(respArtist);
-                if (jsonNodeArtist.get("members") != null) {
-                    Group group = this.getGroup(jsonNodeArtist);
-                    newRecord.addGroup(group);
-                } else {
-                    Performer performer = this.getPerformer(jsonNodeArtist, null);
-                    newRecord.addPerformer(performer);
+                newRecord = new Record();
+                newRecord.setName(recordBrief.getTitle());
+                Integer year = recordBrief.getYear();
+                if (year != null)
+                    newRecord.setYear(year);
+                Genre genre = genreService.getByName(recordBrief.getGenre());
+                if (genre != null)
+                    newRecord.setGenre(genre);
+                newRecord.setPublisher(jsonNode.get("labels").get(0).get("name").asText());
+                newRecord.setBarcode(recordBrief.getBarcode());
+                newRecord.addCover(recordBrief.getCover());
+
+                // здесь полное описание артиста
+                // чтобы понимать артист у нас или группа смотрим на поле members
+                // если такого нет, то это соло исполнитель, если есть - группа
+                var artist = jsonNode.get("artists"); // их несколько
+                for (int i = 0; i < artist.size(); i++) {
+                    String artistURL = artist.get(0).get("resource_url").asText();
+                    String respArtist = HttpRequest.get(artistURL);
+                    JsonNode jsonNodeArtist = objectMapper.readTree(respArtist);
+                    if (jsonNodeArtist.get("members") != null) {
+                        Group group = this.getGroup(jsonNodeArtist);
+                        newRecord.addGroup(group);
+                    } else {
+                        Performer performer = this.getPerformer(jsonNodeArtist, null);
+                        newRecord.addPerformer(performer);
+                    }
                 }
+
+                // добавляем треки
+                Set<Track> tracksToAdd = new HashSet<>();
+                var tracks = jsonNode.get("tracklist");
+                for (int i = 0; i < tracks.size(); i++) {
+                    JsonNode jsonNodeTrack = tracks.get(i);
+                    String title = jsonNodeTrack.get("title").asText();
+                    tracksToAdd.add(new Track(title));
+                }
+                newRecord.setTracks(tracksToAdd);
+                return recordService.addNewRecord(newRecord);
             }
+            return newRecord;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 }

@@ -47,21 +47,23 @@ class RecordTests {
     private PerformerService performerService;
 	
 		
-	@Test 
+	@Test
 	public void test_ClearAll() {
 		User user = userService.getSessionUser();
         personalRecordService.clear(user);
         recordService.clear();
         performerService.clear();
         groupService.clear();
-        genreService.clear();
+        ///genreService.clear();
 	}
 
 	@Test
 	public void testaddNewRecord() {
+		/*
 		Genre rock_add = new Genre();
 		rock_add.setName("Rock");
 		genreService.add(rock_add);		
+		*/
 
 		Group beatles_add = new Group();
 		beatles_add.setName("The Beatles");

@@ -51,12 +51,14 @@ public class Record implements Serializable {
         inverseJoinColumns = { @JoinColumn(name = "group_id") })
     private Set<Group> groups = new HashSet<>();
 
-    @OneToMany( fetch = FetchType.EAGER )
-    @JoinColumn(name = "record_id")
+    //@OneToMany( fetch = FetchType.EAGER , cascade = CascadeType.ALL, orphanRemoval = true)
+    //@JoinColumn(name = "record_id")
+    @OneToMany( mappedBy = "record" , cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Cover> covers = new HashSet<>();
 
-    @OneToMany( fetch = FetchType.EAGER )
-    @JoinColumn(name = "record_id")
+    //@OneToMany( fetch = FetchType.EAGER )
+    //@JoinColumn(name = "record_id")
+    @OneToMany( mappedBy = "record" , cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Track> tracks = new HashSet<>();
 
 
@@ -124,6 +126,7 @@ public class Record implements Serializable {
 
     public void setTracks(Set<Track> tracks){
         this.tracks = tracks;
+        tracks.forEach(track -> track.setRecord(this) );
     }
 
     //---
@@ -137,7 +140,9 @@ public class Record implements Serializable {
     }
 
     public void addCover(String coverUrl) {
-        this.covers.add(new Cover(coverUrl));
+        var cover = new Cover(coverUrl);
+        this.covers.add(cover);
+        cover.setRecord(this);
     }
 
 }

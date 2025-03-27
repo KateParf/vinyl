@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.vinyl.service.PersonalRecordService;
 import com.example.vinyl.service.PlayService;
 import com.example.vinyl.service.RecordService;
+import com.example.vinyl.service.SearchService;
 import com.example.vinyl.service.UserService;
 import com.example.vinyl.exceptions.RecordNotFoundException;
 import com.example.vinyl.model.PersonalRecord;
 import com.example.vinyl.model.Record;
+import com.example.vinyl.model.RecordBrief;
 import com.example.vinyl.model.User;
 
 @RestController
@@ -26,11 +28,13 @@ class RecordsController {
     private final RecordService service;
     private final UserService userService;
     private final PlayService playService;
+    private final SearchService searchService;
 
-    RecordsController(RecordService service, UserService userService, PlayService playService) {
+    RecordsController(RecordService service, UserService userService, PlayService playService, SearchService searchService) {
         this.service = service;
         this.userService = userService;
         this.playService = playService;
+        this.searchService = searchService;
     }
 
     // Получаем все пластинки
@@ -77,11 +81,11 @@ class RecordsController {
         return service.searchRecord(name);
     }
 
-    // Получаем конкретную пластинку по штрихкоду
+    // Получаем RecordBrief по штрихкоду
     @PostMapping("/search/barcode")
-    OpResult getByBarcode(@RequestBody String barcode) {
-        service.getByBarcode(barcode);
-        return new OpResult(true);
+    List<RecordBrief> getByBarcode(@RequestBody String barcode) {
+        List<RecordBrief> recordBriefs = searchService.searchByBarcode(barcode);
+        return recordBriefs;
     }
 
     // Получать мп3 30 сек и проигрывать
