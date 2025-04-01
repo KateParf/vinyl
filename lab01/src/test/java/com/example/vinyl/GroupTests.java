@@ -1,6 +1,8 @@
 package com.example.vinyl;
 
+import com.example.vinyl.controllers.GroupsController;
 import com.example.vinyl.controllers.OpResult;
+import com.example.vinyl.exceptions.ResourceNotFoundException;
 import com.example.vinyl.model.RoleEnum;
 import com.example.vinyl.service.GenreService;
 import com.example.vinyl.service.GroupService;
@@ -12,22 +14,31 @@ import com.example.vinyl.model.Genre;
 import com.example.vinyl.model.Group;
 import com.example.vinyl.model.User;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class GroupTests {
 
 	@Autowired
 	private GroupService groupService;
+    @Autowired
+	private GroupsController groupController;
 
 	@Autowired
     private RecordService recordService;
@@ -36,25 +47,25 @@ class GroupTests {
     private PersonalRecordService personalRecordService;
 
     @Autowired
-    private GenreService genreService;
-
-    @Autowired
     private UserService userService;
     
     @Autowired
     private PerformerService performerService;
     
-    @Test
-    public void test_ClearAll() {
+    //---
+
+    @Test @Order(1)
+    public void testClearAll() {
         User user = userService.getSessionUser();
         personalRecordService.clear(user);
         recordService.clear();
         performerService.clear();
         groupService.clear();
-        genreService.clear();
+        //genreService.clear();
     }
 	
-	@Test
+    // проверка добавления новой записи
+	@Test @Order(2)
 	public void testAddNewGroup() {
 
 		Group beatles = new Group();
@@ -74,5 +85,35 @@ class GroupTests {
         assertTrue(groups.stream().anyMatch(g -> "Бутырка".equals(g.getName())));
 	
 	}
+
+    // проверка кейса когда запись не найдена
+    @Test @Order(3)
+	public void testGroupNotFound() {
+		// service - by id - return null
+		var res = groupService.getById(888);
+		assertNull(res);
+
+        // controller - by id - return exception
+		ResourceNotFoundException exception_id_2 = assertThrows(ResourceNotFoundException.class,
+		() -> groupController.getGroup(999));
+		assertEquals("Group not found with id: 999", exception_id_2.getMessage());
+
+        // service by name - return null
+        var res2 = groupService.getByName("WrongName");
+		assertNull(res2);
+    }
+
+    // проверка кейса когда добавлем дубль записи
+    @Test @Order(4)
+	public void testGroupDublicate() {
+        Group grp1 = new Group();
+		grp1.setName("Еноты");
+		groupService.add(grp1);	
+
+        Group grp2 = new Group();
+		grp2.setName("Еноты");
+		DataIntegrityViolationException exception_dup = assertThrows(DataIntegrityViolationException.class,
+		() -> groupService.add(grp2));
+    }
 
 }

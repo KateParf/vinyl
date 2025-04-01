@@ -2,6 +2,7 @@ package com.example.vinyl.controllers;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +16,7 @@ import com.example.vinyl.service.PlayService;
 import com.example.vinyl.service.RecordService;
 import com.example.vinyl.service.SearchService;
 import com.example.vinyl.service.UserService;
-import com.example.vinyl.exceptions.RecordNotFoundException;
+import com.example.vinyl.exceptions.ResourceNotFoundException;
 import com.example.vinyl.model.PersonalRecord;
 import com.example.vinyl.model.Record;
 import com.example.vinyl.model.RecordBrief;
@@ -23,7 +24,7 @@ import com.example.vinyl.model.User;
 
 @RestController
 @RequestMapping("/records")
-class RecordsController {
+public class RecordsController {
 
     private final RecordService service;
     private final UserService userService;
@@ -50,50 +51,72 @@ class RecordsController {
 
     // Получаем конкретную пластинку по ид
     @GetMapping("/get/{id}")
-    public Record getRecord(@PathVariable Integer id) {
-        return service.getRecord(id);
+    public ResponseEntity<Record> getRecord(@PathVariable Integer id) {
+        Record record = service.getRecord(id);
+        if (record == null) {
+            throw new ResourceNotFoundException("Record", "id", id);
+        }
+        return ResponseEntity.ok(record);
     }
 
     // Редактируем общую инфу о пластинке
     @PostMapping("/edit")
-    OpResult editRecord(@RequestBody Record editRecord) {
-        service.updateRecord(editRecord);
-        return new OpResult(true);
+    public ResponseEntity<Record> editRecord(@RequestBody Record editRecord) {
+        Record updatedRecord = service.updateRecord(editRecord);
+        if (updatedRecord == null) {
+            throw new ResourceNotFoundException("Updated record", "id", editRecord.getId());
+        }
+        return ResponseEntity.ok(updatedRecord);
     }
 
     // Добавление пластинки вручную в общий каталог
     @PostMapping("/new")
-    OpResult newRecord(@RequestBody Record newRecord) {
-        service.addNewRecord(newRecord);
-        return new OpResult(true);
+    public Record newRecord(@RequestBody Record newRecord) {
+        return service.addNewRecord(newRecord);
     }
 
     // Удаление пластинки из общего каталога
     @GetMapping("/delete/{id}")
-    OpResult deleteRecord(@PathVariable Integer id) {
+    public void deleteRecord(@PathVariable Integer id) {
         service.deleteRecord(id);
-        return new OpResult(true);
     }
 
     // Получаем конкретную пластинку по имени
     @PostMapping("/search/name")
-    public Record getByName(@RequestBody String name) {
-        return service.searchRecord(name);
+    public ResponseEntity<Record> getByName(@RequestBody String name) {
+        Record record = service.searchRecord(name);
+        if (record == null) {
+            throw new ResourceNotFoundException("Record", "name", name);
+        }
+        return ResponseEntity.ok(record);
     }
 
     // Получаем RecordBrief по штрихкоду
     @PostMapping("/search/barcode")
-    List<RecordBrief> getByBarcode(@RequestBody String barcode) {
-        List<RecordBrief> recordBriefs = searchService.searchByBarcode(barcode);
-        return recordBriefs;
+    public ResponseEntity<List<RecordBrief>> getByBarcode(@RequestBody String barcode) {
+        List<RecordBrief> records = searchService.searchByBarcode(barcode);
+        if (records.isEmpty()) {
+            throw new ResourceNotFoundException("Records", "barcode", barcode);
+        }
+        return ResponseEntity.ok(records);
     }
 
-    // Получать мп3 30 сек и проигрывать
+    // Получать мп3 30 сек 
+    // если не найдено ИД рекорда или трека то - ексепшен что ресурс не найден
     @GetMapping("/{recordId}/play/{trackId}")
-    String play(@PathVariable Integer recordId, @PathVariable Integer trackId) {
+    public ResponseEntity<String> play(@PathVariable Integer recordId, @PathVariable Integer trackId) {
         String trackName = service.getTrackNameById(recordId, trackId);
+        if (trackName == null) {
+            throw new ResourceNotFoundException("Track", "id", 
+                String.format("recordId=%d, trackId=%d", recordId, trackId));
+        }
+        
         String urlMp3 = playService.getTrackMp3URL(trackName);
-        return urlMp3;
+        if (urlMp3 == null) {
+            throw new ResourceNotFoundException("MP3", "track", trackName);
+        }
+        
+        return ResponseEntity.ok(urlMp3);
     }
 
 }

@@ -17,5 +17,5 @@ import java.util.function.Function;
 
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Integer> {
-    Group findByName(String name);
+    Optional<Group> findByName(String name);
 }

@@ -20,6 +20,8 @@ class PlayTests {
 	@Autowired
 	private PlayService playService;
 	
+	//----
+
 	@Test
 	public void testPlay() {
 
@@ -29,11 +31,13 @@ class PlayTests {
 		String mp3body = this.playService.downloadMp3(mp3url);
 		assertNotNull(mp3body); 
 
+		
 		String mp3url2 = this.playService.getTrackMp3URL("The Beatles Yellow Submarine");
 		assertNotNull(mp3url2); 
 
 		String mp3body2 = this.playService.downloadMp3(mp3url2);
 		assertNotNull(mp3body2); 
+
 
 		String mp3url3 = this.playService.getTrackMp3URL("Уродские бобры Дайте карандаш");
 		assertNull(mp3url3); 

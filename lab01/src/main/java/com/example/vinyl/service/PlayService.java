@@ -19,10 +19,10 @@ public class PlayService {
 
     @Autowired
     public PlayService() {
-
     }
 
-    // возвращает ссылку на mp3 файл для указанного id трека
+    // возвращает ссылку на mp3 файл для указанного имени трека
+    // если по имени ничего не нашлось то возвращает null
     public String getTrackMp3URL(String trackName) {
         try {
             // 1й запрос на поиск композиции по имени

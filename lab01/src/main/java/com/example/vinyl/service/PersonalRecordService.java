@@ -1,6 +1,6 @@
 package com.example.vinyl.service;
 
-import com.example.vinyl.exceptions.RecordNotFoundException;
+import com.example.vinyl.exceptions.ResourceNotFoundException;
 import com.example.vinyl.model.ConditionEnum;
 import com.example.vinyl.model.PersonalRecord;
 import com.example.vinyl.repository.PersonalRecordRepository;
@@ -34,20 +34,22 @@ public class PersonalRecordService {
 
     // Получить пластинку по ID
     public PersonalRecord getRecord(Integer id) {
-        return persRecordRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException(id));
+        return persRecordRepository.findById(id).orElse(null);
     }
 
     // Добавляем пластинку из общего каталога ?????
     // при добавлении коменты и состояние пустые а потом мы их отдельно редактируем
     public PersonalRecord addExistRecord(Integer id, User user) {
         Record existingRecord = recordService.getRecord(id);
-        PersonalRecord newRecord = new PersonalRecord();
-        newRecord.setRecord(existingRecord);
-        newRecord.setComment(null);
-        newRecord.setCondition(null);
-        newRecord.setUser(user);
-        return persRecordRepository.save(newRecord);
+        if (existingRecord != null){
+            PersonalRecord newRecord = new PersonalRecord();
+            newRecord.setRecord(existingRecord);
+            newRecord.setComment(null);
+            newRecord.setCondition(null);
+            newRecord.setUser(user);
+            return persRecordRepository.save(newRecord);
+        }
+        return null;
     }
 
     // Edit single item
@@ -66,7 +68,8 @@ public class PersonalRecordService {
 
     // Delete single item
     public void deleteRecord(Integer id) {
-        persRecordRepository.deleteById(id);
+        if (persRecordRepository.existsById(id))
+            persRecordRepository.deleteById(id);
     }
 
     public void clear(User user) {

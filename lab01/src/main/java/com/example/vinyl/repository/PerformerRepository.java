@@ -17,5 +17,5 @@ import java.util.function.Function;
 
 @Repository
 public interface PerformerRepository extends JpaRepository<Performer, Integer> {
-    Performer findByName(String name);
+    Optional<Performer> findByName(String name);
 }

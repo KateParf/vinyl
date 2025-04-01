@@ -1,6 +1,6 @@
 package com.example.vinyl.service;
 
-import com.example.vinyl.exceptions.RecordNotFoundException;
+import com.example.vinyl.exceptions.ResourceNotFoundException;
 import com.example.vinyl.model.Performer;
 import com.example.vinyl.model.Group;
 import com.example.vinyl.model.Record;
@@ -44,29 +44,24 @@ public class RecordService {
                 "Filtering records with genre= %d, performer= %d, group= %d, startYear= %d, endYear= %d",
                 genre_id, performer_id, group_id, startYear, endYear);
         log.info(info);
-        // return recordRepository.findAllFiltered(genre_id, performer_id, group_id,
-        // startYear, endYear);
-
-        // return recordRepository.findByGroups_IdAndPerformers_IdAndGenre_Id(group_id,
-        // performer_id, genre_id);
 
         return recordRepository.findAllFiltered(genre_id, performer_id, group_id, startYear, endYear);
     }
 
     // Получить пластинку по ID
+    // если не найдено то - нулл
     public Record getRecord(Integer id) {
-        return recordRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException(id));
+        return recordRepository.findById(id).orElse(null);
     }
 
-    // Поиск пластинки по штрихкоду
+    // Поиск пластинок по штрихкоду
     public List<Record> getByBarcode(String barcode) {
         return recordRepository.findByBarcode(barcode);
     }
 
     // Поиск пластинки по имени
     public Record searchRecord(String name) {
-        return recordRepository.findByName(name);
+        return recordRepository.findByName(name).orElse(null);
     }
 
     // Добавить новую пластинку в общий каталог
@@ -90,16 +85,21 @@ public class RecordService {
     }
 
     // Delete single item
+    // если по ИД рекорда нет то никакого исключения не происходит
     public void deleteRecord(Integer id) {
-        recordRepository.deleteById(id);
+        if (recordRepository.existsById(id))
+            recordRepository.deleteById(id);
     }
 
     public void clear() {
         recordRepository.deleteAll();
     }
 
+    // возвращает полное название трека для поиска в музык сервисе = Имя исполнителя + название трека
+    // если пластинки или трека не найдено то возврат null
     public String getTrackNameById(Integer recordId, Integer trackId) {
         Record record = this.getRecord(recordId);
+        if (record == null) return null;
 
         Optional<Track> trackOptional = record.getTracks().stream()
                 .filter(track -> track.getId().equals(trackId))

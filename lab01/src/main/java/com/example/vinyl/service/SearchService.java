@@ -186,7 +186,7 @@ public class SearchService {
                 }
 
                 // добавляем треки
-                Set<Track> tracksToAdd = new HashSet<>();
+                List<Track> tracksToAdd = new ArrayList<>();
                 var tracks = jsonNode.get("tracklist");
                 for (int i = 0; i < tracks.size(); i++) {
                     JsonNode jsonNodeTrack = tracks.get(i);

@@ -11,7 +11,7 @@ CREATE TYPE "role_enum" AS ENUM (
 
 CREATE TABLE "record" (
   "id" SERIAL PRIMARY KEY,
-  "name" varchar UNIQUE,
+  "name" varchar,
   "year" integer,
   "publisher" varchar,
   "barcode" varchar UNIQUE,
@@ -54,7 +54,7 @@ CREATE TABLE "performer_record" (
 CREATE TABLE "tracks" (
   "id" SERIAL PRIMARY KEY,
   "record_id" integer NOT NULL,
-  "name" varchar UNIQUE
+  "name" varchar
 );
 
 CREATE TABLE "performer" (

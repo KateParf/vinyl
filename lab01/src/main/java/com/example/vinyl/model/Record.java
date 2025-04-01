@@ -1,6 +1,7 @@
 package com.example.vinyl.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -59,7 +60,7 @@ public class Record implements Serializable {
     //@OneToMany( fetch = FetchType.EAGER )
     //@JoinColumn(name = "record_id")
     @OneToMany( mappedBy = "record" , cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Track> tracks = new HashSet<>();
+    private List<Track> tracks = new ArrayList<>();
 
 
     //----
@@ -120,11 +121,11 @@ public class Record implements Serializable {
         return this.covers;
     }
 
-    public Set<Track> getTracks() {
+    public List<Track> getTracks() {
         return this.tracks;
     }
 
-    public void setTracks(Set<Track> tracks){
+    public void setTracks(List<Track> tracks){
         this.tracks = tracks;
         tracks.forEach(track -> track.setRecord(this) );
     }
