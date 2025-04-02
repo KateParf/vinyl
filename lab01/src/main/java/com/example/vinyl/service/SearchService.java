@@ -1,36 +1,24 @@
 package com.example.vinyl.service;
 
+import com.example.vinyl.model.Record;
+import com.example.vinyl.model.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.nio.charset.StandardCharsets;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import com.example.vinyl.model.Cover;
-import com.example.vinyl.model.Genre;
-import com.example.vinyl.model.Group;
-import com.example.vinyl.model.Performer;
-import com.example.vinyl.model.Record;
-import com.example.vinyl.model.RecordBrief;
-import com.example.vinyl.model.Track;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SearchService {
 
-    private GenreService genreService;
-    private RecordService recordService;
-    private GroupService groupService;
-    private PerformerService performerService;
+    private final GenreService genreService;
+    private final RecordService recordService;
+    private final GroupService groupService;
+    private final PerformerService performerService;
 
     @Autowired
     public SearchService(GenreService genreService, RecordService recordService, GroupService groupService,
@@ -67,7 +55,7 @@ public class SearchService {
     public List<RecordBrief> searchByBarcodeDiscogs(String barcode) {
         try {
             String url = "https://api.discogs.com/database/search?barcode=" +
-                    URLEncoder.encode(barcode, StandardCharsets.UTF_8.toString()) +
+                    URLEncoder.encode(barcode, StandardCharsets.UTF_8) +
                     "&token=zxUaBYodbchnbbgwQexbAhGpbSXFCowWloLjxSVK";
             String respSearch = HttpRequest.get(url);
 

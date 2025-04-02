@@ -3,14 +3,12 @@ package com.example.vinyl.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.nio.charset.StandardCharsets;
-import java.net.URLEncoder;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 
 // сервис для получения 30сек мп3 с яндекса
 // https://github.com/MarshalX/yandex-music-api
@@ -27,8 +25,8 @@ public class PlayService {
         try {
             // 1й запрос на поиск композиции по имени
             // see - https://github.com/MarshalX/yandex-music-api/blob/main/yandex_music/client.py
-            String url = "https://api.music.yandex.net/search?text=" + 
-              URLEncoder.encode(trackName, StandardCharsets.UTF_8.toString()) + 
+            String url = "https://api.music.yandex.net/search?text=" +
+                    URLEncoder.encode(trackName, StandardCharsets.UTF_8) +
               "&type=all&playlist_in_best=false&page=0";
             String respSearch = HttpRequest.get(url);
 
