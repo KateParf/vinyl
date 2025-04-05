@@ -1,11 +1,12 @@
 package com.example.vinyl.model;
 
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import jakarta.persistence.*;
 
 @Entity
 @Table(name = "record")
@@ -37,7 +38,7 @@ public class Record implements Serializable {
         name = "performer_record", 
         joinColumns = { @JoinColumn(name = "record_id") }, 
         inverseJoinColumns = { @JoinColumn(name = "performer_id") })
-    private Set<Performer> performers = new HashSet<>();
+    private final Set<Performer> performers = new HashSet<>();
 
     //  [] groups
     @ManyToMany(
@@ -50,12 +51,12 @@ public class Record implements Serializable {
         name = "performer_record", 
         joinColumns = { @JoinColumn(name = "record_id") }, 
         inverseJoinColumns = { @JoinColumn(name = "group_id") })
-    private Set<Group> groups = new HashSet<>();
+    private final Set<Group> groups = new HashSet<>();
 
     //@OneToMany( fetch = FetchType.EAGER , cascade = CascadeType.ALL, orphanRemoval = true)
     //@JoinColumn(name = "record_id")
     @OneToMany( mappedBy = "record" , cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Cover> covers = new HashSet<>();
+    private final Set<Cover> covers = new HashSet<>();
 
     //@OneToMany( fetch = FetchType.EAGER )
     //@JoinColumn(name = "record_id")
