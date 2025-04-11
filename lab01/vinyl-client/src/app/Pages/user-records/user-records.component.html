@@ -1,0 +1,16 @@
+<div class="container py-5">
+    <div class="row">
+        <!-- Основной контент - каталог -->
+        <div class="col ms-3">
+            <h2 class="mb-3">Ваши пластинки</h2>
+            <div class="row ms-1 g-4">
+                <div class="custom-card col-lg-2 col-md-4 col-sm-6 me-4" *ngFor="let record of personalRecords">
+                    <img src={{record.coverUrl}} alt="Обложка" class="cover">
+                    <div class="card-title">{{record.title}}</div>
+                    <div class="card-year">{{record.year}}</div>
+                    <span class="card-genre">{{record.genre}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

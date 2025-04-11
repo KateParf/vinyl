@@ -1,0 +1,40 @@
+<div class="container d-flex justify-content-center">
+  <div class="row">
+    <div class="hero col-12 mt-5">
+      <h1>Hello Welcome, vinyl lover</h1>
+      <h3>Create an account</h3>
+    </div>
+  </div>
+</div>
+
+<div class="container d-flex justify-content-center">
+  <form [formGroup]="authForm" (ngSubmit)="auth()">
+    <!-- Email input -->
+    <div class="row mb-4">
+      <label class=" form-label" for="formEmail">Email</label>
+      <input type="email" id="formEmail" class="form-control" />
+    </div>
+
+    <!-- Login input -->
+    <div class="row mb-4">
+      <label class="form-label" for="formLogin">Login</label>
+      <input type="text" id="formLogin" class="form-control" />
+    </div>
+
+    <!-- Password input -->
+    <div class="row mb-4">
+      <label class="form-label" for="formPassword">Password</label>
+      <input type="password" id="formPassword" class="form-control" />
+    </div>
+
+    <div class="row mb-4 d-flex justify-content-center">
+
+      <button type="button" class="col-6 mb-2 btn btn-custom btn-block">Sign in</button>
+
+      <div class="col-12 text-center">
+        <a [routerLink]="['/login']">Already have an account?</a>
+      </div>
+    </div>
+
+  </form>
+</div>
