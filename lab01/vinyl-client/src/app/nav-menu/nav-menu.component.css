@@ -1,11 +1,16 @@
+.navbar {
+	background-color: #ffffff;
+	color: black;
+}
+
 a.navbar-brand {
 	white-space: normal;
 	text-align: center;
-	xx-word-break: break-all;
 }
 
 .nav-link {
-	font-size: 17px;
+	font-size: 18px;
+	color: black;
 }
 
 html {
@@ -24,31 +29,16 @@ html {
 	max-width: 1600px !important;
 }
 
-.box-shadow {
-	box-shadow: 0 .25rem .75rem #2e1a0030;
-	background-color: #2e1a0030;
+.menu {
+	padding-left: calc(30%);
 }
 
-.search-hover {
-	margin-top: 9px;
-	border: 0px solid #ffffff;
+.search {
 	outline: none;
-	background-color: #ffffff00;
-	background-size: 25px;
-	background-position: 0px;
-	background-image: url("/Media/Images/search.png");
-	background-repeat: no-repeat;
-	border-radius: 10px;
-	width: 10px;
-	height: 10px;
-	padding: 12px;
-	transition: all 0.5s;
-}
-
-.search-hover:hover {
-	width: 300px;
-	padding-left: 35px;
-	border: 1px solid #ffffff;
+	border-radius: 6px;
+	width: 240px;
+	padding-inline: 16px;
+	border: 1px solid #DEE2E6;
 	background-color: white;
 	color: black;
 }

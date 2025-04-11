@@ -1,0 +1,47 @@
+<div class="container py-5 record-page" *ngIf="performer">
+
+    <div class="row g-4">
+        <!-- Левая колонка - фото и группы -->
+        <div class="col-lg-4">
+            <!-- Картинка -->
+            <div class="custom-card p-0">
+                <img [src]="imageUrl" class="d-block w-100" alt="картинка">
+            </div>
+
+            <!-- Информация о группах-->
+            <div class="custom-card mt-4 p-3">
+                <div class="meta-item" *ngIf="performer.groups?.length">
+                    <span class="meta-label">Группы: </span>
+                    <span class="meta-value">
+                        <span *ngFor="let group of performer.groups" class="badge bg-primary me-1">
+                            <a href="/group/{{ group.id }}"
+                                style="color: white; text-decoration: none;">{{group.name}}</a>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Правая колонка - информация и пластинки -->
+        <div class="col-lg-8">
+            <div class="custom-card p-4 mb-4">
+                <h1 class="mb-2">{{performerName}}</h1>
+
+                <!-- Пластинки -->
+                <h3 class="mb-3" style="color: orange;">Пластинки исполнителя</h3>
+                <div class="row ms-1 g-4">
+                    <div class="custom-card col-lg-2 col-md-4 col-sm-6 me-4" *ngFor="let record of performerRecords">
+                        <img src={{record.coverUrl}} alt="Обложка" class="cover">
+                        <div class="card-title">{{record.title}}</div>
+                        <div class="card-year">{{record.year}}</div>
+                        <span class="card-genre">{{record.genre}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="!performer" class="container py-5 text-center">
+    <div class="spinner-border" role="status" style="color: orange;"></div>
+</div>

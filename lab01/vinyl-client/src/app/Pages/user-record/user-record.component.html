@@ -1,4 +1,4 @@
-<div class="container py-5 record-page" *ngIf="record">
+<div class="container py-5 record-page" *ngIf="personalRecord && record">
 
     <div class="row g-4">
         <!-- Левая колонка - обложка и метаданные -->
@@ -68,8 +68,15 @@
         <!-- Правая колонка - информация и трек-лист -->
         <div class="col-lg-8">
             <div class="custom-card p-4 mb-4">
-                <h1 class="mb-3">{{recordName}}</h1>
-
+                <h1 class="mb-2">{{recordName}}</h1>
+            </div>
+            <div class="custom-card p-4 mb-4">
+                <div class="record-subtitle text-muted"><span class="meta-label">Состояние:
+                    </span>{{condition}}</div>
+                <div class="record-subtitle text-muted"><span class="meta-label">Комментарий:
+                    </span>{{comment}}</div>
+            </div>
+            <div class="custom-card p-4 mb-4">
                 <!-- Трек-лист -->
                 <div class="tracklist card shadow-sm">
                     <div class="card-header bg-dark text-white">
@@ -99,8 +106,6 @@
     </div>
 </div>
 
-<div *ngIf="!record" class="container py-5 text-center">
-    <div class="spinner-border text-primary" role="status">
-        Загрузка...
-    </div>
+<div *ngIf="!personalRecord && !record" class="container py-5 text-center">
+    <div class="spinner-border" role="status" style="color: orange;"></div>
 </div>
