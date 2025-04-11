@@ -9,6 +9,12 @@ import com.example.vinyl.model.Token;
 import com.example.vinyl.model.User;
 import com.example.vinyl.repository.TokenRepository;
 import com.example.vinyl.repository.UserRepository;
+import io.jsonwebtoken.Jwt;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -72,11 +78,12 @@ public class AuthenticationService {
         tokenRepository.saveAll(validTokens);
     }
 
-    private void saveUserToken(String accessToken, User user) {
+    private void saveUserToken(String accessToken, String refreshToken, User user) {
 
         Token token = new Token();
 
         token.setAccessToken(accessToken);
+        token.setRefreshToken(refreshToken);
         token.setLoggedOut(false);
         token.setUser(user);
 
@@ -96,13 +103,47 @@ public class AuthenticationService {
                 .orElseThrow();
 
         String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
 
         revokeAllToken(user);
 
-        saveUserToken(accessToken, user);
+        saveUserToken(accessToken, refreshToken, user);
 
-        return new JwtDto(accessToken);
+        return new JwtDto(accessToken, refreshToken);
     }
+
+    public ResponseEntity<JwtDto> refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response) {
+
+        String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String token = authorizationHeader.substring(7);
+        String username = jwtService.extractUsername(token);
+
+        User user = userRepository.findByLogin(username)
+                .orElseThrow(() -> new RuntimeException("No user found"));
+
+        if (jwtService.isValidRefresh(token, user)) {
+
+            String accessToken = jwtService.generateAccessToken(user);
+            String refreshToken = jwtService.generateRefreshToken(user);
+
+            revokeAllToken(user);
+
+            saveUserToken(accessToken, refreshToken, user);
+
+            return new ResponseEntity<>(new JwtDto(accessToken, refreshToken), HttpStatus.OK);
+
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
 
     public void changePassword(ChangePasswordDto changePasswordDto){
         String username = ((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
