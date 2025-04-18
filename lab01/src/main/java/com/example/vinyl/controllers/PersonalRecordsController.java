@@ -2,6 +2,8 @@ package com.example.vinyl.controllers;
 
 import java.util.List;
 
+import com.example.vinyl.dto.EditPersonalRecordDto;
+import com.example.vinyl.dto.PersonalListDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,18 +54,17 @@ public class PersonalRecordsController {
 
     // Добавляем пластинку в коллекцию из общего каталога
     @GetMapping("/add/{id}")
-    public ResponseEntity<PersonalRecord> existRecord(@PathVariable Integer id) {
-        User user = userService.getSessionUser();
-        PersonalRecord record = personalService.addExistRecord(id, user);
+    public ResponseEntity<String> existRecord(@PathVariable Integer id) {
+        PersonalRecord record = personalService.addExistRecord(id);
         if (record == null) {
             throw new ResourceNotFoundException("Record", "id", id);
         }
-        return ResponseEntity.ok(record);
+        return ResponseEntity.ok("Пластинка успешно добавлена!");
     }
 
     // из полученных RecordBrief пользователь выбирает одну и мы добавляем ее в бд
     @PostMapping("/addbrief")
-    public ResponseEntity<PersonalRecord> addByRecordBrief(@RequestBody RecordBrief recordBrief) {
+    public ResponseEntity<String> addByRecordBrief(@RequestBody RecordBrief recordBrief) {
         Record record = searchService.addFullBriefs(recordBrief);
         Integer id = record.getId();
         return this.existRecord(id);
@@ -71,11 +72,8 @@ public class PersonalRecordsController {
 
     // Редактируем персональную информацию о пластинке
     @PostMapping("/edit")
-    public ResponseEntity<PersonalRecord> editRecord(@RequestBody PersonalRecord editRecord) {
-        PersonalRecord updatedRecord = personalService.updateRecord(editRecord);
-        if (updatedRecord == null) {
-            throw new ResourceNotFoundException("Updated record", "id", editRecord.getId());
-        }
+    public ResponseEntity<PersonalRecord> editRecord(@RequestBody EditPersonalRecordDto editPersonalRecordDto) {
+        PersonalRecord updatedRecord = personalService.updateRecord(editPersonalRecordDto);
         return ResponseEntity.ok(updatedRecord);
     }
 

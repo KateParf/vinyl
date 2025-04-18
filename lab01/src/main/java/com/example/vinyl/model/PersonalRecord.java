@@ -36,10 +36,6 @@ public class PersonalRecord implements Serializable{
         return this.condition;
     }
 
-    public String getConditionName() {
-        return this.condition.name();
-    }
-
     public void setCondition(ConditionEnum condition) {
         this.condition = condition;
     }

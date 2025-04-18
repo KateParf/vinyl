@@ -28,13 +28,15 @@ public class SecurityConfig {
 
     private final CustomLogoutHandler customLogoutHandler;
 
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     public SecurityConfig(JwtFilter jwtFIlter,
-                          UserService userService, CustomLogoutHandler customLogoutHandler) {
+                          UserService userService, CustomLogoutHandler customLogoutHandler, CustomAccessDeniedHandler customAccessDeniedHandler) {
 
         this.jwtFIlter = jwtFIlter;
         this.userService = userService;
         this.customLogoutHandler = customLogoutHandler;
+        this.customAccessDeniedHandler = customAccessDeniedHandler;
     }
 
     @Bean
@@ -43,10 +45,14 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/login","/register", "/refresh_token")
+                    auth.requestMatchers("/login","/register","/refresh_token")
                             .permitAll();
-                    auth.requestMatchers("/genres").hasRole("ADMIN");
+                    auth.requestMatchers("/genres", "/delete/{id}", "/new").hasAuthority("ADMIN");
                     auth.anyRequest().authenticated();
+                })
+                .exceptionHandling(e -> {
+                    e.accessDeniedHandler(customAccessDeniedHandler);
+                    e.authenticationEntryPoint(new CustomAuthenticationEntryPoint());
                 })
                 .userDetailsService(userService)
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

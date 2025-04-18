@@ -71,8 +71,13 @@ public class RecordsController {
 
     // Добавление пластинки вручную в общий каталог
     @PostMapping("/new")
-    public Record newRecord(@RequestBody Record newRecord) {
-        return service.addNewRecord(newRecord);
+    public ResponseEntity<?> newRecord(@RequestBody Record newRecord) {
+        try {
+            var rec = service.addNewRecord(newRecord);
+            return ResponseEntity.ok(rec);
+        } catch(Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     // Удаление пластинки из общего каталога

@@ -145,16 +145,17 @@ public class AuthenticationService {
     }
 
 
-    public void changePassword(ChangePasswordDto changePasswordDto){
-        String username = ((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+    public void changePassword(ChangePasswordDto changePasswordDto) {
+        String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         User user = userRepository.findByLogin(username).orElseThrow(() -> new RuntimeException("User not found!"));
 
-        if(!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword())){
+        if (!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword())) {
             throw new SecurityException("Old password is incorrect!");
         }
 
         String encodedPassword = passwordEncoder.encode(changePasswordDto.getNewPassword());
         userRepository.updatePasswordById(user.getId(), encodedPassword);
+
 
     }
 }
