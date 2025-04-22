@@ -68,8 +68,10 @@
         <!-- Правая колонка - информация и трек-лист -->
         <div class="col-lg-8">
             <div class="custom-card p-4 mb-4">
-                <h1 class="mb-3">{{recordName}}</h1>
-
+                <div class="d-flex justify-content-between mb-3">
+                    <h1>{{recordName}}</h1>
+                    <button class="btn" (click)="addToUserCollection(recordId)">Добавить в коллекцию</button>
+                </div>
                 <!-- Трек-лист -->
                 <div class="tracklist card shadow-sm">
                     <div class="card-header bg-dark text-white">

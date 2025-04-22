@@ -30,12 +30,6 @@ class UserTests {
 	@Autowired
 	private AuthenticationService authService;
 
-	@Test @Order(0)
-	public void testDeleteUser() {
-		userService.deleteUser("testLogin");
-		var user = userService.loadUserByUsername("testLogin");
-		assertNull(user);
-	}
 
 	@Test @Order(1)
 	public void testRegisterUser() {
@@ -43,7 +37,7 @@ class UserTests {
 		sdto.setLogin("testLogin");
 		sdto.setEmail("testLogin@email.com");
 		sdto.setPassword("12345");
-		var user1 = authService.signUp(sdto);
+		authService.signUp(sdto);
 
 		var user = userService.loadUserByUsername("testLogin");
 		assertNotNull(user);

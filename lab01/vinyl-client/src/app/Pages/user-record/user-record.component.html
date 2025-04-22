@@ -69,13 +69,28 @@
         <div class="col-lg-8">
             <div class="custom-card p-4 mb-4">
                 <h1 class="mb-2">{{recordName}}</h1>
+                <button class="btn" (click)="deleteFromUserCollection(personalRecordId)">Удалить из коллекции</button>
             </div>
+
+            <!-- Информация для редактирования -->
             <div class="custom-card p-4 mb-4">
-                <div class="record-subtitle text-muted"><span class="meta-label">Состояние:
-                    </span>{{condition}}</div>
-                <div class="record-subtitle text-muted"><span class="meta-label">Комментарий:
-                    </span>{{comment}}</div>
+                <form [formGroup]="form">
+                    <div class="record-subtitle text-muted d-flex align-items-center mb-3">
+                        <span class="meta-label">Состояние:</span>
+                        <select class="form-select" formControlName="condition">
+                            <option [ngValue]="condition">BAD</option>
+                            <option [ngValue]="condition">GOOD</option>
+                            <option [ngValue]="condition">NEW</option>
+                        </select>
+                    </div>
+                    <div class="record-subtitle text-muted d-flex align-items-center mb-3">
+                        <span class="meta-label">Комментарий:</span>
+                        <input class="form-control" type="text" formControlName="commentBody" placeholder="Комментарий" >
+                    </div>
+                    <button type="submit" class="btn btn-primary" (click)="onSubmit()">Сохранить</button>
+                </form>
             </div>
+
             <div class="custom-card p-4 mb-4">
                 <!-- Трек-лист -->
                 <div class="tracklist card shadow-sm">

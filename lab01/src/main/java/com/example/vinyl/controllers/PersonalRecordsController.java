@@ -52,7 +52,7 @@ public class PersonalRecordsController {
 
     // Добавляем пластинку в коллекцию из общего каталога
     @GetMapping("/add/{id}")
-    public ResponseEntity<PersonalRecord> existRecord(@PathVariable Integer id) {
+    public ResponseEntity<PersonalRecord> addExistingRecord(@PathVariable Integer id) {
         User user = userService.getSessionUser();
         PersonalRecord record = personalService.addExistRecord(id, user);
         if (record == null) {
@@ -66,7 +66,7 @@ public class PersonalRecordsController {
     public ResponseEntity<PersonalRecord> addByRecordBrief(@RequestBody RecordBrief recordBrief) {
         Record record = searchService.addFullBriefs(recordBrief);
         Integer id = record.getId();
-        return this.existRecord(id);
+        return this.addExistingRecord(id);
     }
 
     // Редактируем персональную информацию о пластинке

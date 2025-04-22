@@ -106,7 +106,7 @@ class PersonalRecordTests {
 
         // controller - by id - return exception
         ResourceNotFoundException exception_id = assertThrows(ResourceNotFoundException.class,
-         () -> personalRecordController.existRecord(999));
+         () -> personalRecordController.addExistingRecord(999));
          assertEquals("Record not found with id: 999", exception_id.getMessage());
         
     }

@@ -38,6 +38,7 @@ public class SearchService {
             for (int i = 0; i < records.size(); i++) {
                 RecordBrief newRecord = new RecordBrief();
                 Record recI = records.get(i);
+                newRecord.setId(recI.getId());
                 newRecord.setTitle(recI.getName());
                 newRecord.setYear(recI.getYear());
                 newRecord.setGenre(recI.getGenre().getName());
@@ -135,7 +136,7 @@ public class SearchService {
     public Record addFullBriefs(RecordBrief recordBrief) {
         try {
             // сначала смотрим есть ли у нас такая пластинка в бд
-            Record newRecord = recordService.searchRecord(recordBrief.getTitle());
+            Record newRecord = recordService.getRecord(recordBrief.getId());
 
             if (newRecord == null) {
                 String url = recordBrief.getSourceUID();

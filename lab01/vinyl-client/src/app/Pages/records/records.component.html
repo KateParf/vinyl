@@ -1,11 +1,27 @@
 <div class="container py-5">
+    <div class="row mb-3">
+        <div class="col-lg-6">
+            <form [formGroup]="formBarcode">
+                <label class="card-title">Найти пластинку по штрихкоду</label>
+                <input type="text" formControlName="filterSearch" class="form-control"
+                    (keyup.enter)="searchByBarcode()" placeholder="Введите штрихкод">
+            </form>
+        </div>
+        <div class="col-lg-6">
+            <form [formGroup]="formName">
+                <label class="card-title">Найти пластинку по имени</label>
+                <input type="text" formControlName="filterSearch" class="form-control"
+                    (keyup.enter)="searchByName()" placeholder="Введите имя">
+            </form>
+        </div>
+    </div>
     <div class="row">
         <!-- Сайдбар с фильтрами -->
         <div class="col-lg-3 mb-4">
             <div class="filter-sidebar">
                 <div class="filter-header">
                     <h5>Фильтры</h5>
-                    <span class="reset-filters">Сбросить</span>
+                    <span class="reset-filters" (click)="resetFilter()">Сбросить</span>
                 </div>
 
                 <form [formGroup]="form" (ngSubmit)="getRecordsWithFilters()">
@@ -96,17 +112,22 @@
                 </form>
             </div>
         </div>
-
-
+        
         <!-- Основной контент - каталог -->
-        <div class="col-lg-8 ms-3">
-            <h2 class="mb-3">Каталог пластинок</h2>
+        <div class="col-lg-8 ms-lg-3">
+            <h2 class="mb-3" *ngIf="queryBarcode != '' ">Каталог пластинок (по штрихкоду: {{queryBarcode}})</h2>
+            <h2 class="mb-3" *ngIf="queryName != '' ">Каталог пластинок (по имени: {{queryName}})</h2>
+            <h2 class="mb-3" *ngIf="queryName == '' && queryBarcode == ''">Каталог пластинок</h2>
             <div class="row ms-1 g-4">
                 <div class="custom-card col-lg-2 col-md-4 col-sm-6 me-4" *ngFor="let record of records">
-                    <img src={{record.coverUrl}} alt="Обложка" class="cover">
-                    <div class="card-title">{{record.title}}</div>
-                    <div class="card-year">{{record.year}}</div>
-                    <span class="card-genre">{{record.genre}}</span>
+                    <a href="/record/{{ record.id }}" class="card-href">
+                        <img src={{record.coverUrl}} alt="Обложка" class="cover">
+                        <div class="card-title">{{record.title}}</div>
+                        <div class="card-year">{{record.year}}</div>
+                        <span class="card-genre">{{record.genre}}</span>
+                    </a>
+                    <button class="btn btn-sm" (click)="addToUserCollection(record)">В коллекцию</button>
+                    <button class="btn btn-sm disabled">В коллекции</button>
                 </div>
             </div>
         </div>

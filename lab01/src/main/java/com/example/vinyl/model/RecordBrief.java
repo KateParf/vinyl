@@ -10,6 +10,8 @@ import jakarta.persistence.*;
 public class RecordBrief {
     public RecordBrief() {}
 
+    private Integer id;
+
     private String title;
 
     private Integer year;
@@ -24,6 +26,10 @@ public class RecordBrief {
     private String barcode;
 
     //----
+
+    public Integer getId() {
+        return this.id;
+    }
 
     public String getSourceUID() {
         return sourceUID;
@@ -72,5 +78,9 @@ public class RecordBrief {
     
     public void setSourceUID(String sourceUID) {
         this.sourceUID = sourceUID;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

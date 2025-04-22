@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Record } from '../../models/record';
 import { Performer } from '../../models/performer';
@@ -7,6 +6,8 @@ import { Track } from '../../models/track';
 import { Cover } from '../../models/cover';
 import { Group } from '../../models/group';
 import { PersonalRecord } from '../../models/personalRecord';
+import { APIService } from '../../Services/api';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-user-record',
@@ -31,52 +32,19 @@ export class UserRecordComponent {
   public recordPerformers: Performer[] = [];
   public recordGroups: Group[] = [];
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private route: ActivatedRoute, private router: Router) {
-    this.baseUrl = baseUrl;
+  form = new FormGroup({
+    commentBody: new FormControl(""),
+    condition: new FormControl("NEW"),
+  });
+
+  constructor(private route: ActivatedRoute, private router: Router, private apiService: APIService) {
     void route.params.subscribe(params => this.personalRecordId = params["id"]);
 
-    this.personalRecord = {
-      id: 1,
-      condition: "BAD",
-      comment: "Ваще пластинка огонь где стоит не знаю",
-      record: {
-        id: 1,
-        name: 'Abbey Road',
-        year: 1969,
-        publisher: "Apple Records",
-        barcode: "111222333",
-        tracks: [
-          {
-            id: 1,
-            name: 'Come Together'
-          },
-          {
-            id: 2,
-            name: 'Octopuses garden'
-          },
-          {
-            id: 3,
-            name: 'You never give me your money'
-          }
-        ],
-        covers: [
-          {
-            id: 1,
-            image: 'https://avatars.mds.yandex.net/i?id=6f36d6c01a938a4cc8141321bd74bf71_l-7755581-images-thumbs&n=13'
-          },
-          {
-            id: 2,
-            image: 'https://yastatic.net/naydex/yandex-search/i11tyh308/a3e3e896_R/rzVBW48SpldEPZsi3FxYsuhWDmMxveAOP7EDHRWinsHIVwdMiA3F-8cxgrIIoDmOCNgBOPpj1ncO-iMgBoff8ZgWanWvKM9zbjfUNdlXRPniDT9Z'
-          }
-        ],
-        performers: [],
-        groups: [{
-          id: 1,
-          name: 'The Beatles',
-          image: 'https://yastatic.net/naydex/yandex-search/i12tyh084/a3e3e896_R/rzVBW48SpldEPZsi3FxYsuhWDmMxveAOP7EDHRWinsHIVwdMiA3F-8EzhrUAvS-GDd4ONfllzRcJ5UBuY-j45YZmTWWiIMl4fwHnEvp7cq7xFgRjPbz1HhTD'
-        }]
-      }
-    };
+    this.loadPersonalRecordData();
+  }
+
+  private loadPersonalRecordData() {
+    this.personalRecord = this.apiService.getPersonalRecordById(this.personalRecordId);
     // ---
     this.condition = this.personalRecord.condition;
     this.comment = this.personalRecord.comment;
@@ -90,34 +58,29 @@ export class UserRecordComponent {
     this.recordPerformers = this.record.performers;
     this.recordGroups = this.record.groups;
 
-    //this.loadPersonalRecordData();
+    this.form.controls["commentBody"].setValue(this.comment);
+    this.form.controls["condition"].setValue(this.condition);
   }
 
-  private loadPersonalRecordData() {
-    this.http.get<PersonalRecord>(this.baseUrl + 'api/userrecords/get' + this.personalRecordId).subscribe(result => {
-      this.personalRecord = result;
+  onSubmit() {
+    const data = this.form.value;
+    console.log(data);
+    this.comment = data.commentBody ? data.commentBody : "";
+    this.condition = data.condition ? data.condition : "";
+    if (this.personalRecord != undefined) this.personalRecord.comment = this.comment;
+    if (this.personalRecord != undefined) this.personalRecord.condition = this.condition;
+    if (this.personalRecord != undefined) this.apiService.editUserCollectionRecord(this.personalRecord);
+  }
 
-      this.condition = this.personalRecord.condition;
-      this.comment = this.personalRecord.comment;
-
-      this.record = this.personalRecord.record;
-      this.recordName = this.record.name;
-      this.recordYear = this.record.year;
-      this.recordPublisher = this.record.publisher;
-      this.recordBarcode = this.record.barcode;
-      this.recordTracks = this.record.tracks;
-      this.recordCovers = this.record.covers;
-      this.recordPerformers = this.record.performers;
-      this.recordGroups = this.record.groups;
-    }, error => console.error(error));
+  public deleteFromUserCollection(personalRecordId: number) {
+    const result = this.apiService.deleteFromUserCollection(personalRecordId);
   }
 
   public playTrack(trackId: number) {
-    this.http.get<string>(this.baseUrl + 'api/' + this.recordId + '/play/' + trackId).subscribe(result => {
-      // Воспроизведение трека
-      const audio = new Audio(result);
-      audio.play();
-    }, error => console.error(error));
+    const result = this.apiService.getTrackURL(this.recordId, trackId);
+    // Воспроизведение трека
+    const audio = new Audio(result);
+    audio.play();
   }
 
   // -- работа с каруселью

@@ -21,6 +21,7 @@ import { HomeComponent } from './Pages/home/home.component';
 import { AuthorizationComponent } from './Pages/authorization/authorization.component';
 import { LoginComponent } from './Pages/login/login.component';
 import { ChangePasswordComponent } from './Pages/change-password/change-password.component';
+import { APIService } from './Services/api';
 
 @NgModule({
   declarations: [
@@ -49,13 +50,13 @@ import { ChangePasswordComponent } from './Pages/change-password/change-password
 
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'performer', component: PerformerComponent },
-      { path: 'group', component: GroupComponent },
+      { path: 'group/:id', component: GroupComponent },
       { path: 'performers', component: PerformersComponent },
-      { path: 'record', component: RecordComponent },
+      { path: 'performer/:id', component: PerformerComponent },
       { path: 'records', component: RecordsComponent },
-      { path: 'user-record', component: UserRecordComponent },
+      { path: 'record/:id', component: RecordComponent },
       { path: 'user-records', component: UserRecordsComponent },
+      { path: 'user-record/:id', component: UserRecordComponent },
       { path: 'login', component: LoginComponent },
       { path: 'auth', component: AuthorizationComponent }, 
       { path: 'change-pass', component: ChangePasswordComponent },

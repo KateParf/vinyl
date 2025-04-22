@@ -21,7 +21,6 @@ public class AuthController {
     @PostMapping("/login")
     JwtDto signIn(@RequestBody SignInDto signInDto) {
         return authenticationService.authenticate(signInDto);
-
     }
 
     @PostMapping("/register")
