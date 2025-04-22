@@ -5,6 +5,8 @@ import com.example.vinyl.dto.JwtDto;
 import com.example.vinyl.dto.SignInDto;
 import com.example.vinyl.dto.SignUpDto;
 import com.example.vinyl.service.AuthenticationService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +29,14 @@ public class AuthController {
     ResponseEntity<String> singUp(@RequestBody SignUpDto signUpDto) {
         authenticationService.signUp(signUpDto);
         return ResponseEntity.ok("Регистрация прошла успешно!");
+    }
+
+    @PostMapping("/refresh_token")
+    public ResponseEntity<JwtDto> refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response) {
+
+        return authenticationService.refreshToken(request, response);
     }
 
     @PostMapping("/password_change")

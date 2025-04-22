@@ -51,7 +51,10 @@ public class JwtService {
 
         return generateToken(user, accessTokenExpiration);
     }
+    public String generateRefreshToken(User user) {
 
+        return generateToken(user, refreshTokenExpiration);
+    }
 
     private Claims extractAllClaims(String token) {
 
@@ -87,11 +90,23 @@ public class JwtService {
         String username = extractUsername(token);
 
         boolean isValidToken = tokenRepository.findByAccessToken(token)
-                .map(t -> !t.getLoggedOut()).orElse(false);
+                .map(t -> !t.isLoggedOut()).orElse(false);
 
         return username.equals(user.getUsername())
                 && isAccessTokenExpired(token)
                 && isValidToken;
+    }
+
+    public boolean isValidRefresh(String token, User user) {
+
+        String username = extractUsername(token);
+
+        boolean isValidRefreshToken = tokenRepository.findByRefreshToken(token)
+                .map(t -> !t.isLoggedOut()).orElse(false);
+
+        return username.equals(user.getUsername())
+                && isAccessTokenExpired(token)
+                && isValidRefreshToken;
     }
 
 

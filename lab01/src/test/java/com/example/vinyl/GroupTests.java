@@ -56,8 +56,6 @@ class GroupTests {
 
     @Test @Order(1)
     public void testClearAll() {
-        User user = userService.getSessionUser();
-        personalRecordService.clear(user);
         recordService.clear();
         performerService.clear();
         groupService.clear();

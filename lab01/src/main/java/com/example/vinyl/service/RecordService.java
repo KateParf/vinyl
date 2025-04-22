@@ -71,17 +71,18 @@ public class RecordService {
 
     // Edit single item
     public Record updateRecord(Record editRecord) {
-        return recordRepository.findById(editRecord.getId())
-                .map(record -> {
+        var rec = recordRepository.findById(editRecord.getId());
+        if (rec.isEmpty()) return null;
+
+        return rec.map(record -> {
                     record.setName(editRecord.getName());
                     record.setYear(editRecord.getYear());
+                    record.setGenre(editRecord.getGenre());
                     record.setPublisher(editRecord.getPublisher());
                     record.setBarcode(editRecord.getBarcode());
                     return recordRepository.save(record);
                 })
-                .orElseGet(() -> {
-                    return recordRepository.save(editRecord);
-                });
+                .get();
     }
 
     // Delete single item

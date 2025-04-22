@@ -22,6 +22,9 @@ public class Token {
     @Column(name = "access_token")
     private String accessToken;
 
+    @Column(name = "refresh_token")
+    private String refreshToken;
+
     @Column(name = "is_logged_out")
     private boolean loggedOut;
 
@@ -35,6 +38,14 @@ public class Token {
 
     public Long getId() {
         return id;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     public void setId(Long id) {

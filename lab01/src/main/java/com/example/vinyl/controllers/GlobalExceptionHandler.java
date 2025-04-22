@@ -1,7 +1,12 @@
 package com.example.vinyl.controllers;
 
+
+import com.example.vinyl.dto.ErrorResponse;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -10,19 +15,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.example.vinyl.exceptions.ResourceNotFoundException;
 
+import java.util.stream.Collectors;
+
 @RestControllerAdvice
-public class GlobalExceptionHandler  {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler  {
 
     // ресурс не найден по запросу
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ERROR (resource not found): " + ex.getMessage());
-    }
-
-    // невалидный аргумент 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR (argument not valid) : " + ex.getMessage());
     }
 
     // неверный тип аргумента
@@ -31,6 +32,9 @@ public class GlobalExceptionHandler  {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR (Type mismatch) : " + ex.getMessage());
     }
 
-    
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> handleRuntimeException(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR (request error) : " + ex.getMessage());
+    }
     
 }
