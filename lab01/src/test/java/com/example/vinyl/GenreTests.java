@@ -69,7 +69,14 @@ class GenreTests {
         Genre g2 = new Genre();
 		g2.setName("Blues");
 		DataIntegrityViolationException exception_dup = assertThrows(DataIntegrityViolationException.class,
-		() -> genreService.add(g2));
+			() -> genreService.add(g2));
 		assertNotNull(exception_dup);
+    }
+
+	@Test @Order(4)
+	public void testGenreGetAll() {
+		List<Genre> genres = genreService.getAll();
+		assertNotNull(genres);
+		assertEquals(genres.size(), 3);
     }
 }

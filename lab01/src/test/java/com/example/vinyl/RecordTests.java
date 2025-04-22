@@ -136,7 +136,7 @@ class RecordTests {
 		record4.setGenre(rock);
 		record4.setBarcode("322223322223");
 		Exception exception_2 = assertThrows(Exception.class,
-		() -> recordService.addNewRecord(record4));
+			() -> recordService.addNewRecord(record4));
 
 	}
 
