@@ -6,6 +6,7 @@ import { Group } from '../models/group';
 import { Genre } from '../models/genre';
 import { Record } from '../models/record';
 import { PersonalRecord } from '../models/personalRecord';
+import { User } from '../models/user';
 
 
 @Injectable({ providedIn: 'root' })
@@ -29,13 +30,13 @@ export class APIService {
   //---- groups 
 
   public async getGroupsList(): Promise<Group[]> {
-    return await this.http.get<Group[]>(`${this.baseUrl}api/groups`).toPromise().catch(
+    return await this.http.get<Group[]>(`${this.baseUrl}api/groups/list`).toPromise().catch(
       error => console.error("getGroupsList error: ", error)
     ) ?? [];
   }
 
   public async getGroupById(groupId: number): Promise<Group | null> {
-    return await this.http.get<Group>(`${this.baseUrl}api/group/${groupId}`).toPromise().catch(
+    return await this.http.get<Group>(`${this.baseUrl}api/groups/get/${groupId}`).toPromise().catch(
       error => console.error("getGroupById error: ", error)
     ) ?? null;
   }
@@ -43,26 +44,26 @@ export class APIService {
   //---- performers
 
   public async getPerformersList(): Promise<Performer[]> {
-    return await this.http.get<Performer[]>(`${this.baseUrl}api/performers`).toPromise().catch(
+    return await this.http.get<Performer[]>(`${this.baseUrl}api/performers/list`).toPromise().catch(
       error => console.error("getPerformersList error: ", error)
     ) ?? [];
   }
 
   public async getPerformerById(performerId: number): Promise<Performer | null> {
-    return await this.http.get<Performer>(`${this.baseUrl}api/performer/${performerId}`).toPromise().catch(
+    return await this.http.get<Performer>(`${this.baseUrl}api/performers/get/${performerId}`).toPromise().catch(
       error => console.error("getPerformerById error: ", error)
     ) ?? null;
   }
 
   //---- records 
 
-  public async getRecordsList(): Promise<Record[]> {
-    return await this.http.get<Record[]>(`${this.baseUrl}api/records/list`).toPromise().catch(
+  public async getRecordsList(): Promise<RecordBrief[]> {
+    return await this.http.get<RecordBrief[]>(`${this.baseUrl}api/records/list`).toPromise().catch(
       error => console.error("getRecordsList error: ", error)
     ) ?? [];
   }
 
-  public async getRecordsWithFilters(genre_id?: number | null, group_id?: number | null, performer_id?: number | null, decade?: number | null): Promise<Record[]> {
+  public async getRecordsWithFilters(genre_id?: number | null, group_id?: number | null, performer_id?: number | null, decade?: number | null): Promise<RecordBrief[]> {
     let filterParams = "?";
 
     if (genre_id) filterParams += "&genre_id=" + genre_id;
@@ -70,7 +71,7 @@ export class APIService {
     if (performer_id) filterParams += "&performer_id=" + performer_id;
     if (decade) filterParams += "&decade=" + decade;
 
-    return await this.http.get<Record[]>(`${this.baseUrl}api/records/list${filterParams}`).toPromise().catch(
+    return await this.http.get<RecordBrief[]>(`${this.baseUrl}api/records/list${filterParams}`).toPromise().catch(
       error => console.error("getRecordsWithFilters error: ", error)
     ) ?? [];
   }
@@ -81,8 +82,8 @@ export class APIService {
     ) ?? [];
   }
 
-  public async getRecordsByName(name: string): Promise<Record[]> {
-    return await this.http.post<Record[]>(`${this.baseUrl}api/records/search/name`, name).toPromise().catch(
+  public async getRecordsByName(name: string): Promise<RecordBrief[]> {
+    return await this.http.post<RecordBrief[]>(`${this.baseUrl}api/records/search/name`, name).toPromise().catch(
       error => console.error("getRecordsByName error: ", error)
     ) ?? [];
   }
@@ -186,8 +187,8 @@ export class APIService {
 
   //---- personal records
 
-  public async getPersonalRecordsList(): Promise<PersonalRecord[]> {
-    return await this.http.get<PersonalRecord[]>(`${this.baseUrl}api/userrecords/list`).toPromise().catch(
+  public async getPersonalRecordsList(): Promise<RecordBrief[]> {
+    return await this.http.get<RecordBrief[]>(`${this.baseUrl}api/userrecords/list`).toPromise().catch(
       error => console.error("getPersonalRecordsList error: ", error)
     ) ?? [];
   }
@@ -223,27 +224,10 @@ export class APIService {
     );
   }
 
-  // ---- login 
+  //---- user ----
 
-  public isAuth() {
-    // анализировать флаг из сторожа
-    let flag = localStorage.getItem('auth');
-    console.log("isauth = ", flag);
-    if (flag == 'true') return true;
-    else return false;
-  }
-
-  public async login(login: string, password: string): Promise<string | null> {
-    /*
-          this.http.post<any>("/api/login", login)
-      .subscribe(res=>{
-
-      },err=>{
-        alert("Something went wrong")
-      })
-
-    */
-
+  public async registration(email: string, login: string, password: string): Promise<string | null> {
+    //!! TODO
     // testdata
     if (login == "katya") {
       // писать в локалстораж флаг
@@ -256,46 +240,30 @@ export class APIService {
     }
   }
 
-  public async logout() {
-    localStorage.removeItem('auth');
-    return "logout"
+  public async getUserInfo(): Promise<User | null> {
+    // testdata
+    /*
+    var user = { name: "average vinyl lover", password: "123", email: "test@email.com" };
+    return user;
+    */
+    return await this.http.get<User>(`${this.baseUrl}api/userinfo`).toPromise().catch(
+      error => console.error("getUserInfo error: ", error)
+    ) ?? null;
+
   }
 
-  public async changePassword(oldPassword: string, newPassword: string) {
+  public async changePassword(oldPassword: string, newPassword: string): Promise<any> {
     /*this.http.post<any>("/api/password_change", newPassword)
       .subscribe(res => {
         alert('PASSWORD CHANGED SUCCESFUL');
       }, err => {
         alert("Something went wrong")
       })*/
-  }
-
-  public async registration(email: string, login: string, password: string): Promise<string | null> {
-    /*this.http.post<any>("/api/register",this.authForm.value)
-    .subscribe(res=>{
-      alert('REG SUCCESFUL');
-      this.authForm.reset()
-      this.router.navigate(["registration"])
-    },err=>{
-      alert("Something went wrong")
-    })*/
-
-    // testdata
-    if (login == "katya") {
-      // писать в локалстораж флаг
-      localStorage.setItem('auth', 'true');
-      return null;
-    } else {
-      // чистить локалсторож
-      localStorage.removeItem('auth');
-      return "AUTH ERROR!"
-    }
-  }
-
-  getUserInfo() {
-    // testdata
-    var user = { name: "average vinyl lover", password: "123", email: "test@email.com" };
-    return user;
+    const dto = {"oldPassword": oldPassword, "newPassword": newPassword}; 
+    const res = await this.http.post<any>(`${this.baseUrl}api/password_change`, dto).toPromise().catch(
+      error => console.error("getUserInfo error: ", error)
+    ) ?? { status: -1, message: "Ошибка смены пароля"};
+    return res;
   }
 
 }

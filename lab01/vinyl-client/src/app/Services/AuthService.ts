@@ -1,38 +1,65 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AuthService {
+    private baseUrl: string = "";
 
-    constructor(private http: HttpClient) {
-
+    constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+        this.baseUrl = baseUrl;
+      }
+    
+    public async login(login: string, password: string): Promise<any | null> {
+        let res = await this.http.post<any>(`${this.baseUrl}api/login`,
+          { login: login, password: password }
+        ).toPromise().catch(
+          error => console.error("login error: ", error)
+        ) ?? null;
+    
+        // testdata
+        ////!!if (login == "katya") {
+        if (res && res.accessToken) {
+          console.log("api login - ok");
+          // писать в локалстораж флаг
+          this.setSession(res)
+        } else {
+          console.log("api login - error");
+          // чистить локалсторож
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+        }
+        return res;
     }
-
-    login(email:string, password:string ) {
-        /*return this.http.post<User>('/api/login', {email, password})
-            .do(res => this.setSession) 
-            .shareReplay();
-            */
-    }
+    
           
     private setSession(authResult: any) {
-        //const expiresAt = moment().add(authResult.expiresIn,'second');
+        localStorage.setItem('accessToken', authResult.accessToken);
+        localStorage.setItem('refreshToken', authResult.refreshToken);        
 
-        localStorage.setItem('id_token', authResult.idToken);
+        //const expiresAt = moment().add(authResult.expiresIn,'second');
         //localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
     }          
 
     logout() {
-        localStorage.removeItem("id_token");
-        localStorage.removeItem("expires_at");
+        //?? надо ли вызывать что то на сервере ??
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
     }
 
     public isLoggedIn() {
         //return moment().isBefore(this.getExpiration());
+
+        // анализировать флаг из сторожа
+        let flag = localStorage.getItem('accessToken');
+        console.log("isauth = ", flag);
+        if (flag) 
+            return true;
+        else 
+            return false;
     }
 
     isLoggedOut() {
-        //return !this.isLoggedIn();
+        return !this.isLoggedIn();
     }
 
     getExpiration() {

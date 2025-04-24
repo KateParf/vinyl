@@ -49,8 +49,7 @@ export class RecordsComponent {
   }
 
   private async loadRecordsList() {
-    var records = await this.apiService.getRecordsList();
-    this.records = this.fromRecordToBrief(records);
+    this.records = await this.apiService.getRecordsList();
   }
 
   ngOnInit() {
@@ -95,13 +94,12 @@ export class RecordsComponent {
   public async getRecordsWithFilters() {
     this.resetName();
     this.resetBarcode();
-    var records = await this.apiService.getRecordsWithFilters(
+    this.records = await this.apiService.getRecordsWithFilters(
       this.form.value.genre_id,
       this.form.value.group_id,
       this.form.value.performer_id,
       this.form.value.decade
     );
-    this.records = this.fromRecordToBrief(records);
   }
 
   public async searchByBarcode() {
@@ -121,8 +119,7 @@ export class RecordsComponent {
     this.resetFilter();
     this.resetBarcode();
     if (this.formName.value["filterSearch"]) {
-      var records = await this.apiService.getRecordsByName(this.formName.value["filterSearch"]);
-      this.records = this.fromRecordToBrief(records);
+      this.records = await this.apiService.getRecordsByName(this.formName.value["filterSearch"]);
       this.queryName = this.formName.value["filterSearch"];
     }
     else {

@@ -20,7 +20,7 @@ export class UserRecordsComponent {
   ngOnInit() {this.loadPersonalRecordsList();}
 
   private async loadPersonalRecordsList() {
-    this.personalRecords = this.fromRecordToBrief(await this.apiService.getPersonalRecordsList());
+    this.personalRecords = await this.apiService.getPersonalRecordsList();
   }
 
   public deleteFromUserCollection(personalRecordId: number) {

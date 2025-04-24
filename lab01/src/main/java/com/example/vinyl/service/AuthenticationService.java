@@ -2,6 +2,7 @@ package com.example.vinyl.service;
 
 import com.example.vinyl.dto.ChangePasswordDto;
 import com.example.vinyl.dto.JwtDto;
+import com.example.vinyl.dto.OpResult;
 import com.example.vinyl.dto.SignInDto;
 import com.example.vinyl.dto.SignUpDto;
 import com.example.vinyl.model.RoleEnum;
@@ -147,17 +148,15 @@ public class AuthenticationService {
     }
 
 
-    public void changePassword(ChangePasswordDto changePasswordDto) {
-        String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        User user = userRepository.findByLogin(username).orElseThrow(() -> new RuntimeException("User not found!"));
+    public OpResult changePassword(ChangePasswordDto changePasswordDto) {
+        User user = userService.getSessionUser();
 
         if (!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword())) {
-            throw new SecurityException("Old password is incorrect!");
+            return new OpResult(-1, "Старый пароль не подходит !");
         }
 
         String encodedPassword = passwordEncoder.encode(changePasswordDto.getNewPassword());
         userRepository.updatePasswordById(user.getId(), encodedPassword);
-
-
+        return new OpResult(0, "Пароль успешно изменен");
     }
 }

@@ -97,12 +97,19 @@
             <h2 class="mb-3" *ngIf="queryName == '' && queryBarcode == ''">Каталог пластинок</h2>
             <div class="row ms-1 g-4">
                 <div class="custom-card col-lg-2 col-md-4 col-sm-6 me-4" *ngFor="let record of records">
-                    <a href="/record/{{ record.id }}" class="card-href">
+                    @if (record.id != null) {
+                    <a *ngIf="record.id" href="/record/{{ record.id }}" class="card-href">
                         <img src={{record.coverUrl}} alt="Обложка" class="cover">
                         <div class="card-title">{{record.title}}</div>
                         <div class="card-year">{{record.year}}</div>
                         <span class="card-genre">{{record.genre}}</span>
                     </a>
+                    } @else {
+                        <img src={{record.coverUrl}} alt="Обложка" class="cover">
+                        <div class="card-title">{{record.title}}</div>
+                        <div class="card-year">{{record.year}}</div>
+                        <span class="card-genre">{{record.genre}}</span>
+                    }
                     <button class="btn btn-sm" (click)="addToUserCollection(record)">В коллекцию</button>
                     <button class="btn btn-sm disabled">В коллекции</button>
                 </div>

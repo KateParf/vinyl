@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -34,23 +35,28 @@ public class SearchService {
         // по дискогсу
         List<Record> records = recordService.getByBarcode(barcode);
         if (records.size() > 0) {
-            List<RecordBrief> recordsBriefs = new ArrayList<RecordBrief>();
-            for (int i = 0; i < records.size(); i++) {
-                RecordBrief newRecord = new RecordBrief();
-                Record recI = records.get(i);
-                newRecord.setId(recI.getId());
-                newRecord.setTitle(recI.getName());
-                newRecord.setYear(recI.getYear());
-                newRecord.setGenre(recI.getGenre().getName());
-                Cover[] covers = recI.getCovers().toArray(new Cover[0]);
-                if (covers.length > 0)
-                    newRecord.setCover(covers[0].getPicture());
-                recordsBriefs.add(newRecord);
-            }
-            return recordsBriefs;
+            return RecordsToBriefs(records);
         } else {
             return searchByBarcodeDiscogs(barcode);
         }
+    }
+
+    public List<RecordBrief> RecordsToBriefs(List<Record> records) {
+        List<RecordBrief> recordsBriefs = new ArrayList<RecordBrief>();
+        for (int i = 0; i < records.size(); i++) {
+            RecordBrief newRecord = new RecordBrief();
+            Record recI = records.get(i);
+            newRecord.setId(recI.getId());
+            newRecord.setTitle(recI.getName());
+            newRecord.setYear(recI.getYear());
+            newRecord.setGenre(recI.getGenre().getName());
+            List<Cover> covers = new ArrayList<>(recI.getCovers());
+            covers.sort(Comparator.comparingInt(Cover::getId));
+            if (covers.size() > 0)
+                newRecord.setCoverUrl(covers.get(0).getPicture());
+            recordsBriefs.add(newRecord);
+        }
+        return recordsBriefs;
     }
 
     public List<RecordBrief> searchByBarcodeDiscogs(String barcode) {
@@ -76,7 +82,7 @@ public class SearchService {
                 String genreStr = nodeI.get("genre").get(0).asText();
                 newRecord.setGenre(genreStr);
                 newRecord.setBarcode(nodeI.get("barcode").get(0).asText());
-                newRecord.setCover(nodeI.get("cover_image").asText());
+                newRecord.setCoverUrl(nodeI.get("cover_image").asText());
                 newRecord.setSourceUID(nodeI.get("resource_url").asText());
                 records.add(newRecord);
             }
@@ -158,7 +164,7 @@ public class SearchService {
                     newRecord.setGenre(genre);
                 newRecord.setPublisher(jsonNode.get("labels").get(0).get("name").asText());
                 newRecord.setBarcode(recordBrief.getBarcode());
-                newRecord.addCover(recordBrief.getCover());
+                newRecord.addCover(recordBrief.getCoverUrl());
 
                 // здесь полное описание артиста
                 // чтобы понимать артист у нас или группа смотрим на поле members

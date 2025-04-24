@@ -3,17 +3,18 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
 @Injectable()
-export class AuthInterceptor implements HttpInterceptor {
+export class AuthInterceptor implements HttpInterceptor, AuthInterceptor {
 
     intercept(req: HttpRequest<any>,
               next: HttpHandler): Observable<HttpEvent<any>> {
 
-        const idToken = localStorage.getItem("id_token");
+        //console.log("intercept");
+        const accessToken = localStorage.getItem("accessToken");
 
-        if (idToken) {
+        if (accessToken) {
+            //console.log("interceptor uses token: ", accessToken);
             const cloned = req.clone({
-                headers: req.headers.set("Authorization",
-                    "Bearer " + idToken)
+                headers: req.headers.set("Authorization", "Bearer " + accessToken)
             });
 
             return next.handle(cloned);

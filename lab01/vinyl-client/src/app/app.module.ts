@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -25,8 +25,18 @@ import { APIService } from './Services/api';
 import { AuthService } from './Services/AuthService';
 import { canActivate } from './Services/AuthGuardService';
 import { LogoutComponent } from './Pages/logout/logout.component';
+import {AuthInterceptor} from './Services/AuthInterceptor';
 
 @NgModule({
+  providers: [
+    AuthService,
+    APIService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   declarations: [
     AppComponent,
     NavMenuComponent,
@@ -41,7 +51,7 @@ import { LogoutComponent } from './Pages/logout/logout.component';
     UserRegistrationComponent,
     LoginComponent,
     LogoutComponent,
-    UserComponent
+    UserComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

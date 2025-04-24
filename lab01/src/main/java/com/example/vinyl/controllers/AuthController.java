@@ -1,7 +1,9 @@
 package com.example.vinyl.controllers;
 
 import com.example.vinyl.dto.ChangePasswordDto;
+import com.example.vinyl.dto.ErrorResponse;
 import com.example.vinyl.dto.JwtDto;
+import com.example.vinyl.dto.OpResult;
 import com.example.vinyl.dto.SignInDto;
 import com.example.vinyl.dto.SignUpDto;
 import com.example.vinyl.service.AuthenticationService;
@@ -40,9 +42,8 @@ public class AuthController {
     }
 
     @PostMapping("/password_change")
-    ResponseEntity<String> changePassword(@RequestBody ChangePasswordDto changePasswordDto){
-        authenticationService.changePassword(changePasswordDto);
-        return ResponseEntity.ok("Пароль успешно изменен!");
-
+    ResponseEntity<OpResult> changePassword(@RequestBody ChangePasswordDto changePasswordDto){
+        OpResult res = authenticationService.changePassword(changePasswordDto);
+        return ResponseEntity.ok(res);
     }
 }

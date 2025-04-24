@@ -47,6 +47,9 @@ public class PersonalRecordService {
     // при добавлении коменты и состояние пустые а потом мы их отдельно редактируем
     public PersonalRecord addExistRecord(Integer MainRecordId, User user) {
         Record existingRecord = recordService.getRecord(MainRecordId);
+        if (existingRecord == null) {
+            return null;
+        }
 
         PersonalRecord newRecord = new PersonalRecord();
         newRecord.setRecord(existingRecord);

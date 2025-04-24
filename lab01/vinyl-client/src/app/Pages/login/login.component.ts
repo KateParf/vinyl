@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { APIService } from '../../Services/api';
+import {AuthService} from '../../Services/AuthService';
 
 @Component({
   selector: 'app-login',
@@ -15,10 +15,10 @@ export class LoginComponent {
   public isError: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient,
-    private route: ActivatedRoute, private router: Router, private apiService: APIService) { }
+    private route: ActivatedRoute, private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
-    if (this.apiService.isAuth()){
+    if (this.authService.isLoggedIn()){
       this.router.navigate(["/user"]);
     }
 
@@ -37,18 +37,18 @@ export class LoginComponent {
     });
   }
 
-  login() {
+  async login() {
     console.log("login ...", this.loginForm.value.login, this.loginForm.value.password);
-    let res = this.apiService.login(this.loginForm.value["login"], this.loginForm.value["password"]);
-    if (!res) {
+    let res = await this.authService.login(this.loginForm.value["login"], this.loginForm.value["password"]);
+    if (res && (res.error == "" || res.error == null)) {
       // login ok - redir
       console.log("login ok");
-      console.log(this.apiService.isAuth());
+      console.log(this.authService.isLoggedIn());
       this.router.navigate([this.returnUrl]); //!! TODO навигировать куда шли
     } else {
       // login fail
       console.log("login fail", res);
-      console.log(this.apiService.isAuth());
+      console.log(this.authService.isLoggedIn());
       this.loginForm.reset();
       // вывести ошибку !!!
       this.isError = true;

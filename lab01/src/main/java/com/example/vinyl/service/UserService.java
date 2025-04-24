@@ -21,10 +21,10 @@ public class UserService implements UserDetailsService {
 
     public User getSessionUser() {
         //!! FOR DEBUG
-        User user = userRepository.findByLogin("testLogin").orElseThrow(() -> new RuntimeException("User not found!"));
+        //!!User user = userRepository.findByLogin("testLogin").orElseThrow(() -> new RuntimeException("User not found!"));
 
-        //String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        //User user = userRepository.findByLogin(username).orElseThrow(() -> new RuntimeException("User not found!"));
+        String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        User user = userRepository.findByLogin(username).orElseThrow(() -> new RuntimeException("User not found!"));
         
         return user;
     }

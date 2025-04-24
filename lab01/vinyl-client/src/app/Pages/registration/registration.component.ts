@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { APIService } from '../../Services/api';
+import {AuthService} from '../../Services/AuthService';
 
 @Component({
   selector: 'app-registration',
@@ -12,7 +13,8 @@ export class UserRegistrationComponent {
   public authForm!: FormGroup;
   public isError: boolean = false;
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router, private apiService: APIService) { }
+  constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router, 
+    private apiService: APIService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.authForm = this.formBuilder.group({
@@ -26,12 +28,12 @@ export class UserRegistrationComponent {
     let res = this.apiService.registration(this.authForm.value["email"], this.authForm.value["login"], this.authForm.value["password"]);
     if (!res) {
       console.log("register ok");
-      console.log(this.apiService.isAuth());
+      console.log(this.authService.isLoggedIn());
       this.router.navigate(["/user"]);
     } else {
       // fail
       console.log("register fail", res);
-      console.log(this.apiService.isAuth());
+      console.log(this.authService.isLoggedIn());
       this.authForm.reset();
       // вывести ошибку !!!
       this.isError = true;

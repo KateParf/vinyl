@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class ChangePasswordDto {
-    private String login;
     private String oldPassword;
     private String newPassword;
 
@@ -24,11 +23,4 @@ public class ChangePasswordDto {
         this.oldPassword = oldPassword;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
 }

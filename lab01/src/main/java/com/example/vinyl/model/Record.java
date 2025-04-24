@@ -147,4 +147,8 @@ public class Record implements Serializable {
         cover.setRecord(this);
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
 }

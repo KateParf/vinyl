@@ -5,8 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.vinyl.service.PerformerService;
@@ -15,6 +14,7 @@ import com.example.vinyl.model.Group;
 import com.example.vinyl.model.Performer;
 
 @RestController
+@RequestMapping("/performers")
 public class PerformersController {
 
     private final PerformerService service;
@@ -24,13 +24,13 @@ public class PerformersController {
     }
 
     // Получение списка исполнителей для которых у нас есть пластинки
-    @GetMapping("/performers")
+    @GetMapping("/list")
     public List<Performer> all() {
         return service.getAll();
     }
 
     // Получаем конкретного исполнителя
-    @GetMapping("/performer/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<Performer> getPerformer(@PathVariable Integer id) {
         Performer performer = service.getById(id);
         if (performer == null) {

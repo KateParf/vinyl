@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { APIService } from '../../Services/api';
+import {AuthService} from '../../Services/AuthService';
 
 @Component({
   selector: 'app-logout',
@@ -11,10 +11,10 @@ import { APIService } from '../../Services/api';
 export class LogoutComponent {
   public loginForm!: FormGroup;
   
-    constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router,  private apiService: APIService) { }
+    constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router,  private authService: AuthService) { }
   
-    ngOnInit(): void {
-      this.apiService.logout();
+    async ngOnInit() {
+      await this.authService.logout();
       this.router.navigate(["/"]);
     }
   

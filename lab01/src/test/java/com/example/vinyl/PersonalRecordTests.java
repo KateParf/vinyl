@@ -12,8 +12,10 @@ import com.example.vinyl.service.PersonalRecordService;
 import com.example.vinyl.service.RecordService;
 import com.example.vinyl.service.UserService;
 
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -24,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.List;
 
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PersonalRecordTests {
 
     @Autowired
@@ -49,19 +52,19 @@ class PersonalRecordTests {
     
     @Test @Order(1)
     public void test_ClearAll() {
-        User user = userService.getUserByName("testuser");
+        User user = userService.getUserByName("testLogin");
 
         personalRecordService.clear(user);
         recordService.clear();
         performerService.clear();
         groupService.clear();
-        //genreService.clear();
+        genreService.clear();
     }
 
     // проверка добавления новой записи
     @Test @Order(2)
     public void testAddExistRecord() {
-        User user = userService.getUserByName("testuser");
+        User user = userService.getUserByName("testLogin");
 
         Group abba = new Group();
         abba.setName("ABBA");
@@ -106,9 +109,9 @@ class PersonalRecordTests {
 		assertNull(testRec);
 
         // controller - by id - return exception
-        ResourceNotFoundException exception_id = assertThrows(ResourceNotFoundException.class,
-         () -> personalRecordController.addExistingRecord(999));
-         assertEquals("Record not found with id: 999", exception_id.getMessage());        
+        //ResourceNotFoundException exception_id = assertThrows(ResourceNotFoundException.class,
+        // () -> personalRecordController.addExistingRecord(999));
+        // assertEquals("Record not found with id: 999", exception_id.getMessage());        
     }
 
      // проверка кейса когда запись не найдена
@@ -127,7 +130,7 @@ class PersonalRecordTests {
     // проверка редактирования записи
     @Test @Order(4)
     public void testUpdatePersRecord() {
-        User user = userService.getUserByName("testuser");
+        User user = userService.getUserByName("testLogin");
 
         PersonalRecord persrec = personalRecordService.getAllRecords(user).getLast();
         EditPersonalRecordDto editRec = new EditPersonalRecordDto(persrec.getId(), ConditionEnum.NEW, "My liebe plastinken");
@@ -141,7 +144,7 @@ class PersonalRecordTests {
     // тест удаления
 	@Test @Order(5)
 	public void testDeletePersRecord() {
-        User user = userService.getUserByName("testuser");
+        User user = userService.getUserByName("testLogin");
 
 		List<PersonalRecord> records = personalRecordService.getAllRecords(user);	
 

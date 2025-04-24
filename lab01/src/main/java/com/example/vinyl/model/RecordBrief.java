@@ -51,7 +51,7 @@ public class RecordBrief {
         return this.barcode;
     }
 
-    public String getCover() {
+    public String getCoverUrl() {
         return this.coverUrl;
     }
 
@@ -71,8 +71,8 @@ public class RecordBrief {
         this.barcode = barcode;
     }
 
-    public void setCover(String cover) {
-        this.coverUrl = cover;
+    public void setCoverUrl(String coverUrl) {
+        this.coverUrl = coverUrl;
     }
 
     

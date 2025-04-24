@@ -1,12 +1,12 @@
 import { ActivatedRouteSnapshot, createUrlTreeFromSnapshot, RouterStateSnapshot } from "@angular/router";
-import { APIService } from "./api";
 import { inject } from "@angular/core";
+import {AuthService} from "./AuthService";
 
 export const canActivate = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
     console.log("canActivate");
 
-    const apiService = inject(APIService);
-    if (apiService.isAuth()) return true;
+    const authService = inject(AuthService);
+    if (authService.isLoggedIn()) return true;
 
     return createUrlTreeFromSnapshot(route, ['/login'], { returnUrl: state.url });
 }
