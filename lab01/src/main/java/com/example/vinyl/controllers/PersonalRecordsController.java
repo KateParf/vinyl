@@ -5,6 +5,8 @@ import java.util.List;
 import com.example.vinyl.dto.EditPersonalRecordDto;
 import com.example.vinyl.dto.PersonalListDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +41,8 @@ public class PersonalRecordsController {
     // Получаем все пластинки юзера
     @GetMapping("/list")
     public List<PersonalRecord> userAll() {
-        return personalService.getAllRecords();
+        var user = userService.getSessionUser();
+        return personalService.getAllRecords(user);
     }
 
     // Получаем конкретную пластинку юзера
@@ -55,17 +58,17 @@ public class PersonalRecordsController {
     // Добавляем пластинку в коллекцию из общего каталога
     @GetMapping("/add/{id}")
     public ResponseEntity<PersonalRecord> addExistingRecord(@PathVariable Integer id) {
-        User user = userService.getSessionUser();
+        var user = userService.getSessionUser();
         PersonalRecord record = personalService.addExistRecord(id, user);
         if (record == null) {
             throw new ResourceNotFoundException("Record", "id", id);
         }
-        return ResponseEntity.ok("Пластинка успешно добавлена!");
+        return ResponseEntity.ok(record);
     }
 
     // из полученных RecordBrief пользователь выбирает одну и мы добавляем ее в бд
     @PostMapping("/addbrief")
-    public ResponseEntity<String> addByRecordBrief(@RequestBody RecordBrief recordBrief) {
+    public ResponseEntity<PersonalRecord> addByRecordBrief(@RequestBody RecordBrief recordBrief) {
         Record record = searchService.addFullBriefs(recordBrief);
         Integer id = record.getId();
         return this.addExistingRecord(id);
@@ -74,14 +77,16 @@ public class PersonalRecordsController {
     // Редактируем персональную информацию о пластинке
     @PostMapping("/edit")
     public ResponseEntity<PersonalRecord> editRecord(@RequestBody EditPersonalRecordDto editPersonalRecordDto) {
-        PersonalRecord updatedRecord = personalService.updateRecord(editPersonalRecordDto);
+        var user = userService.getSessionUser();
+        PersonalRecord updatedRecord = personalService.updateRecord(editPersonalRecordDto, user);
         return ResponseEntity.ok(updatedRecord);
     }
 
     // Удаляем пластинку из каталога юзера
     @GetMapping("/delete/{id}")
     public void deleteRecord(@PathVariable Integer id) {
-        personalService.deleteRecord(id);
+        var user = userService.getSessionUser();
+        personalService.deleteRecord(id, user);
     }
 
 }

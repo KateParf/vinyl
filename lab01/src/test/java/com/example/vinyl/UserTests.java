@@ -1,6 +1,5 @@
 package com.example.vinyl;
 
-import com.example.vinyl.controllers.OpResult;
 import com.example.vinyl.dto.SignInDto;
 import com.example.vinyl.dto.SignUpDto;
 import com.example.vinyl.model.RoleEnum;

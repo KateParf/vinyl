@@ -19,13 +19,13 @@ export class PerformersComponent {
     this.loadPerformersList();
   }
 
-  private loadGroupsList() {
-    const result = this.apiService.getGroupsList();
+  private async loadGroupsList() {
+    const result = await this.apiService.getGroupsList();
     this.groups = result.sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  private loadPerformersList() {
-    const result = this.apiService.getPerformersList();
+  private async loadPerformersList() {
+    const result = await this.apiService.getPerformersList();
     this.performers = result.sort((a, b) => a.name.localeCompare(b.name));
   }
 }

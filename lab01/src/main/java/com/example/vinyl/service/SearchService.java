@@ -135,9 +135,12 @@ public class SearchService {
 
     public Record addFullBriefs(RecordBrief recordBrief) {
         try {
+            Record newRecord = null;
             // сначала смотрим есть ли у нас такая пластинка в бд
-            Record newRecord = recordService.getRecord(recordBrief.getId());
-
+            var id = recordBrief.getId();
+            if (id != null) {
+                newRecord = recordService.getRecord(id);
+            }
             if (newRecord == null) {
                 String url = recordBrief.getSourceUID();
                 String respSearch = HttpRequest.get(url);

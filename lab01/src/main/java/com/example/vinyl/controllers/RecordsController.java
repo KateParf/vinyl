@@ -16,11 +16,11 @@ import com.example.vinyl.service.PlayService;
 import com.example.vinyl.service.RecordService;
 import com.example.vinyl.service.SearchService;
 import com.example.vinyl.service.UserService;
+import com.example.vinyl.dto.TrackDto;
 import com.example.vinyl.exceptions.ResourceNotFoundException;
 import com.example.vinyl.model.PersonalRecord;
 import com.example.vinyl.model.Record;
 import com.example.vinyl.model.RecordBrief;
-import com.example.vinyl.model.User;
 
 @RestController
 @RequestMapping("/records")
@@ -88,12 +88,12 @@ public class RecordsController {
 
     // Получаем конкретную пластинку по имени
     @PostMapping("/search/name")
-    public ResponseEntity<Record> getByName(@RequestBody String name) {
-        Record record = service.searchRecord(name);
-        if (record == null) {
+    public ResponseEntity<List<Record>> getByName(@RequestBody String name) {
+        List<Record> records = service.searchRecords(name);
+        if (records.isEmpty()) {
             throw new ResourceNotFoundException("Record", "name", name);
         }
-        return ResponseEntity.ok(record);
+        return ResponseEntity.ok(records);
     }
 
     // Получаем RecordBrief по штрихкоду
@@ -109,7 +109,7 @@ public class RecordsController {
     // Получать мп3 30 сек 
     // если не найдено ИД рекорда или трека то - ексепшен что ресурс не найден
     @GetMapping("/{recordId}/play/{trackId}")
-    public ResponseEntity<String> play(@PathVariable Integer recordId, @PathVariable Integer trackId) {
+    public ResponseEntity<TrackDto> play(@PathVariable Integer recordId, @PathVariable Integer trackId) {
         String trackName = service.getTrackNameById(recordId, trackId);
         if (trackName == null) {
             throw new ResourceNotFoundException("Track", "id", 
@@ -121,7 +121,7 @@ public class RecordsController {
             throw new ResourceNotFoundException("MP3", "track", trackName);
         }
         
-        return ResponseEntity.ok(urlMp3);
+        return ResponseEntity.ok(new TrackDto(urlMp3));
     }
 
 }

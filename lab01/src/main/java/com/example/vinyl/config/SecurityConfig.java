@@ -19,9 +19,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
-@EnableWebSecurity
+///DEBUG @EnableWebSecurity
 public class SecurityConfig {
-
+    
     private final JwtFilter jwtFIlter;
 
     private final UserService userService;
@@ -45,10 +45,12 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/login","/register","/refresh_token")
+                    auth.requestMatchers("/login", "/register", "/refresh_token")
                             .permitAll();
-                    auth.requestMatchers("/genres", "/delete/{id}", "/new").hasAuthority("ADMIN");
-                    auth.anyRequest().authenticated();
+                    ///??? auth.requestMatchers("/genres", "/delete/{id}", "/new").hasAuthority("ADMIN");
+                    
+                    //!! FOR DEBUG !! auth.anyRequest().authenticated();
+                    auth.anyRequest().anonymous();  //!! FOR DEBUG
                 })
                 .exceptionHandling(e -> {
                     e.accessDeniedHandler(customAccessDeniedHandler);
@@ -61,22 +63,22 @@ public class SecurityConfig {
                     log.logoutUrl("/logout");
                     log.addLogoutHandler(customLogoutHandler);
                     log.logoutSuccessHandler((request, response, authentication) ->
-                            SecurityContextHolder.clearContext());
+                        SecurityContextHolder.clearContext());
                 });
 
         return http.build();
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-
-        return new BCryptPasswordEncoder();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    //-----
 
-        return config.getAuthenticationManager();
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }

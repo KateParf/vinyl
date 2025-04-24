@@ -92,12 +92,16 @@ public class AuthenticationService {
 
     public JwtDto authenticate(SignInDto request) {
 
-        authenticationManager.authenticate(
+        try {
+            authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getLogin(),
-                        request.getPassword()
+                    request.getLogin(),
+                    request.getPassword()
                 )
-        );
+            );
+        } catch (Exception ex) {
+            return new JwtDto(null, null, ex.getMessage());
+        }
 
         User user = userRepository.findByLogin(request.getLogin())
                 .orElseThrow();
@@ -109,7 +113,7 @@ public class AuthenticationService {
 
         saveUserToken(accessToken, refreshToken, user);
 
-        return new JwtDto(accessToken, refreshToken);
+        return new JwtDto(accessToken, refreshToken, null);
     }
 
     public ResponseEntity<JwtDto> refreshToken(
@@ -129,7 +133,6 @@ public class AuthenticationService {
                 .orElseThrow(() -> new RuntimeException("No user found"));
 
         if (jwtService.isValidRefresh(token, user)) {
-
             String accessToken = jwtService.generateAccessToken(user);
             String refreshToken = jwtService.generateRefreshToken(user);
 
@@ -137,8 +140,7 @@ public class AuthenticationService {
 
             saveUserToken(accessToken, refreshToken, user);
 
-            return new ResponseEntity<>(new JwtDto(accessToken, refreshToken), HttpStatus.OK);
-
+            return new ResponseEntity<>(new JwtDto(accessToken, refreshToken, null), HttpStatus.OK);
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

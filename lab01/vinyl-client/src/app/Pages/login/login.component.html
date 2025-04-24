@@ -1,38 +1,39 @@
 <div class="container d-flex justify-content-center">
     <div class="row">
         <div class="hero col-12 mt-5">
-            <h1>Welcome back, vinyl lover</h1>
-            <h3>Login to your account</h3>
+            <h1>Приветствую тебя снова, любитель винила</h1>
+            <h3>Войдите в аккаунт</h3>
         </div>
     </div>
 </div>
 
-<div class="container d-flex justify-content-center">
-    <form [formGroup]="loginForm" (ngSubmit)="login()">
-        <!-- Login input -->
-        <div class="row mb-4">
-            <label class="form-label" for="formLogin">Login</label>
-            <input type="text" id="formLogin" class="form-control" />
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <form [formGroup]="loginForm">
+
+                <div class="mb-3">
+                    <label class="form-label">Логин</label>
+                    <input type="text" formControlName="login" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" formControlName="password" class="form-control" />
+                </div>
+
+                <button type="button" (click)="login()" class="mb-4 btn btn-custom btn-block w-100">Войти</button>
+
+                <div class="row mb-4 d-flex justify-content-center">
+                    <div *ngIf="isError" class="alert alert-danger mb-2">
+                        Неверное имя пользователя или пароль
+                    </div>
+                    <div class="col-12 text-center">
+                        <a [routerLink]="['/registration']">Ещё нет аккаунта?</a>
+                    </div>
+                </div>
+            </form>
         </div>
-
-        <!-- Password input -->
-        <div class="row mb-2">
-            <label class="form-label" for="formPassword">Password</label>
-            <input type="password" id="formPassword" class="form-control" />
-        </div>
-
-        <div class="row mb-4 d-flex justify-content-center">
-            <div class="col-12 mb-4 text-center">
-                <a [routerLink]="['/']">Forgot password?</a>
-            </div>
-
-            <!-- Submit button -->
-            <button type="button" class="col-6 mb-2 btn btn-custom btn-block">Sign in</button>
-
-            <div class="col-12 text-center">
-                <a [routerLink]="['/auth']">Don't have an account?</a>
-            </div>
-        </div>
-
-    </form>
+    </div>
 </div>

@@ -9,11 +9,11 @@
             </div>
 
             <!-- Информация о исполнителях-->
-            <div class="custom-card mt-4 p-3">
-                <div class="meta-item" *ngIf="group.performers?.length">
+            <div *ngIf="performer != undefined" class="custom-card mt-4 p-3">
+                <div class="meta-item">
                     <span class="meta-label">Исполнители: </span>
                     <span class="meta-value">
-                        <span *ngFor="let performer of group.performers" class="badge bg-primary me-1">
+                        <span class="badge bg-primary me-1">
                             <a href="/performer/{{ performer.id }}"
                                 style="color: white; text-decoration: none;">{{performer.name}}</a>
                         </span>

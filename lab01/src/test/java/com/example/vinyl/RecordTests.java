@@ -1,6 +1,5 @@
 package com.example.vinyl;
 
-import com.example.vinyl.controllers.OpResult;
 import com.example.vinyl.controllers.RecordsController;
 import com.example.vinyl.exceptions.ResourceNotFoundException;
 import com.example.vinyl.service.GenreService;

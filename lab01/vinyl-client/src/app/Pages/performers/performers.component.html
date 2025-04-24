@@ -1,11 +1,11 @@
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-6">
-            <h2 class="mb-3">Исполнители</h2>
-            <div class="row ms-1 g-4">
+            <h2 class="mb-4">Исполнители</h2>
+            <div [class.scrollable-performers]="performers.length > 3" class="row ms-1 g-4">
                 <div class="custom-card col-lg-3 col-md-4 col-sm-6 me-4" *ngFor="let performer of performers">
                     <a href="/performer/{{ performer.id }}" class="card-href">
-                        <div class="ratio ratio-1x1"><img src={{performer.image}} alt="Изображение"
+                        <div class="ratio ratio-1x1"><img src={{performer.picture}} alt="Изображение"
                                 class="img-fluid object-fit-cover"></div>
                         <div class="card-title">{{performer.name}}</div>
                     </a>
@@ -13,11 +13,11 @@
             </div>
         </div>
         <div class="col-lg-6">
-            <h2 class="mb-3">Группы</h2>
-            <div class="row ms-1 g-4">
-                <div class="custom-card col-lg-3 col-md-4 col-sm-6 me-4 " *ngFor="let group of groups">
+            <h2 class="mb-4">Группы</h2>
+            <div [class.scrollable-performers]="groups.length > 3" class="row ms-1 g-4">
+                <div class="custom-card col-lg-3 col-md-4 col-sm-6 me-lg-4 " *ngFor="let group of groups">
                     <a href="/group/{{ group.id }}" class="card-href">
-                        <div class="ratio ratio-1x1"><img src={{group.image}} alt="Изображение"
+                        <div class="ratio ratio-1x1"><img src={{group.picture}} alt="Изображение"
                                 class="img-fluid object-fit-cover"></div>
                         <div class="card-title">{{group.name}}</div>
                     </a>

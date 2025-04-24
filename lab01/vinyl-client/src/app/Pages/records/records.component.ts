@@ -4,6 +4,7 @@ import { RecordBrief } from '../../models/recordBrief';
 import { Performer } from '../../models/performer';
 import { Group } from '../../models/group';
 import { Genre } from '../../models/genre';
+import { Record } from '../../models/record';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { APIService } from '../../Services/api';
 
@@ -23,6 +24,8 @@ export class RecordsComponent {
   public genres: Genre[] = [];
   public groups: Group[] = [];
   public performers: Performer[] = [];
+
+  public decades = [{ value: 1950, name: "1950-е" }, { value: 1960, name: "1960-е" }, { value: 1970, name: "1970-е" }, { value: 1980, name: "1980-е" }, { value: 1990, name: "1990-е" }, { value: 2000, name: "2000-е" }, { value: 2010, name: "2010-е" }, { value: 2020, name: "2020-е" }];
 
   formBarcode = new FormGroup({
     filterSearch: new FormControl("")
@@ -45,9 +48,9 @@ export class RecordsComponent {
     this.loadPerformersList();
   }
 
-  private loadRecordsList() {
-    // test vals
-    this.records = this.apiService.getRecordsList();
+  private async loadRecordsList() {
+    var records = await this.apiService.getRecordsList();
+    this.records = this.fromRecordToBrief(records);
   }
 
   ngOnInit() {
@@ -58,11 +61,6 @@ export class RecordsComponent {
       this.queryPerformerId = (params['performer_id']) ? Number(params['performer_id']) : null;
       this.queryYear = (params['decade']) ? Number(params['decade']) : null;
     });
-    this.route.queryParams.subscribe(params => {
-      this.queryName = (params['name']) ? String(params['name']) : "";
-    });
-    this.formName.controls["filterSearch"].setValue(this.queryName);
-    this.searchByName();
   }
 
   public resetFilter() {
@@ -72,49 +70,90 @@ export class RecordsComponent {
     this.form.controls["decade"].setValue(0);
   }
 
-  private loadGenresList() {
-    this.genres = this.apiService.getGenresList();
+  public resetBarcode() {
+    this.queryBarcode = "";
+      this.formBarcode.controls["filterSearch"].setValue("");
   }
 
-  private loadGroupsList() {
-    this.groups = this.apiService.getGroupsList();
+  public resetName() {
+    this.queryName = "";
+    this.formName.controls["filterSearch"].setValue("");
   }
 
-  private loadPerformersList() {
-    this.performers = this.apiService.getPerformersList();
+  private async loadGenresList() {
+    this.genres = await this.apiService.getGenresList();
   }
 
-  public getRecordsWithFilters() {
-    this.records = this.apiService.getRecordsWithFilters(
+  private async loadGroupsList() {
+    this.groups = await this.apiService.getGroupsList();
+  }
+
+  private async loadPerformersList() {
+    this.performers = await this.apiService.getPerformersList();
+  }
+
+  public async getRecordsWithFilters() {
+    this.resetName();
+    this.resetBarcode();
+    var records = await this.apiService.getRecordsWithFilters(
       this.form.value.genre_id,
       this.form.value.group_id,
       this.form.value.performer_id,
       this.form.value.decade
     );
+    this.records = this.fromRecordToBrief(records);
   }
 
-  public searchByBarcode() {
+  public async searchByBarcode() {
+    this.resetFilter();
+    this.resetName();
     if (this.formBarcode.value["filterSearch"]) {
-      this.records = this.apiService.getRecordsByBarcode(this.formBarcode.value["filterSearch"]);
+      this.records = await this.apiService.getRecordsByBarcode(this.formBarcode.value["filterSearch"]);
       this.queryBarcode = this.formBarcode.value["filterSearch"];
-      this.queryName = "";
-      this.formName.controls["filterSearch"].setValue("");
+    }
+    else {
+      this.loadRecordsList();
+      this.resetBarcode();
     }
   }
 
-  public searchByName() {
+  public async searchByName() {
+    this.resetFilter();
+    this.resetBarcode();
     if (this.formName.value["filterSearch"]) {
-      this.records = this.apiService.getRecordsByName(this.formName.value["filterSearch"]);
+      var records = await this.apiService.getRecordsByName(this.formName.value["filterSearch"]);
+      this.records = this.fromRecordToBrief(records);
       this.queryName = this.formName.value["filterSearch"];
-      this.queryBarcode = "";
-      this.formBarcode.controls["filterSearch"].setValue("");
+    }
+    else {
+      this.loadRecordsList();
+      this.resetName();
     }
   }
 
-  public addToUserCollection(recordBrief: RecordBrief) {
-    const record = this.apiService.addToUserCollectionRecord(recordBrief);
-    const id = record.id;
-    this.router.navigate(['/user-record/'+ id]);
+  public async addToUserCollection(recordBrief: RecordBrief) {
+    const record = await this.apiService.addToUserCollectionRecord(recordBrief);
+    if (record != null) {
+      const id = record.id;
+      this.router.navigate(['/user-record/' + id]);
+    }
+  }
+
+  private fromRecordToBrief(records: Record[]) {
+    var res_records = [];
+    for (let i = 0; i < records.length; i++) {
+      var recordBrief = {
+        id: records[i].id,
+        title: records[i].name,
+        year: records[i].year,
+        genre: records[i].genre.name,
+        coverUrl: records[i].covers.sort((el1,el2) => el1.id - el2.id)[0].picture,
+        sourceUID: null,
+        barcode: records[i].barcode
+      };
+      res_records.push(recordBrief);
+    }
+    return res_records;
   }
 
 }

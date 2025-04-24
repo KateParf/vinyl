@@ -1,7 +1,7 @@
 package com.example.vinyl;
 
-import com.example.vinyl.controllers.OpResult;
 import com.example.vinyl.controllers.PersonalRecordsController;
+import com.example.vinyl.dto.EditPersonalRecordDto;
 import com.example.vinyl.exceptions.ResourceNotFoundException;
 import com.example.vinyl.model.*;
 import com.example.vinyl.model.Record;
@@ -49,7 +49,8 @@ class PersonalRecordTests {
     
     @Test @Order(1)
     public void test_ClearAll() {
-        User user = userService.getSessionUser();
+        User user = userService.getUserByName("testuser");
+
         personalRecordService.clear(user);
         recordService.clear();
         performerService.clear();
@@ -60,7 +61,7 @@ class PersonalRecordTests {
     // проверка добавления новой записи
     @Test @Order(2)
     public void testAddExistRecord() {
-        User user = userService.getSessionUser();
+        User user = userService.getUserByName("testuser");
 
         Group abba = new Group();
         abba.setName("ABBA");
@@ -86,7 +87,7 @@ class PersonalRecordTests {
 
         PersonalRecord myRingRing = personalRecordService.addExistRecord(ringRingId, user);
 
-        PersonalRecord myRingRing2 = personalRecordService.getAllRecords().getLast();
+        PersonalRecord myRingRing2 = personalRecordService.getAllRecords(user).getLast();
         assertEquals(myRingRing2.getRecord().getId(), ringRingId);
         assertEquals(myRingRing2.getRecord().getName(), "Ring Ring");
 
@@ -107,8 +108,7 @@ class PersonalRecordTests {
         // controller - by id - return exception
         ResourceNotFoundException exception_id = assertThrows(ResourceNotFoundException.class,
          () -> personalRecordController.addExistingRecord(999));
-         assertEquals("Record not found with id: 999", exception_id.getMessage());
-        
+         assertEquals("Record not found with id: 999", exception_id.getMessage());        
     }
 
      // проверка кейса когда запись не найдена
@@ -127,12 +127,13 @@ class PersonalRecordTests {
     // проверка редактирования записи
     @Test @Order(4)
     public void testUpdatePersRecord() {
-        PersonalRecord persrec = personalRecordService.getAllRecords().getLast();
-        persrec.setComment("My liebe plastinken");
-        persrec.setCondition(ConditionEnum.NEW);
-        personalRecordService.updateRecord(persrec);
+        User user = userService.getUserByName("testuser");
 
-        PersonalRecord persrec2 = personalRecordService.getAllRecords().getLast();
+        PersonalRecord persrec = personalRecordService.getAllRecords(user).getLast();
+        EditPersonalRecordDto editRec = new EditPersonalRecordDto(persrec.getId(), ConditionEnum.NEW, "My liebe plastinken");
+        personalRecordService.updateRecord(editRec, user);
+
+        PersonalRecord persrec2 = personalRecordService.getAllRecords(user).getLast();
         assertEquals(persrec2.getComment(), "My liebe plastinken");
         assertEquals(persrec2.getCondition(), ConditionEnum.NEW);
     }
@@ -140,14 +141,16 @@ class PersonalRecordTests {
     // тест удаления
 	@Test @Order(5)
 	public void testDeletePersRecord() {
-		List<PersonalRecord> records = personalRecordService.getAllRecords();	
+        User user = userService.getUserByName("testuser");
+
+		List<PersonalRecord> records = personalRecordService.getAllRecords(user);	
 
 		// удаляем второй трек
 		var recId = records.get(1).getId();	
-		personalRecordService.deleteRecord(recId);
+		personalRecordService.deleteRecord(recId, user);
 
 		// удалем немуществ запись - ошибки не будет
-		personalRecordService.deleteRecord(121212);
+		personalRecordService.deleteRecord(121212, user);
 	}
 
 }

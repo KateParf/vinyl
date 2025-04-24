@@ -64,6 +64,10 @@ public class RecordService {
         return recordRepository.findByName(name).orElse(null);
     }
 
+    public List<Record> searchRecords(String searchTerm) {
+        return recordRepository.findByNameContainingIgnoreCase(searchTerm);
+    }
+
     // Добавить новую пластинку в общий каталог
     public Record addNewRecord(Record record) {
         return recordRepository.save(record);
@@ -126,6 +130,7 @@ public class RecordService {
             if (performerName != null) {
                 return performerName + " " + trackOptional.get().getName();
             }
+            return trackOptional.get().getName();
         }
         return null;
     }

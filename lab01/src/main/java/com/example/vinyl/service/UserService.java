@@ -3,6 +3,7 @@ package com.example.vinyl.service;
 import com.example.vinyl.model.User;
 import com.example.vinyl.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,7 +20,17 @@ public class UserService implements UserDetailsService {
 
 
     public User getSessionUser() {
-        return userRepository.findAll().getFirst();
+        //!! FOR DEBUG
+        User user = userRepository.findByLogin("testLogin").orElseThrow(() -> new RuntimeException("User not found!"));
+
+        //String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        //User user = userRepository.findByLogin(username).orElseThrow(() -> new RuntimeException("User not found!"));
+        
+        return user;
+    }
+
+    public User getUserByName(String username) {
+        return userRepository.findByLogin(username).orElseThrow();
     }
 
     @Override

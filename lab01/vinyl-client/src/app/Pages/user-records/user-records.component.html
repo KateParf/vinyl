@@ -11,7 +11,7 @@
                         <div class="card-year">{{record.year}}</div>
                         <span class="card-genre">{{record.genre}}</span>
                     </a>
-                    <button class="btn btn-sm" (click)="deleteFromUserCollection(record.id)">Удалить из коллекции</button>
+                    <div><button *ngIf="record.id" class="btn btn-sm" (click)="deleteFromUserCollection(record.id)">Удалить из коллекции</button></div>
                 </div>
             </div>
         </div>

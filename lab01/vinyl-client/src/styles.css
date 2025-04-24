@@ -38,26 +38,54 @@ body {
     background-color: darkorange;
 }
 
-.btn:focus, .btn:active, .btn:focus-visible, .btn:active:focus-visible {
+.btn:focus,
+.btn:active,
+.btn:focus-visible,
+.btn:active:focus-visible {
     background-color: darkorange !important;
     border: darkorange !important;
     box-shadow: 0 0 0 .25rem rgba(210, 105, 30, .5) !important
 }
 
-input:focus, input:active, input:focus-visible, input:active:focus-visible {
+input:focus,
+input:active,
+input:focus-visible,
+input:active:focus-visible {
     border: darkorange !important;
     box-shadow: 0 0 0 .25rem rgba(210, 105, 30, .5) !important
 }
 
-select:focus, select:active, select:focus-visible, select:active:focus-visible {
+textarea:focus,
+textarea:active,
+textarea:focus-visible,
+textarea:active:focus-visible {
     border: darkorange !important;
     box-shadow: 0 0 0 .25rem rgba(210, 105, 30, .5) !important
 }
 
-@media (min-width: 576px) {
-	select {
-		width: 25% !important;
-	}
+
+select:focus,
+select:active,
+select:focus-visible,
+select:active:focus-visible {
+    border: darkorange !important;
+    box-shadow: 0 0 0 .25rem rgba(210, 105, 30, .5) !important
+}
+
+@media (max-width: 992px) {
+    select {
+        width: 25% !important;
+    }
+
+    .scrollable-performers {
+        height: calc(50vh - 100px) !important;
+        margin-top: 1px;
+        margin-bottom: 1px;
+    }
+
+    .scrollable-performers .custom-card {
+        margin-right: 0px !important;
+    }
 }
 
 .btn-sm {
@@ -101,6 +129,12 @@ a.card-href {
 
 .filter-group {
     margin-bottom: 25px;
+}
+
+.scrollable {
+    max-height: 75px;
+    overflow-y: auto;
+    padding-right: 5px;
 }
 
 .filter-title {
@@ -168,6 +202,15 @@ a.card-href {
     border-radius: 20px;
     font-size: 0.8rem;
     margin-top: 8px;
+}
+
+.scrollable-performers {
+    height: calc(100vh - 210px);
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    margin-right: -0.5rem;
 }
 
 /* Record Page Styles */

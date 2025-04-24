@@ -9,11 +9,11 @@
             </div>
 
             <!-- Информация о группах-->
-            <div class="custom-card mt-4 p-3">
-                <div class="meta-item" *ngIf="performer.groups?.length">
+            <div *ngIf="group != undefined" class="custom-card mt-4 p-3">
+                <div class="meta-item">
                     <span class="meta-label">Группы: </span>
                     <span class="meta-value">
-                        <span *ngFor="let group of performer.groups" class="badge bg-primary me-1">
+                        <span class="badge bg-primary me-1">
                             <a href="/group/{{ group.id }}"
                                 style="color: white; text-decoration: none;">{{group.name}}</a>
                         </span>

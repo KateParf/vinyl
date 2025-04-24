@@ -10,7 +10,6 @@ public class EditPersonalRecordDto {
     private final String comment;
 
     public EditPersonalRecordDto( Integer id, ConditionEnum condition, String comment) {
-
         this.id = id;
         this.condition = condition;
         this.comment = comment;
