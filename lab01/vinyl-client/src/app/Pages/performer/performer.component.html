@@ -9,8 +9,8 @@
             </div>
 
             <!-- Информация о группах-->
-            <div *ngIf="group != undefined" class="custom-card mt-4 p-3">
-                <div class="meta-item">
+            <div *ngIf="group != undefined && group.id != null" class="custom-card mt-4 p-3">
+                <div class="meta-item mb-0">
                     <span class="meta-label">Группы: </span>
                     <span class="meta-value">
                         <span class="badge bg-primary me-1">
@@ -27,7 +27,7 @@
             <div class="custom-card p-4 mb-4">
                 <h1 class="mb-2">{{performerName}}</h1>
 
-                <!-- Пластинки -->
+                <!-- Пластинки 
                 <h3 class="mb-3" style="color: orange;">Пластинки исполнителя</h3>
                 <div class="row ms-1 g-4">
                     <div class="custom-card col-lg-2 col-md-4 col-sm-6 me-4" *ngFor="let record of performerRecords">
@@ -39,6 +39,7 @@
                         </a>
                     </div>
                 </div>
+                -->
             </div>
         </div>
     </div>

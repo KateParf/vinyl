@@ -1,5 +1,7 @@
 package com.example.vinyl.service;
 
+import com.example.vinyl.dto.GroupDto;
+import com.example.vinyl.dto.PerformerDto;
 import com.example.vinyl.exceptions.ResourceNotFoundException;
 import com.example.vinyl.model.Performer;
 import com.example.vinyl.model.Group;
@@ -115,13 +117,13 @@ public class RecordService {
             // Получаем название группы (если есть)
             String groupName = record.getGroups().stream()
                     .findFirst()
-                    .map(Group::getName)
+                    .map(GroupDto::getName)
                     .orElse(null);
 
             // Получаем название исполнителя (если есть)
             String performerName = record.getPerformers().stream()
                     .findFirst()
-                    .map(Performer::getName)
+                    .map(PerformerDto::getName)
                     .orElse(null);
 
             if (groupName != null) {

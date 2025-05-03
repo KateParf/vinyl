@@ -33,12 +33,12 @@ public class User implements UserDetails {
     }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return login;
+        return this.login;
     }
 
     @Override
@@ -62,7 +62,7 @@ public class User implements UserDetails {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -70,7 +70,7 @@ public class User implements UserDetails {
     }
 
     public String getLogin() {
-        return login;
+        return this.login;
     }
 
     public void setLogin(String login) {
@@ -82,7 +82,7 @@ public class User implements UserDetails {
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public void setEmail(String email) {
@@ -90,7 +90,7 @@ public class User implements UserDetails {
     }
 
     public RoleEnum getRole() {
-        return role;
+        return this.role;
     }
 
     public void setRole(RoleEnum role) {

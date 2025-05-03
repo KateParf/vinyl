@@ -3,5 +3,5 @@ export interface Group {
     id: number;
     name: string;
     picture: string;
-    performer?: Performer;
+    performers?: Performer[];
 }

@@ -54,7 +54,7 @@ public class AuthenticationService {
     }
 
 
-    public void signUp(SignUpDto request) {
+    public JwtDto signUp(SignUpDto request) {
 
         User user = new User();
 
@@ -64,6 +64,11 @@ public class AuthenticationService {
         user.setRole(RoleEnum.DEFAULT);
 
         userRepository.save(user);
+
+        SignInDto requestSignIn = new SignInDto();
+        requestSignIn.setLogin(user.getLogin());
+        requestSignIn.setPassword(request.getPassword());
+        return this.authenticate(requestSignIn);
     }
 
     private void revokeAllToken(User user) {

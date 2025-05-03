@@ -24,9 +24,9 @@ export class UserRegistrationComponent {
     })
   }
 
-  registration() {
-    let res = this.apiService.registration(this.authForm.value["email"], this.authForm.value["login"], this.authForm.value["password"]);
-    if (!res) {
+  public async registration() {
+    let res = await this.authService.registration(this.authForm.value["email"], this.authForm.value["login"], this.authForm.value["password"]);
+    if (res && (res.error == "" || res.error == null)) {
       console.log("register ok");
       console.log(this.authService.isLoggedIn());
       this.router.navigate(["/user"]);

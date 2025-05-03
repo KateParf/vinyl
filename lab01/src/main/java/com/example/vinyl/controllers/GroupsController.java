@@ -1,5 +1,6 @@
 package com.example.vinyl.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -9,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.vinyl.service.GroupService;
+import com.example.vinyl.dto.GroupDto;
 import com.example.vinyl.exceptions.ResourceNotFoundException;
 import com.example.vinyl.model.Group;
+import com.example.vinyl.model.Performer;
 
 @RestController
 @RequestMapping("/groups")
@@ -24,18 +27,26 @@ public class GroupsController {
 
     // Получение списка групп для которых у нас есть пластинки
     @GetMapping("/list")
-    public List<Group> all() {
-        return service.getAll();
+    public List<GroupDto> all() {
+        List<Group> groups = service.getAll();
+        List<GroupDto> dtos = new ArrayList<GroupDto>();
+        for (int i = 0; i < groups.size(); i++) {
+            GroupDto dto = new GroupDto(groups.get(i).getId(), groups.get(i).getName(), groups.get(i).getPicture(), groups.get(i).getPerformers());
+            dtos.add(dto);
+        }
+        return dtos;
     }
 
     // Получение конкретной группы
     // если для такого ид нет записи то вернем 404
     @GetMapping("/get/{id}")
-    public ResponseEntity<Group> getGroup(@PathVariable Integer id) {
+    public ResponseEntity<GroupDto> getGroup(@PathVariable Integer id) {
         Group group = service.getById(id);
         if (group == null) {
             throw new ResourceNotFoundException("Group", "id", id);
         }
-        return ResponseEntity.ok(group);
+        GroupDto dto = new GroupDto(id, group.getName(), group.getPicture(), group.getPerformers());
+        return ResponseEntity.ok(dto);
     }
+
 }

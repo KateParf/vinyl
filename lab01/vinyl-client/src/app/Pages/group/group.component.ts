@@ -17,7 +17,7 @@ export class GroupComponent {
   public groupId: number = 0;
   public groupName: string = "";
   public imageUrl: string = "";
-  public performer?: Performer | undefined = undefined;
+  public performers: Performer[] = [];
   public groupRecords: RecordBrief[] = [];
 
 
@@ -34,9 +34,8 @@ export class GroupComponent {
       this.group = group;
       this.groupName = this.group.name;
       this.imageUrl = this.group.picture;
-      this.performer = this.group.performer;
+      this.performers = this.group.performers!=undefined?this.group.performers:[];
     }
-
     await this.loadGroupRecords();
   }
 
@@ -44,4 +43,5 @@ export class GroupComponent {
     // test vals
     this.groupRecords = await this.apiService.getRecordsByGroupId(this.groupId);
   }
+
 }

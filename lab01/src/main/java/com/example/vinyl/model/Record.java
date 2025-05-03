@@ -8,6 +8,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.example.vinyl.dto.GroupDto;
+import com.example.vinyl.dto.PerformerDto;
+
 @Entity
 @Table(name = "record")
 public class Record implements Serializable {
@@ -38,7 +41,7 @@ public class Record implements Serializable {
         name = "performer_record", 
         joinColumns = { @JoinColumn(name = "record_id") }, 
         inverseJoinColumns = { @JoinColumn(name = "performer_id") })
-    private final Set<Performer> performers = new HashSet<>();
+    private final List<Performer> performers = new ArrayList<>();
 
     //  [] groups
     @ManyToMany(
@@ -51,7 +54,7 @@ public class Record implements Serializable {
         name = "performer_record", 
         joinColumns = { @JoinColumn(name = "record_id") }, 
         inverseJoinColumns = { @JoinColumn(name = "group_id") })
-    private final Set<Group> groups = new HashSet<>();
+    private final List<Group> groups = new ArrayList<>();
 
     //@OneToMany( fetch = FetchType.EAGER , cascade = CascadeType.ALL, orphanRemoval = true)
     //@JoinColumn(name = "record_id")
@@ -110,12 +113,22 @@ public class Record implements Serializable {
         this.barcode = barcode;
     }
 
-    public Set<Group> getGroups() {
-        return this.groups;
+    public List<GroupDto> getGroups() {
+        List<GroupDto> dtos = new ArrayList<GroupDto>();
+        for (int i = 0; i < this.groups.size(); i++) {
+            GroupDto dto = new GroupDto(this.groups.get(i).getId(), this.groups.get(i).getName(), this.groups.get(i).getPicture(), this.groups.get(i).getPerformers());
+            dtos.add(dto);
+        }
+        return dtos;
     }
 
-    public Set<Performer> getPerformers() {
-        return this.performers;
+    public List<PerformerDto> getPerformers() {
+        List<PerformerDto> dtos = new ArrayList<PerformerDto>();
+        for (int i = 0; i < this.performers.size(); i++) {
+            PerformerDto dto = new PerformerDto(this.performers.get(i).getId(), this.performers.get(i).getName(), this.performers.get(i).getPicture(), this.performers.get(i).getGroup());
+            dtos.add(dto);
+        }
+        return dtos;
     }
 
     public Set<Cover> getCovers() {

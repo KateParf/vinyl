@@ -67,6 +67,7 @@ export class RecordsComponent {
     this.form.controls["group_id"].setValue(0);
     this.form.controls["performer_id"].setValue(0);
     this.form.controls["decade"].setValue(0);
+    //this.loadRecordsList();
   }
 
   public resetBarcode() {
@@ -107,6 +108,7 @@ export class RecordsComponent {
     this.resetName();
     if (this.formBarcode.value["filterSearch"]) {
       this.records = await this.apiService.getRecordsByBarcode(this.formBarcode.value["filterSearch"]);
+      console.log(this.records)
       this.queryBarcode = this.formBarcode.value["filterSearch"];
     }
     else {
@@ -132,6 +134,7 @@ export class RecordsComponent {
     const record = await this.apiService.addToUserCollectionRecord(recordBrief);
     if (record != null) {
       const id = record.id;
+      console.log(record)
       this.router.navigate(['/user-record/' + id]);
     }
   }

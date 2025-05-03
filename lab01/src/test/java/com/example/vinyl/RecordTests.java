@@ -1,6 +1,7 @@
 package com.example.vinyl;
 
 import com.example.vinyl.controllers.RecordsController;
+import com.example.vinyl.dto.GroupDto;
 import com.example.vinyl.exceptions.ResourceNotFoundException;
 import com.example.vinyl.service.GenreService;
 import com.example.vinyl.service.GroupService;
@@ -104,8 +105,8 @@ class RecordTests {
 
 		Record newRecord = recordService.getAllRecords().getLast();
 		assertEquals(newRecord.getName(), "Abbey Road");
-		List<Group> groups = new ArrayList<>(newRecord.getGroups());
-		Group recGroup = groups.getFirst();
+		List<GroupDto> groups = new ArrayList<>(newRecord.getGroups());
+		GroupDto recGroup = groups.getFirst();
 		assertEquals(recGroup.getName(), "The Beatles");
 		
 		//--

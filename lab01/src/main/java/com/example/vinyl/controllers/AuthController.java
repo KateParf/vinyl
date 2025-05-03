@@ -28,9 +28,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    ResponseEntity<String> singUp(@RequestBody SignUpDto signUpDto) {
-        authenticationService.signUp(signUpDto);
-        return ResponseEntity.ok("Регистрация прошла успешно!");
+    JwtDto singUp(@RequestBody SignUpDto signUpDto) {
+        return authenticationService.signUp(signUpDto);
+        //return ResponseEntity.ok("Регистрация прошла успешно!");
     }
 
     @PostMapping("/refresh_token")

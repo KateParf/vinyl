@@ -31,13 +31,32 @@ export class AuthService {
         return res;
     }
     
+    public async registration(email: string, login: string, password: string): Promise<any | null> {
+      let res = await this.http.post<any>(`${this.baseUrl}api/register`,
+        { login: login, password: password, email: email }
+      ).toPromise().catch(
+        error => console.error("register error: ", error)
+      ) ?? null;
+  
+      // testdata
+      ////!!if (login == "katya") {
+      if (res && res.accessToken) {
+        console.log("api register - ok");
+        // писать в локалстораж флаг
+        this.setSession(res)
+      } else {
+        console.log("api register - error");
+        // чистить локалсторож
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+      }
+      return res;
+  }
           
     private setSession(authResult: any) {
         localStorage.setItem('accessToken', authResult.accessToken);
         localStorage.setItem('refreshToken', authResult.refreshToken);        
 
-        //const expiresAt = moment().add(authResult.expiresIn,'second');
-        //localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
     }          
 
     logout() {

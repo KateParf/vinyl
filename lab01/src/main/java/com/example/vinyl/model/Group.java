@@ -1,6 +1,8 @@
 package com.example.vinyl.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.lang.Nullable;
 
@@ -17,10 +19,16 @@ public class Group implements Serializable{
 
     @Nullable
     private String picture;
-    
 
+    @OneToMany( mappedBy = "group" , cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Performer> performers = new ArrayList<>();
+    
     public Integer getId() {
         return this.id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -38,4 +46,10 @@ public class Group implements Serializable{
     public void setPicture(String picture) {
         this.picture = picture;
     }
+
+    public List<Performer> getPerformers() {
+        return performers;
+    }
+    
+
 }

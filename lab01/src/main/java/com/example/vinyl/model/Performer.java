@@ -23,6 +23,10 @@ public class Performer implements Serializable{
         return this.id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName() {
         return this.name;
     }
@@ -32,7 +36,7 @@ public class Performer implements Serializable{
     }
 
     public Group getGroup() {
-        return this.group;
+        return this.group==null?new Group():this.group;
     }
 
     public void setName(String name) {
