@@ -9,7 +9,11 @@ import com.example.vinyl.dto.SignUpDto;
 import com.example.vinyl.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Validator;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,19 +22,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthenticationService authenticationService;
 
-    public AuthController(AuthenticationService authenticationService) {
+
+    public AuthController(AuthenticationService authenticationService, Validator validator) {
         this.authenticationService = authenticationService;
     }
 
     @PostMapping("/login")
-    JwtDto signIn(@RequestBody SignInDto signInDto) {
+    JwtDto signIn(@RequestBody @Valid SignInDto signInDto) {
+
         return authenticationService.authenticate(signInDto);
     }
 
     @PostMapping("/register")
-    JwtDto singUp(@RequestBody SignUpDto signUpDto) {
+    JwtDto singUp(@RequestBody @Valid SignUpDto signUpDto) {
         return authenticationService.signUp(signUpDto);
-        //return ResponseEntity.ok("Регистрация прошла успешно!");
     }
 
     @PostMapping("/refresh_token")
