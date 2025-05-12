@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { APIService } from '../../Services/api';
-import {AuthService} from '../../Services/AuthService';
+import { AuthService } from '../../Services/AuthService';
 
 @Component({
   selector: 'app-registration',
@@ -13,15 +13,16 @@ export class UserRegistrationComponent {
   public authForm!: FormGroup;
   public isError: boolean = false;
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router, 
-    private apiService: APIService, private authService: AuthService) { }
+  constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router,
+    private apiService: APIService, private authService: AuthService) {
+  }
 
   ngOnInit(): void {
-    this.authForm = this.formBuilder.group({
-      email: [""],
-      login: [""],
-      password: [""]
-    })
+    this.authForm = new FormGroup({
+      login: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', Validators.required)
+    });
   }
 
   public async registration() {

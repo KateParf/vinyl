@@ -3,7 +3,9 @@ package com.example.vinyl.service;
 import com.example.vinyl.exceptions.ResourceNotFoundException;
 import com.example.vinyl.model.Group;
 import com.example.vinyl.model.Performer;
+import com.example.vinyl.model.Record;
 import com.example.vinyl.repository.PerformerRepository;
+import com.example.vinyl.repository.RecordRepository;
 
 import java.util.List;
 
@@ -14,10 +16,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class PerformerService {
     private final PerformerRepository performerRepository;
+    private final RecordRepository recordRepository;
 
     @Autowired
-    public PerformerService(PerformerRepository performerRepository) {
+    public PerformerService(PerformerRepository performerRepository, RecordRepository recordRepository) {
         this.performerRepository = performerRepository;
+        this.recordRepository = recordRepository;
     }
 
     // Получить всех исполнителей
@@ -43,6 +47,11 @@ public class PerformerService {
     // При вставке дубликата - возвращается DataIntegrityViolationException
     public Performer add(Performer performer) throws DataIntegrityViolationException {
         return performerRepository.save(performer);
+    }
+
+    // ищет все пластинки исполнителя
+    public List<Record> getRecordsByPerformerId(Integer performerId) {
+        return recordRepository.findByPerformerId(performerId);
     }
 
     public void clear() {

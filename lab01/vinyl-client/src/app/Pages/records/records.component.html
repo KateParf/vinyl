@@ -1,4 +1,4 @@
-<div class="container py-5">
+<div class="container py-3">
     <div class="row mb-3">
         <div class="col-lg-6">
             <form [formGroup]="formBarcode">
@@ -105,13 +105,19 @@
                         <span class="card-genre">{{record.genre}}</span>
                     </a>
                     } @else {
-                        <img src={{record.coverUrl}} alt="Обложка" class="cover">
-                        <div class="card-title">{{record.title}}</div>
-                        <div class="card-year">{{record.year}}</div>
-                        <span class="card-genre">{{record.genre}}</span>
+                    <img src={{record.coverUrl}} alt="Обложка" class="cover">
+                    <div class="card-title">{{record.title}}</div>
+                    <div class="card-year">{{record.year}}</div>
+                    <span class="card-genre">{{record.genre}}</span>
                     }
+
+                    @if (record.id != null && !inCollection(record.id)) {
                     <button class="btn btn-sm" (click)="addToUserCollection(record)">В коллекцию</button>
-                    <!--button class="btn btn-sm disabled">В коллекции</button-->
+                    }
+                    @if (record.id != null && inCollection(record.id)) {
+                    <button class="btn btn-sm disabled">В коллекции</button>
+                    }
+
                 </div>
             </div>
         </div>

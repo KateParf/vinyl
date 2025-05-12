@@ -50,6 +50,14 @@ public class PersonalRecordsController {
         return briefs;
     }
 
+    // Получаем все ид глобальных пластинок у юзера
+    @GetMapping("/list/ids")
+    public ResponseEntity<List<Integer>> getUserRecordIds() {
+        var user = userService.getSessionUser();
+        List<Integer> recordIds = personalService.getRecordIdsInUserCollection(user);
+        return ResponseEntity.ok(recordIds);
+    }
+
     // Получаем конкретную пластинку юзера
     @GetMapping("/get/{id}")
     public ResponseEntity<PersonalRecord> getRecord(@PathVariable Integer id) {

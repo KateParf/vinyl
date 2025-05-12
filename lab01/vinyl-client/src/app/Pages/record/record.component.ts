@@ -57,8 +57,18 @@ export class RecordComponent {
     var record = await this.apiService.addToUserCollectionRecordId(recordId);
     if (record != null) {
       const id = record.id;
+      await this.apiService.getUserRecordIds();
       this.router.navigate(['/user-record/' + id]);
     }
+  }
+
+  public inCollection(recId: number) {
+    var res = localStorage.getItem('userRecords');
+    var recs = JSON.parse(res == null ? "" : res);
+    for (let i = 0; i < recs.length; i++) {
+      if (recId == recs[i]) { return true }
+    }
+    return false;
   }
 
   // получить и играть трек

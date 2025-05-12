@@ -86,8 +86,9 @@ export class UserRecordComponent {
   }
 
   // удалить пластинку из коллекции пользователя
-  public deleteFromUserCollection(personalRecordId: number) {
+  public async deleteFromUserCollection(personalRecordId: number) {
     this.apiService.deleteFromUserCollection(personalRecordId);
+    this.apiService.getUserRecordIds();
     this.router.navigate(['/user-records']);
   }
 

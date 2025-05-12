@@ -1,9 +1,9 @@
-<div class="container py-5">
+<div class="container py-3">
     <div class="row">
         <div class="col-lg-6">
             <h2 class="mb-4">Исполнители</h2>
-            <div [class.scrollable-performers]="performers.length > 3" class="row ms-1 g-4">
-                <div class="custom-card col-lg-3 col-md-4 col-sm-6 me-4" *ngFor="let performer of performers">
+            <div [class.scrollable-performers]="performers.length > 3" class="row ms-lg-1 gx-4 ps-1">
+                <div class="custom-card col-lg-3 col-md-4 col-sm-6 me-4 mb-4" *ngFor="let performer of performers">
                     <a href="/performer/{{ performer.id }}" class="card-href">
                         <div class="ratio ratio-1x1"><img src={{performer.picture}} alt="Изображение"
                                 class="img-fluid object-fit-cover"></div>
@@ -14,8 +14,8 @@
         </div>
         <div class="col-lg-6">
             <h2 class="mb-4">Группы</h2>
-            <div [class.scrollable-performers]="groups.length > 3" class="row ms-1 g-4">
-                <div class="custom-card col-lg-3 col-md-4 col-sm-6 me-lg-4 " *ngFor="let group of groups">
+            <div [class.scrollable-performers]="groups.length > 3" class="row ms-lg-1 gx-4 ps-1">
+                <div class="custom-card col-lg-3 col-md-4 col-sm-6 me-4 mb-4" *ngFor="let group of groups">
                     <a href="/group/{{ group.id }}" class="card-href">
                         <div class="ratio ratio-1x1"><img src={{group.picture}} alt="Изображение"
                                 class="img-fluid object-fit-cover"></div>

@@ -70,7 +70,12 @@
             <div class="custom-card p-4 mb-4">
                 <div class="d-flex justify-content-between mb-3">
                     <h1>{{recordName}}</h1>
+                    @if (!inCollection(record.id)) {
                     <button class="btn" (click)="addToUserCollection(recordId)">Добавить в коллекцию</button>
+                    }
+                    @if (inCollection(record.id)) {
+                    <button class="btn disabled">В коллекции</button>
+                    }
                 </div>
                 <!-- Трек-лист -->
                 <div class="tracklist card shadow-sm">

@@ -1,8 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import {AuthService} from '../../Services/AuthService';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../Services/AuthService';
+import { APIService } from '../../Services/api';
 
 @Component({
   selector: 'app-login',
@@ -15,25 +16,25 @@ export class LoginComponent {
   public isError: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient,
-    private route: ActivatedRoute, private router: Router, private authService: AuthService) { }
+    private route: ActivatedRoute, private router: Router, private authService: AuthService, private apiService: APIService) { }
 
   ngOnInit(): void {
-    if (this.authService.isLoggedIn()){
+    if (this.authService.isLoggedIn()) {
       this.router.navigate(["/user"]);
     }
 
-    this.loginForm = this.formBuilder.group({
-      login: [""],
-      password: [""]
+    this.loginForm = new FormGroup({
+      login: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required)
     });
 
     this.route.queryParams.subscribe(params => {
       if (params['returnUrl']) {
-        this.returnUrl = params['returnUrl'];   
+        this.returnUrl = params['returnUrl'];
       }
       else {
         this.returnUrl = "/user";
-      }  
+      }
     });
   }
 
@@ -44,7 +45,11 @@ export class LoginComponent {
       // login ok - redir
       console.log("login ok");
       console.log(this.authService.isLoggedIn());
-      this.router.navigate([this.returnUrl]); //!! TODO навигировать куда шли
+
+      // получаем ид глобальных пластинок
+      await this.apiService.getUserRecordIds();
+
+      this.router.navigate([this.returnUrl]); // навигировать куда шли
     } else {
       // login fail
       console.log("login fail", res);

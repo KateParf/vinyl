@@ -41,6 +41,12 @@ export class APIService {
     ) ?? null;
   }
 
+  public async getGroupRecords(groupId: number): Promise<RecordBrief[]> {
+    return await this.http.get<RecordBrief[]>(`${this.baseUrl}api/groups/records/${groupId}`).toPromise().catch(
+      error => console.error("getGroupRecords error: ", error)
+    ) ?? [];
+  }
+
   //---- performers
 
   public async getPerformersList(): Promise<Performer[]> {
@@ -53,6 +59,12 @@ export class APIService {
     return await this.http.get<Performer>(`${this.baseUrl}api/performers/get/${performerId}`).toPromise().catch(
       error => console.error("getPerformerById error: ", error)
     ) ?? null;
+  }
+
+  public async getPerformerRecords(performerId: number): Promise<RecordBrief[]> {
+    return await this.http.get<RecordBrief[]>(`${this.baseUrl}api/performers/records/${performerId}`).toPromise().catch(
+      error => console.error("getPerformerRecords error: ", error)
+    ) ?? [];
   }
 
   //---- records 
@@ -88,89 +100,6 @@ export class APIService {
     ) ?? [];
   }
 
-  public async getRecordsByGroupId(groupId: number): Promise<RecordBrief[]> {
-    //!! TODO - потом вызывать норм метод фильтраии по групИд
-    return [{
-      title: 'Abbey Road 1',
-      year: 1969,
-      genre: 'Rock',
-      coverUrl: 'https://yastatic.net/naydex/yandex-search/i11tyh308/a3e3e896_R/rzVBW48SpldEPZsi3FxYsuhWDmMxveAOP7EDHRWinsHIVwdMiA3F-8cxgrIIoDmOCNgBOPpj1ncO-iMgBoff8ZgWanWvKM9zbjfUNdlXRPniDT9Z',
-      sourceUID: '',
-      barcode: '',
-      id: 3
-    },
-    {
-      title: 'Abbey Road 2',
-      year: 1969,
-      genre: 'Rock',
-      coverUrl: 'https://yastatic.net/naydex/yandex-search/i11tyh308/a3e3e896_R/rzVBW48SpldEPZsi3FxYsuhWDmMxveAOP7EDHRWinsHIVwdMiA3F-8cxgrIIoDmOCNgBOPpj1ncO-iMgBoff8ZgWanWvKM9zbjfUNdlXRPniDT9Z',
-      sourceUID: '',
-      barcode: '',
-      id: 3
-    },
-    {
-      title: 'Abbey Road 3',
-      year: 1969,
-      genre: 'Rock',
-      coverUrl: 'https://yastatic.net/naydex/yandex-search/i11tyh308/a3e3e896_R/rzVBW48SpldEPZsi3FxYsuhWDmMxveAOP7EDHRWinsHIVwdMiA3F-8cxgrIIoDmOCNgBOPpj1ncO-iMgBoff8ZgWanWvKM9zbjfUNdlXRPniDT9Z',
-      sourceUID: '',
-      barcode: '',
-      id: 3
-    },
-    {
-      title: 'Abbey Road 4',
-      year: 1969,
-      genre: 'Rock',
-      coverUrl: 'https://yastatic.net/naydex/yandex-search/i11tyh308/a3e3e896_R/rzVBW48SpldEPZsi3FxYsuhWDmMxveAOP7EDHRWinsHIVwdMiA3F-8cxgrIIoDmOCNgBOPpj1ncO-iMgBoff8ZgWanWvKM9zbjfUNdlXRPniDT9Z',
-      sourceUID: '',
-      barcode: '',
-      id: 3
-    }
-    ];
-  }
-
-  public async getRecordsByPerformerId(id: number): Promise<RecordBrief[]> {
-    //!! TODO - потом вызывать норм метод фильтраии
-    const recs = await this.getRecordsList();
-    return [{
-      title: 'Abbey Road 1',
-      year: 1969,
-      genre: 'Rock',
-      coverUrl: 'https://yastatic.net/naydex/yandex-search/i11tyh308/a3e3e896_R/rzVBW48SpldEPZsi3FxYsuhWDmMxveAOP7EDHRWinsHIVwdMiA3F-8cxgrIIoDmOCNgBOPpj1ncO-iMgBoff8ZgWanWvKM9zbjfUNdlXRPniDT9Z',
-      sourceUID: '',
-      barcode: '',
-      id: 3
-    },
-    {
-      title: 'Abbey Road 2',
-      year: 1969,
-      genre: 'Rock',
-      coverUrl: 'https://yastatic.net/naydex/yandex-search/i11tyh308/a3e3e896_R/rzVBW48SpldEPZsi3FxYsuhWDmMxveAOP7EDHRWinsHIVwdMiA3F-8cxgrIIoDmOCNgBOPpj1ncO-iMgBoff8ZgWanWvKM9zbjfUNdlXRPniDT9Z',
-      sourceUID: '',
-      barcode: '',
-      id: 3
-    },
-    {
-      title: 'Abbey Road 3',
-      year: 1969,
-      genre: 'Rock',
-      coverUrl: 'https://yastatic.net/naydex/yandex-search/i11tyh308/a3e3e896_R/rzVBW48SpldEPZsi3FxYsuhWDmMxveAOP7EDHRWinsHIVwdMiA3F-8cxgrIIoDmOCNgBOPpj1ncO-iMgBoff8ZgWanWvKM9zbjfUNdlXRPniDT9Z',
-      sourceUID: '',
-      barcode: '',
-      id: 3
-    },
-    {
-      title: 'Abbey Road 4',
-      year: 1969,
-      genre: 'Rock',
-      coverUrl: 'https://yastatic.net/naydex/yandex-search/i11tyh308/a3e3e896_R/rzVBW48SpldEPZsi3FxYsuhWDmMxveAOP7EDHRWinsHIVwdMiA3F-8cxgrIIoDmOCNgBOPpj1ncO-iMgBoff8ZgWanWvKM9zbjfUNdlXRPniDT9Z',
-      sourceUID: '',
-      barcode: '',
-      id: 3
-    }
-    ];
-  }
-
   public async getRecord(recordId: number): Promise<Record | null> {
     return await this.http.get<Record>(`${this.baseUrl}api/records/get/${recordId}`).toPromise().catch(
       error => console.error("getRecordsList error: ", error)
@@ -191,6 +120,13 @@ export class APIService {
     return await this.http.get<RecordBrief[]>(`${this.baseUrl}api/userrecords/list`).toPromise().catch(
       error => console.error("getPersonalRecordsList error: ", error)
     ) ?? [];
+  }
+
+  public async getUserRecordIds() {
+    var res = await this.http.get<Number[]>(`${this.baseUrl}api/userrecords/list/ids`).toPromise().catch(
+      error => console.error("getUserRecordIds error: ", error)
+    ) ?? [];
+    localStorage.setItem('userRecords', JSON.stringify(res));
   }
 
   public async getPersonalRecordById(personalRecordId: number): Promise<PersonalRecord | null> {

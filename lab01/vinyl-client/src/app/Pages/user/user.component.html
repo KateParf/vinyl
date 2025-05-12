@@ -1,31 +1,51 @@
-<div class="container d-flex justify-content-center">
+<div class="container d-flex justify-content-center mb-5">
     <div class="row">
         <div class="col-12 mt-5">
             <h1>Пользователь</h1>
             <h4>Имя: {{userName}}</h4>
             <h4>Почта: {{userEmail}}</h4>
         </div>
-        
-    <div class="row">
-        <div class="col-12 mt-5">
-            <h3>Сменить пароль</h3>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <form [formGroup]="changeForm">
+                <div class="mb-3">
+                    <label class="form-label">Старый пароль</label>
+                    <input type="password" formControlName="oldPassword" class="form-control mb-4" />
+                    <div class="alert alert-danger mb-4"
+                        *ngIf="changeForm.controls['oldPassword'].invalid && changeForm.controls['oldPassword'].touched">
+                        Введите старый пароль, это обязательно.
+                    </div>
+                </div>
+
+                <label class="form-label">Новый пароль</label>
+                <input type="password" formControlName="newPassword" class="form-control mb-4" />
+                <div class="alert alert-danger mb-4"
+                    *ngIf="changeForm.controls['newPassword'].invalid && changeForm.controls['newPassword'].touched">
+                    <b>Введите новый пароль, это обязательно.</b> <br>
+                    Пароль должен быть длиной не менее 8 и не более 20 символов,
+                    содержать как минимум одну букву верхнего регистра,
+                    содержать как минимум одну букву нижнего регистра,
+                    содержать как минимум одну цифру,
+                    содержать как минимум один специальный символ (&#64;, #, $, %, ^, &, *) и
+                    не содержать пробелов.
+                </div>
+
+                <button type="button" (click)="changePassword()"
+                    class="mb-4 btn btn-custom btn-block w-100">Применить</button>
+
+                <div class="row mb-4 d-flex justify-content-center">
+                    <div *ngIf="isError == true" class="alert alert-danger mt-2 mb-2">
+                        Старый пароль указан неверно
+                    </div>
+                    <div *ngIf="isError == false" class="alert alert-success mt-2 mb-2">
+                        Смена пароля прошла успешно
+                    </div>
+                </div>
+            </form>
         </div>
-        <form [formGroup]="changeForm">
-        <!-- Password input -->
-        <div class="col-12 mb-4">
-            <label class="form-label">Старый пароль</label>
-            <input type="password" formControlName="oldPassword" class="form-control mb-4" />
-            <label class="form-label">Новый пароль</label>
-            <input type="password" formControlName="newPassword" class="form-control mb-4" />
-            <div class="d-flex justify-content-center">
-                <button (click)="changePassword()" type="button" class="btn btn-custom">Применить</button>
-            </div>
-            <div *ngIf="isError == true" class="alert alert-danger mt-2 mb-2">
-                Старый пароль указан неверно
-            </div>
-            <div *ngIf="isError == false" class="alert alert-success mt-2 mb-2">
-                Смена пароля прошла успешно
-            </div>
-        </div>
-    </form>
+    </div>
 </div>

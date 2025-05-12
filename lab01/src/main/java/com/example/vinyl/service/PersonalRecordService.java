@@ -38,6 +38,10 @@ public class PersonalRecordService {
         return persRecordRepository.findAllByUser(user);
     }
 
+    public List<Integer> getRecordIdsInUserCollection(User user) {
+        return persRecordRepository.findRecordIdsByUserId(user.getId());
+    }
+
     // Получить пластинку по ID
     public PersonalRecord getRecord(Integer id) {
         return persRecordRepository.findById(id).orElse(null);
@@ -59,7 +63,7 @@ public class PersonalRecordService {
         return persRecordRepository.save(newRecord);
     }
 
-    // Edit single item
+    // изменяем информацию о пластинке пользователя (комент и состояние)
     public PersonalRecord updateRecord(EditPersonalRecordDto editRecord, User user) {
         Record record = recordRepository.findById(editRecord.getId()).orElseThrow(() -> new RuntimeException("Record not found!"));
 
@@ -74,7 +78,7 @@ public class PersonalRecordService {
                 });
     }
 
-    // Delete single item
+    // удаляем пластинку из коллекции
     public void deleteRecord(Integer id, User user) {
         if (persRecordRepository.existsById(id))
             persRecordRepository.deleteById(id);

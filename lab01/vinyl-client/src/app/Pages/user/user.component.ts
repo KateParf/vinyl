@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { APIService } from '../../Services/api';
 
 @Component({
@@ -19,10 +19,11 @@ export class UserComponent {
   constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router, private apiService: APIService) { }
 
   async ngOnInit() {
-    this.changeForm = this.formBuilder.group({
-      oldPassword: [""],
-      newPassword: [""]
-    })
+    this.changeForm = new FormGroup({
+      oldPassword: new FormControl('', Validators.required),
+      newPassword: new FormControl('', Validators.required)
+    });
+
     var user = await this.apiService.getUserInfo();
     if (user) {
       this.userEmail = user.email;

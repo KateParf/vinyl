@@ -20,12 +20,14 @@ export class UserRecordsComponent {
   ngOnInit() {this.loadPersonalRecordsList();}
 
   private async loadPersonalRecordsList() {
+    await this.apiService.getUserRecordIds();
     this.personalRecords = await this.apiService.getPersonalRecordsList();
   }
 
   public deleteFromUserCollection(personalRecordId: number) {
     this.apiService.deleteFromUserCollection(personalRecordId);
     this.loadPersonalRecordsList();
+    window.location.reload();
   }
 
   private fromRecordToBrief(records: PersonalRecord[]) {

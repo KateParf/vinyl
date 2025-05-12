@@ -34,14 +34,13 @@ export class GroupComponent {
       this.group = group;
       this.groupName = this.group.name;
       this.imageUrl = this.group.picture;
-      this.performers = this.group.performers!=undefined?this.group.performers:[];
+      this.performers = this.group.performers != undefined ? this.group.performers : [];
     }
     await this.loadGroupRecords();
   }
 
   private async loadGroupRecords() {
-    // test vals
-    this.groupRecords = await this.apiService.getRecordsByGroupId(this.groupId);
+    this.groupRecords = await this.apiService.getGroupRecords(this.groupId);
   }
 
 }

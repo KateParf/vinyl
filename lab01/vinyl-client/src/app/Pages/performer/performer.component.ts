@@ -41,7 +41,7 @@ export class PerformerComponent {
 
   private async loadPerformerRecords() {
     if (this.performer)
-      this.performerRecords = await this.apiService.getRecordsByPerformerId(this.performer.id);
+      this.performerRecords = await this.apiService.getPerformerRecords(this.performer.id);
   }
 }
 

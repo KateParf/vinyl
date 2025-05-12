@@ -72,7 +72,7 @@ export class RecordsComponent {
 
   public resetBarcode() {
     this.queryBarcode = "";
-      this.formBarcode.controls["filterSearch"].setValue("");
+    this.formBarcode.controls["filterSearch"].setValue("");
   }
 
   public resetName() {
@@ -130,11 +130,20 @@ export class RecordsComponent {
     }
   }
 
+  public inCollection(recId: number) {
+    var res = localStorage.getItem('userRecords');
+    var recs = JSON.parse(res == null ? "" : res);
+    for (let i = 0; i < recs.length; i++) {
+      if (recId == recs[i]) { return true }
+    }
+    return false;
+  }
+
   public async addToUserCollection(recordBrief: RecordBrief) {
     const record = await this.apiService.addToUserCollectionRecord(recordBrief);
     if (record != null) {
       const id = record.id;
-      console.log(record)
+      await this.apiService.getUserRecordIds();
       this.router.navigate(['/user-record/' + id]);
     }
   }
@@ -147,7 +156,7 @@ export class RecordsComponent {
         title: records[i].name,
         year: records[i].year,
         genre: records[i].genre.name,
-        coverUrl: records[i].covers.sort((el1,el2) => el1.id - el2.id)[0].picture,
+        coverUrl: records[i].covers.sort((el1, el2) => el1.id - el2.id)[0].picture,
         sourceUID: null,
         barcode: records[i].barcode
       };

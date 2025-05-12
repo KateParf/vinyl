@@ -2,7 +2,9 @@ package com.example.vinyl.service;
 
 import com.example.vinyl.model.Group;
 import com.example.vinyl.model.Performer;
+import com.example.vinyl.model.Record;
 import com.example.vinyl.repository.GroupRepository;
+import com.example.vinyl.repository.RecordRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,10 +16,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class GroupService {
     private final GroupRepository groupRepository;
+    private final RecordRepository recordRepository;
 
     @Autowired
-    public GroupService(GroupRepository groupRepository) {
+    public GroupService(GroupRepository groupRepository, RecordRepository recordRepository) {
         this.groupRepository = groupRepository;
+        this.recordRepository = recordRepository;
     }
 
     // Получить все группы
@@ -43,6 +47,11 @@ public class GroupService {
     // При вставке дубликата - возвращается DataIntegrityViolationException
     public Group add(Group group) throws DataIntegrityViolationException {
         return groupRepository.save(group);
+    }
+
+    // ищет все пластинки группы
+    public List<Record> getRecordsByGroupId(Integer performerId) {
+        return recordRepository.findByGroupId(performerId);
     }
 
     public void clear() {

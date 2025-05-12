@@ -12,15 +12,22 @@
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
             <form [formGroup]="loginForm">
-
                 <div class="mb-3">
                     <label class="form-label">Логин</label>
                     <input type="text" formControlName="login" class="form-control" />
+                    <div class="alert alert-danger my-2"
+                        *ngIf="loginForm.controls['login'].invalid && loginForm.controls['login'].touched">
+                        Введите логин, это обязательно.
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Пароль</label>
                     <input type="password" formControlName="password" class="form-control" />
+                    <div class="alert alert-danger my-2"
+                        *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched">
+                        Введите пароль, это обязательно.<br>
+                    </div>
                 </div>
 
                 <button type="button" (click)="login()" class="mb-4 btn btn-custom btn-block w-100">Войти</button>
