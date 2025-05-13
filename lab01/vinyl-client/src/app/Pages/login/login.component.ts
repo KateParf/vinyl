@@ -14,6 +14,7 @@ export class LoginComponent {
 
   private returnUrl: any;
   public isError: boolean = false;
+  public errorMess: string = "";
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient,
     private route: ActivatedRoute, private router: Router, private authService: AuthService, private apiService: APIService) { }
@@ -53,9 +54,9 @@ export class LoginComponent {
     } else {
       // login fail
       console.log("login fail", res);
+      this.errorMess = res.error;
       console.log(this.authService.isLoggedIn());
       this.loginForm.reset();
-      // вывести ошибку !!!
       this.isError = true;
     }
   }

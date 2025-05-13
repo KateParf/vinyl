@@ -11,30 +11,38 @@
   <div class="row justify-content-center">
     <div class="col-md-6 col-lg-4">
       <form [formGroup]="authForm">
+        <!-- Поле email -->
         <div class="mb-3">
           <label class="form-label">Почта</label>
           <input type="email" formControlName="email" class="form-control" id="email" />
-          <div class="alert alert-danger my-2" *ngIf="authForm.controls['email'].invalid && authForm.controls['email'].touched">Неверный формат почты.
+          <div class="alert alert-danger my-2" *ngIf="authForm.controls['email'].invalid && authForm.controls['email'].touched">
+            Неверный формат почты.
+          </div>
+          <div class="alert alert-danger my-2" *ngIf="serverErrors['email']">
+            {{ serverErrors['email'] }}
           </div>
         </div>
 
+        <!-- Поле login -->
         <div class="mb-3">
           <label class="form-label">Логин</label>
           <input type="text" formControlName="login" class="form-control" />
-          <div class="alert alert-danger my-2"
-            *ngIf="authForm.controls['login'].invalid && authForm.controls['login'].touched">
+          <div class="alert alert-danger my-2" *ngIf="authForm.controls['login'].invalid && authForm.controls['login'].touched">
             <b>Введите логин, это обязательно.</b> <br>
             Логин должен быть длиной от 3 до 15 символов, содержать только буквы латинского алфавита (верхнего и нижнего
             регистра), цифры или символ подчеркивания (_),
             не начинаться с цифры и не содержать пробелов.
           </div>
+          <div class="alert alert-danger my-2" *ngIf="serverErrors['login']">
+            {{ serverErrors['login'] }}
+          </div>
         </div>
 
+        <!-- Поле password -->
         <div class="mb-3">
           <label class="form-label">Пароль</label>
           <input type="password" formControlName="password" class="form-control" />
-          <div class="alert alert-danger my-2"
-            *ngIf="authForm.controls['password'].invalid && authForm.controls['password'].touched">
+          <div class="alert alert-danger my-2" *ngIf="authForm.controls['password'].invalid && authForm.controls['password'].touched">
             <b>Введите пароль, это обязательно.</b> <br>
             Пароль должен быть длиной не менее 8 и не более 20 символов,
             содержать как минимум одну букву верхнего регистра,
@@ -43,14 +51,22 @@
             содержать как минимум один специальный символ (&#64;, #, $, %, ^, &, *) и
             не содержать пробелов.
           </div>
+          <div class="alert alert-danger my-2" *ngIf="serverErrors['password']">
+            {{ serverErrors['password'] }}
+          </div>
         </div>
 
         <button type="button" [disabled]="!authForm.valid" (click)="registration()"
           class="mb-4 btn btn-custom btn-block w-100">Создать</button>
 
         <div class="row mb-4 d-flex justify-content-center">
-          <div *ngIf="isError" class="alert alert-danger mb-2">
-            Неверное имя пользователя или почта
+          <div *ngIf="isError && serverErrors['exists']" 
+               class="alert alert-danger mb-2">
+            {{ serverErrors['exists'] }}
+          </div>
+          <div *ngIf="isError && !serverErrors['email'] && !serverErrors['login'] && !serverErrors['password'] && !serverErrors['exists']" 
+               class="alert alert-danger mb-2">
+            Ошибка регистрации
           </div>
           <div class="col-12 text-center">
             <a [routerLink]="['/login']">Уже есть аккаунт?</a>

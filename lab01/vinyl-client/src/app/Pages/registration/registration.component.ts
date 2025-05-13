@@ -12,6 +12,7 @@ import { AuthService } from '../../Services/AuthService';
 export class UserRegistrationComponent {
   public authForm!: FormGroup;
   public isError: boolean = false;
+  public serverErrors: { [key: string]: string } = {};
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router,
     private apiService: APIService, private authService: AuthService) {
@@ -34,11 +35,18 @@ export class UserRegistrationComponent {
     } else {
       // fail
       console.log("register fail", res);
+      if (res.error?.violations) {
+        res.error.violations.forEach((error: any) => {
+          this.serverErrors[error.fieldName] = error.message;
+        });
+      }
+      else if (res.error) {
+        this.serverErrors["exists"] = res.error;
+      }
       console.log(this.authService.isLoggedIn());
       this.authForm.reset();
-      // вывести ошибку !!!
       this.isError = true;
     }
   }
-
 }
+

@@ -39,12 +39,11 @@ public class AuthenticationService {
 
     private final UserService userService;
 
-
     public AuthenticationService(UserRepository userRepository,
-                                 JwtService jwtService,
-                                 PasswordEncoder passwordEncoder,
-                                 AuthenticationManager authenticationManager,
-                                 TokenRepository tokenRepository, UserService userService) {
+            JwtService jwtService,
+            PasswordEncoder passwordEncoder,
+            AuthenticationManager authenticationManager,
+            TokenRepository tokenRepository, UserService userService) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
@@ -53,10 +52,23 @@ public class AuthenticationService {
         this.userService = userService;
     }
 
-
     public JwtDto signUp(SignUpDto request) {
 
-        User user = new User();
+        User user = userRepository.findByLogin(request.getLogin())
+                .orElse(null);
+                
+        if (user != null) {
+            return new JwtDto(null, null, "Пользователь с таким логином уже существует");
+        }
+
+        user = userRepository.findByEmail(request.getEmail())
+                .orElse(null);
+
+        if (user != null) {
+            return new JwtDto(null, null, "Пользователь с таким email уже существует");
+        }
+
+        user = new User();
 
         user.setLogin(request.getLogin());
         user.setEmail(request.getEmail());
@@ -100,11 +112,9 @@ public class AuthenticationService {
 
         try {
             authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    request.getLogin(),
-                    request.getPassword()
-                )
-            );
+                    new UsernamePasswordAuthenticationToken(
+                            request.getLogin(),
+                            request.getPassword()));
         } catch (Exception ex) {
             return new JwtDto(null, null, ex.getMessage());
         }
@@ -151,7 +161,6 @@ public class AuthenticationService {
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
-
 
     public OpResult changePassword(ChangePasswordDto changePasswordDto) {
         User user = userService.getSessionUser();

@@ -29,7 +29,6 @@ public class AuthController {
 
     @PostMapping("/login")
     JwtDto signIn(@RequestBody SignInDto signInDto) {
-
         return authenticationService.authenticate(signInDto);
     }
 
@@ -47,7 +46,7 @@ public class AuthController {
     }
 
     @PostMapping("/password_change")
-    ResponseEntity<OpResult> changePassword(@RequestBody ChangePasswordDto changePasswordDto){
+    ResponseEntity<OpResult> changePassword(@RequestBody @Valid ChangePasswordDto changePasswordDto){
         OpResult res = authenticationService.changePassword(changePasswordDto);
         return ResponseEntity.ok(res);
     }

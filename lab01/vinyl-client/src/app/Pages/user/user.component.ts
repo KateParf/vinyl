@@ -15,6 +15,7 @@ export class UserComponent {
   public userEmail: string = "";
 
   public isError: boolean | null = null;
+  public errorMess: string = "";
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router, private apiService: APIService) { }
 
@@ -40,6 +41,7 @@ export class UserComponent {
       console.log("change passw ok");
     } else {
       this.isError = true;
+      this.errorMess = res.message;
       console.log("change passw NE ok");
     }
   }

@@ -162,42 +162,16 @@ export class APIService {
 
   //---- user ----
 
-  public async registration(email: string, login: string, password: string): Promise<string | null> {
-    //!! TODO
-    // testdata
-    if (login == "katya") {
-      // писать в локалстораж флаг
-      localStorage.setItem('auth', 'true');
-      return null;
-    } else {
-      // чистить локалсторож
-      localStorage.removeItem('auth');
-      return "AUTH ERROR!"
-    }
-  }
-
   public async getUserInfo(): Promise<User | null> {
-    // testdata
-    /*
-    var user = { name: "average vinyl lover", password: "123", email: "test@email.com" };
-    return user;
-    */
     return await this.http.get<User>(`${this.baseUrl}api/userinfo`).toPromise().catch(
       error => console.error("getUserInfo error: ", error)
     ) ?? null;
-
   }
 
   public async changePassword(oldPassword: string, newPassword: string): Promise<any> {
-    /*this.http.post<any>("/api/password_change", newPassword)
-      .subscribe(res => {
-        alert('PASSWORD CHANGED SUCCESFUL');
-      }, err => {
-        alert("Something went wrong")
-      })*/
     const dto = {"oldPassword": oldPassword, "newPassword": newPassword}; 
     const res = await this.http.post<any>(`${this.baseUrl}api/password_change`, dto).toPromise().catch(
-      error => console.error("getUserInfo error: ", error)
+      error => { console.error("changePassword error: ", error); return { status: -1, message: error.error.violations[0].message} }
     ) ?? { status: -1, message: "Ошибка смены пароля"};
     return res;
   }

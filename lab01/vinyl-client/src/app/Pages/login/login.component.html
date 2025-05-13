@@ -34,7 +34,7 @@
 
                 <div class="row mb-4 d-flex justify-content-center">
                     <div *ngIf="isError" class="alert alert-danger mb-2">
-                        Неверное имя пользователя или пароль
+                        {{errorMess}}
                     </div>
                     <div class="col-12 text-center">
                         <a [routerLink]="['/registration']">Ещё нет аккаунта?</a>

@@ -39,7 +39,7 @@
 
                 <div class="row mb-4 d-flex justify-content-center">
                     <div *ngIf="isError == true" class="alert alert-danger mt-2 mb-2">
-                        Старый пароль указан неверно
+                        {{ errorMess }}
                     </div>
                     <div *ngIf="isError == false" class="alert alert-success mt-2 mb-2">
                         Смена пароля прошла успешно
