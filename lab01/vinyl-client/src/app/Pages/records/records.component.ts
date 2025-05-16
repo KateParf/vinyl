@@ -7,6 +7,7 @@ import { Genre } from '../../models/genre';
 import { Record } from '../../models/record';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { APIService } from '../../Services/api';
+import { AuthService } from '../../Services/AuthService';
 
 @Component({
   selector: 'app-records',
@@ -41,7 +42,7 @@ export class RecordsComponent {
     decade: new FormControl(0, Validators.required)
   });
 
-  constructor(private route: ActivatedRoute, private router: Router, private apiService: APIService) {
+  constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService, private apiService: APIService) {
     this.loadRecordsList();
     this.loadGenresList();
     this.loadGroupsList();
@@ -132,14 +133,19 @@ export class RecordsComponent {
 
   public inCollection(recId: number) {
     var res = localStorage.getItem('userRecords');
-    var recs = JSON.parse(res == null ? "" : res);
-    for (let i = 0; i < recs.length; i++) {
-      if (recId == recs[i]) { return true }
+    if (res != "none") {
+      var recs = JSON.parse((res == null) ? "" : res);
+      for (let i = 0; i < recs.length; i++) {
+        if (recId == recs[i]) { return true }
+      }
     }
     return false;
   }
 
   public async addToUserCollection(recordBrief: RecordBrief) {
+    if (! this.authService.isLoggedIn()) {
+      this.router.navigate(["/login"]);
+    }
     const record = await this.apiService.addToUserCollectionRecord(recordBrief);
     if (record != null) {
       const id = record.id;

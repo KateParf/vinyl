@@ -174,10 +174,14 @@ public class SearchService {
                     String artistURL = artist.get(0).get("resource_url").asText();
                     String respArtist = HttpRequest.get(artistURL);
                     JsonNode jsonNodeArtist = objectMapper.readTree(respArtist);
-                    if (jsonNodeArtist.get("members") != null) {
+                    if (respArtist == "") {
+                        continue;
+                    }
+                    else if (jsonNodeArtist.get("members") != null) {
                         Group group = this.getGroup(jsonNodeArtist);
                         newRecord.addGroup(group);
-                    } else {
+                    } 
+                    else {
                         Performer performer = this.getPerformer(jsonNodeArtist, null);
                         newRecord.addPerformer(performer);
                     }

@@ -15,6 +15,8 @@ export class LogoutComponent {
   
     async ngOnInit() {
       await this.authService.logout();
+      var res: string[] = [];
+      localStorage.setItem('userRecords', "none");
       this.router.navigate(["/"]);
     }
   

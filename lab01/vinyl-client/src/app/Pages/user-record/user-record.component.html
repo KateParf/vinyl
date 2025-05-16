@@ -43,22 +43,22 @@
                     <span class="meta-value">{{recordBarcode}}</span>
                 </div>
 
-                <div class="meta-item" *ngIf="recordPerformers.length">
-                    <span class="meta-label">Исполнители: </span>
+                <div class="meta-item" *ngIf="recordPerformer != undefined">
+                    <span class="meta-label">Исполнитель: </span>
                     <span class="meta-value">
-                        <span *ngFor="let performer of recordPerformers" class="badge bg-secondary me-1">
-                            <a href="/performer/{{ performer.id }}"
-                                style="color: white; text-decoration: none;">{{performer.name}}</a>
+                        <span class="badge bg-secondary me-1">
+                            <a href="/performer/{{ recordPerformer.id }}"
+                                style="color: white; text-decoration: none;">{{recordPerformer.name}}</a>
                         </span>
                     </span>
                 </div>
 
-                <div class="meta-item" *ngIf="recordGroups.length">
-                    <span class="meta-label">Группы: </span>
+                <div class="meta-item" *ngIf="recordGroup != undefined">
+                    <span class="meta-label">Группа: </span>
                     <span class="meta-value">
-                        <span *ngFor="let group of recordGroups" class="badge bg-primary me-1">
-                            <a href="/group/{{ group.id }}"
-                                style="color: white; text-decoration: none;">{{group.name}}</a>
+                        <span class="badge bg-primary me-1">
+                            <a href="/group/{{ recordGroup.id }}"
+                                style="color: white; text-decoration: none;">{{recordGroup.name}}</a>
                         </span>
                     </span>
                 </div>

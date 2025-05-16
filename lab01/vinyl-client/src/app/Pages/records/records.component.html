@@ -114,9 +114,12 @@
                     @if (record.id != null && !inCollection(record.id)) {
                     <button class="btn btn-sm" (click)="addToUserCollection(record)">В коллекцию</button>
                     }
+                    @if (record.id == null) {
+                    <button class="btn btn-sm" (click)="addToUserCollection(record)">В коллекцию</button>
+                    }
                     @if (record.id != null && inCollection(record.id)) {
                     <button class="btn btn-sm disabled">В коллекции</button>
-                    }
+                    }                    
 
                 </div>
             </div>

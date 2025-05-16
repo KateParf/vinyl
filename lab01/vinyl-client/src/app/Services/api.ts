@@ -126,7 +126,9 @@ export class APIService {
     var res = await this.http.get<Number[]>(`${this.baseUrl}api/userrecords/list/ids`).toPromise().catch(
       error => console.error("getUserRecordIds error: ", error)
     ) ?? [];
-    localStorage.setItem('userRecords', JSON.stringify(res));
+    if (res.length != 0)
+      localStorage.setItem('userRecords', JSON.stringify(res));
+    else localStorage.setItem('userRecords', "none");
   }
 
   public async getPersonalRecordById(personalRecordId: number): Promise<PersonalRecord | null> {

@@ -30,21 +30,4 @@ export class UserRecordsComponent {
     window.location.reload();
   }
 
-  private fromRecordToBrief(records: PersonalRecord[]) {
-      var res_records = [];
-      for (let i = 0; i < records.length; i++) {
-        var recordBrief = {
-          id: records[i].id,
-          title: records[i].record.name,
-          year: records[i].record.year,
-          genre: records[i].record.genre.name,
-          coverUrl: records[i].record.covers.sort((el1,el2) => el1.id - el2.id)[0].picture,
-          sourceUID: null,
-          barcode: records[i].record.barcode
-        };
-        res_records.push(recordBrief);
-      }
-      return res_records;
-    }
-
 }

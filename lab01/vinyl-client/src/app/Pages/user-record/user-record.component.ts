@@ -29,8 +29,8 @@ export class UserRecordComponent {
   public recordBarcode: string = "";
   public recordTracks: Track[] = [];
   public recordCovers: Cover[] = [];
-  public recordPerformers: Performer[] = [];
-  public recordGroups: Group[] = [];
+  public recordPerformer: Performer | undefined = undefined;
+  public recordGroup: Group | undefined = undefined;
 
   form = new FormGroup({
     commentBody: new FormControl(""),
@@ -66,8 +66,8 @@ export class UserRecordComponent {
       this.recordBarcode = this.record.barcode;
       this.recordTracks = this.record.tracks.sort((el1,el2) => el1.id - el2.id);
       this.recordCovers = this.record.covers.sort((el1,el2) => el1.id - el2.id);
-      this.recordPerformers = this.record.performers;
-      this.recordGroups = this.record.groups;
+      this.recordPerformer = this.record.performers[0];
+      this.recordGroup = this.record.groups[0];
 
       this.form.controls["commentBody"].setValue(this.comment);
       this.form.controls["condition"].setValue(this.condition);

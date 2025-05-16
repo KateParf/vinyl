@@ -6,6 +6,7 @@ import { Track } from '../../models/track';
 import { Cover } from '../../models/cover';
 import { Group } from '../../models/group';
 import { APIService } from '../../Services/api';
+import { AuthService } from '../../Services/AuthService';
 
 @Component({
   selector: 'app-record',
@@ -22,8 +23,8 @@ export class RecordComponent {
   public recordBarcode: string = "";
   public recordTracks: Track[] = [];
   public recordCovers: Cover[] = [];
-  public recordPerformers: Performer[] = [];
-  public recordGroups: Group[] = [];
+  public recordPerformer: Performer | undefined = undefined;
+  public recordGroup: Group | undefined = undefined;
 
   // --- для трека
   currentAudio: HTMLAudioElement | null = null;
@@ -32,7 +33,7 @@ export class RecordComponent {
   currentTime = 0;
   duration = 0;
 
-  constructor(private route: ActivatedRoute, private router: Router, private apiService: APIService) {
+  constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService, private apiService: APIService) {
     void route.params.subscribe(params => this.recordId = params["id"]);
     this.loadRecordData();
   }
@@ -47,13 +48,16 @@ export class RecordComponent {
       this.recordBarcode = this.record.barcode;
       this.recordTracks = this.record.tracks.sort((el1,el2) => el1.id - el2.id);
       this.recordCovers = this.record.covers.sort((el1,el2) => el1.id - el2.id);
-      this.recordPerformers = this.record.performers;
-      this.recordGroups = this.record.groups;
+      this.recordPerformer = this.record.performers[0];
+      this.recordGroup = this.record.groups[0];
     }
   }
 
   // добавить в коллекцию юзера
   public async addToUserCollection(recordId: number) {
+    if (! this.authService.isLoggedIn()) {
+      this.router.navigate(["/login"]);
+    }
     var record = await this.apiService.addToUserCollectionRecordId(recordId);
     if (record != null) {
       const id = record.id;
@@ -64,9 +68,11 @@ export class RecordComponent {
 
   public inCollection(recId: number) {
     var res = localStorage.getItem('userRecords');
-    var recs = JSON.parse(res == null ? "" : res);
-    for (let i = 0; i < recs.length; i++) {
-      if (recId == recs[i]) { return true }
+    if (res != "none") {
+      var recs = JSON.parse((res == null) ? "" : res);
+      for (let i = 0; i < recs.length; i++) {
+        if (recId == recs[i]) { return true }
+      }
     }
     return false;
   }
