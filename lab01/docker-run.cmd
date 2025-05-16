@@ -1,0 +1,1 @@
+docker run --name vynilapp-cont -d -p 8080:8080 --add-host=host.docker.internal:host-gateway  vynilapp 

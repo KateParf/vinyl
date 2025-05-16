@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  postgres:
+    build: ./docker/postgre
+    ports:
+      - "5432:5432"
+
+  vynilapp:
+    build: ./lab01
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/db_vinyl?stringtype=unspecified
+      SPRING_DATASOURCE_USERNAME: eusevios
+      SPRING_DATASOURCE_PASSWORD: 1234
