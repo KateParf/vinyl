@@ -20,7 +20,7 @@ import com.example.vinyl.model.Record;
 import com.example.vinyl.model.RecordBrief;
 
 @RestController
-@RequestMapping("/records")
+@RequestMapping("/api/records")
 public class RecordsController {
 
     private final RecordService recordService;

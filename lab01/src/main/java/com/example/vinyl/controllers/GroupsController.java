@@ -19,7 +19,7 @@ import com.example.vinyl.model.RecordBrief;
 import com.example.vinyl.model.Record;
 
 @RestController
-@RequestMapping("/groups")
+@RequestMapping("/api/groups")
 public class GroupsController {
 
     private final GroupService service;

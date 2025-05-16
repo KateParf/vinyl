@@ -27,17 +27,17 @@ public class AuthController {
         this.authenticationService = authenticationService;
     }
 
-    @PostMapping("/login")
+    @PostMapping("/api/login")
     JwtDto signIn(@RequestBody SignInDto signInDto) {
         return authenticationService.authenticate(signInDto);
     }
 
-    @PostMapping("/register")
+    @PostMapping("/api/register")
     JwtDto singUp(@RequestBody @Valid SignUpDto signUpDto) {
         return authenticationService.signUp(signUpDto);
     }
 
-    @PostMapping("/refresh_token")
+    @PostMapping("/api/refresh_token")
     public ResponseEntity<JwtDto> refreshToken(
             HttpServletRequest request,
             HttpServletResponse response) {
@@ -45,7 +45,7 @@ public class AuthController {
         return authenticationService.refreshToken(request, response);
     }
 
-    @PostMapping("/password_change")
+    @PostMapping("/api/password_change")
     ResponseEntity<OpResult> changePassword(@RequestBody @Valid ChangePasswordDto changePasswordDto){
         OpResult res = authenticationService.changePassword(changePasswordDto);
         return ResponseEntity.ok(res);

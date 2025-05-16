@@ -18,7 +18,7 @@ import com.example.vinyl.model.Record;
 import com.example.vinyl.model.RecordBrief;
 
 @RestController
-@RequestMapping("/performers")
+@RequestMapping("/api/performers")
 public class PerformersController {
 
     private final PerformerService service;

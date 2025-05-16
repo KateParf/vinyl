@@ -75,7 +75,7 @@ import {AuthInterceptor} from './Services/AuthInterceptor';
       { path: 'logout', component: LogoutComponent },
       { path: 'registration', component: UserRegistrationComponent }, 
       { path: 'user', component: UserComponent },
-    ]),
+    ],  { useHash: true }),
   ],
   bootstrap: [AppComponent]
 })

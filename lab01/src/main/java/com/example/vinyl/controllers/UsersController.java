@@ -25,7 +25,7 @@ class UsersController {
     }
 
     // Получение всех жанров
-    @GetMapping("/userinfo")
+    @GetMapping("/api/userinfo")
     public ResponseEntity<User> getUser() {
         var user = userService.getSessionUser();
         user.setPassword(null);

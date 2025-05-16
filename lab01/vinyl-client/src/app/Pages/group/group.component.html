@@ -14,7 +14,7 @@
                     <span class="meta-label">Исполнители: </span>
                     <span class="meta-value">
                         <span class="badge bg-primary me-1" *ngFor="let performer of performers">
-                            <a href="/performer/{{ performer.id }}"
+                            <a routerLink="/performer/{{ performer.id }}"
                                 style="color: white; text-decoration: none;">{{performer.name}}</a>
                         </span>
                     </span>
@@ -31,7 +31,7 @@
                 <h3 class="mb-3" style="color: orange;">Пластинки группы</h3>
                 <div class="row ms-1 g-4">
                     <div class="custom-card col-lg-2 col-md-4 col-sm-6 me-4" *ngFor="let record of groupRecords">
-                        <a href="/record/{{ record.id }}" class="card-href">
+                        <a routerLink="/record/{{ record.id }}" class="card-href">
                             <img src={{record.coverUrl}} alt="Обложка" class="cover">
                             <div class="card-title">{{record.title}}</div>
                             <div class="card-year">{{record.year}}</div>

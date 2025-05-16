@@ -48,9 +48,9 @@ public class SecurityConfig {
                     //        .permitAll();
                     ///??? auth.requestMatchers("/genres", "/delete/{id}", "/new").hasAuthority("ADMIN");
                             
-                    auth.requestMatchers("/register", "/login", "/genres", "/groups/**", "/performers/**", "/records/**")
+                    auth.requestMatchers("/**", "/api/register", "/api/login", "/api/genres", "/api/groups/**", "/api/performers/**", "/api/records/**")
                         .permitAll();
-                    auth.requestMatchers("/userrecords/**", "/userinfo", "/password_change")
+                    auth.requestMatchers("/api/userrecords/**", "/api/userinfo", "/api/password_change")
                         .hasAnyAuthority("DEFAULT", "ADMIN");
                     //auth.requestMatchers("/", "/**").permitAll();
                     
